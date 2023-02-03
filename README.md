@@ -1,6 +1,11 @@
 # marktplaats-py
 A small Python package to request listings from marktplaats.nl
 
+## Installing
+```shell
+pip3 install marktplaats
+```
+
 ## Example
 This is an example on how to use the library:
 ```py
