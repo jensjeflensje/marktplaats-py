@@ -1,0 +1,23 @@
+[project]
+name = "marktplaats"
+version = "0.0.1"
+authors = [
+  { name="Jens de Ruiter", email="me@jensderuiter.dev" },
+]
+description = "A small Python package to request listings from marktplaats.nl"
+readme = "README.md"
+requires-python = ">=3.5"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/jensjeflensje/marktplaats-py"
+"Bug Tracker" = "https://github.com/jensjeflensje/marktplaats-py/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
