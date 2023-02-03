@@ -6,12 +6,15 @@ authors = [
 ]
 description = "A small Python package to request listings from marktplaats.nl"
 readme = "README.md"
-requires-python = ">=3.5"
+requires-python = ">=3.6"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
 
 [project.urls]
 "Homepage" = "https://github.com/jensjeflensje/marktplaats-py"
