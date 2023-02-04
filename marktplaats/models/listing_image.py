@@ -7,6 +7,8 @@ class ListingImage:
 
     @classmethod
     def parse_images(cls, data):
+        if data is None:
+            return []
         images = []
         for image_data in data:
             images.append(cls(

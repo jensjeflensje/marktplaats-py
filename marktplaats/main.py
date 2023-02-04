@@ -44,7 +44,7 @@ class Marktplaats:
                 ListingSeller(listing["sellerInformation"]["sellerName"], listing["sellerInformation"]["isVerified"]),
                 listing["priceInfo"]["priceCents"] / 100,
                 "https://link.marktplaats.nl/" + listing["itemId"],
-                ListingImage.parse_images(listing["pictures"]),
+                ListingImage.parse_images(listing.get("pictures")),
                 listing["categoryId"],
                 listing["attributes"],
             )
