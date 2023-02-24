@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 import json
 
@@ -39,6 +41,7 @@ class SearchQuery:
                 listing["itemId"],
                 listing["title"],
                 listing["description"],
+                datetime.strptime(listing["date"], "%Y-%m-%dT%H:%M:%S.%f%z"),
                 ListingSeller.parse(listing["sellerInformation"]),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,

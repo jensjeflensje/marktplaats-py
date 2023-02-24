@@ -33,6 +33,9 @@ for listing in listings:
     # the seller object
     print(listing.seller)
     
+    # the datetime object
+    print(listing.date)
+    
     # the full seller object (another request)
     print(listing.seller.get_seller())
     
