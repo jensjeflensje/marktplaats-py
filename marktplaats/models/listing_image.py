@@ -1,12 +1,15 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class ListingImage:
-    def __init__(self, extra_small, medium, large, extra_large):
-        self.extra_small = extra_small
-        self.medium = medium
-        self.large = large
-        self.extra_large = extra_large
+    extra_small: str
+    medium: str
+    large: str
+    extra_large: str
 
     @classmethod
-    def parse_images(cls, data):
+    def parse(cls, data):
         if data is None:
             return []
         images = []

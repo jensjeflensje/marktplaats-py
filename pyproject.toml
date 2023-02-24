@@ -1,12 +1,12 @@
 [project]
 name = "marktplaats"
-version = "0.0.2"
+version = "0.1.0"
 authors = [
   { name="Jens de Ruiter", email="me@jensderuiter.dev" },
 ]
 description = "A small Python package to request listings from marktplaats.nl"
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",

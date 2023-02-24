@@ -1,12 +1,10 @@
 import requests
 import json
 
-from marktplaats.models import Listing, ListingSeller, ListingImage
+from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
 
 
-class Marktplaats:
-    listings = []
-
+class SearchQuery:
     def __init__(self, query, zip_code="", distance=1000000, price_from=0, price_to=1000000, limit=1, offset=0):
         self.request = requests.get(
             "https://www.marktplaats.nl/lrp/api/search",
@@ -35,18 +33,19 @@ class Marktplaats:
         self.body_json = json.loads(self.body)
 
     def get_listings(self):
-        if len(self.listings):
-            return self.listings
+        listings = []
         for listing in self.body_json["listings"]:
             listing_obj = Listing(
+                listing["itemId"],
                 listing["title"],
                 listing["description"],
-                ListingSeller(listing["sellerInformation"]["sellerName"], listing["sellerInformation"]["isVerified"]),
+                ListingSeller.parse(listing["sellerInformation"]),
+                ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
                 "https://link.marktplaats.nl/" + listing["itemId"],
-                ListingImage.parse_images(listing.get("pictures")),
+                ListingImage.parse(listing.get("pictures")),
                 listing["categoryId"],
                 listing["attributes"],
             )
-            self.listings.append(listing_obj)
-        return self.listings
+            listings.append(listing_obj)
+        return listings
