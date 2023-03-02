@@ -37,11 +37,16 @@ class SearchQuery:
     def get_listings(self):
         listings = []
         for listing in self.body_json["listings"]:
+            try:
+                listing_time = datetime.strptime(listing["date"], "%Y-%m-%dT%H:%M:%S%z")
+            except Exception as e:
+                listing_time = datetime.now(timezone.utc)
+
             listing_obj = Listing(
                 listing["itemId"],
                 listing["title"],
                 listing["description"],
-                datetime.strptime(listing["date"], "%Y-%m-%dT%H:%M:%S.%f%z"),
+                listing_time,
                 ListingSeller.parse(listing["sellerInformation"]),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
