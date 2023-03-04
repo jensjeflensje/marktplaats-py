@@ -16,7 +16,20 @@ class SortOrder(str, Enum):
     ASC = "INCREASING"
 
 class SearchQuery:
-    def __init__(self, query, zip_code="", distance=1000000, price_from=0, price_to=1000000, limit=1, offset=0):
+    log: logging
+
+    def __init__(self,
+                query:      str,
+                zip_code:   str         = "",
+                distance:   int         = 1000000,
+                price_from: int         = 0,
+                price_to:   int         = 1000000,
+                limit:      int         = 1,
+                offset:     int         = 0,
+                sort_by:    SortBy      = SortBy.DEFAULT,
+                sort_order: SortOrder   = SortOrder.DESC
+                ):
+
         self.request = requests.get(
             "https://www.marktplaats.nl/lrp/api/search",
             params={
@@ -30,6 +43,8 @@ class SearchQuery:
                 "viewOptions": "list-view",
                 "distanceMeters": str(distance),
                 "postcode": zip_code,
+                "sortBy": sort_by,
+                "sortOrder": sort_order,
             },
             # Some headers to make the request look legit
             headers={
