@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 
 import requests
 import json
+import logging
 from enum import Enum
 
 from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
@@ -30,6 +31,13 @@ class SearchQuery:
                 sort_order: SortOrder   = SortOrder.DESC
                 ):
 
+        self.log = logging.getLogger(__name__)
+        self.log.debug(f"Init markplaats module")
+
+        if query is None:
+            self.log.error(f"Empty search string!")
+            raise ValueError(f"Empty search string!")
+
         self.request = requests.get(
             "https://www.marktplaats.nl/lrp/api/search",
             params={
@@ -55,8 +63,11 @@ class SearchQuery:
             }
         )
 
-        self.body = self.request.text
-        self.body_json = json.loads(self.body)
+        try:
+            self.body = self.request.text
+            self.body_json = json.loads(self.body)
+        except Exception as e:
+            raise e
 
     def get_listings(self):
         listings = []
