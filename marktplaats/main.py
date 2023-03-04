@@ -34,7 +34,7 @@ class SearchQuery:
         self.log = logging.getLogger(__name__)
         self.log.debug(f"Init marktplaats module")
 
-        if query is None:
+        if query in (None, ''):
             self.log.error(f"Empty search string!")
             raise ValueError(f"Empty search string!")
 
