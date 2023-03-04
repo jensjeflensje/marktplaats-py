@@ -2,9 +2,18 @@ from datetime import datetime, timezone
 
 import requests
 import json
+from enum import Enum
 
 from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
 
+class SortBy(str, Enum):
+    DATE= "SORT_INDEX"
+    PRICE= "PRICE"
+    DEFAULT= "OPTIMIZED"
+
+class SortOrder(str, Enum):
+    DESC= "DECREASING"
+    ASC = "INCREASING"
 
 class SearchQuery:
     def __init__(self, query, zip_code="", distance=1000000, price_from=0, price_to=1000000, limit=1, offset=0):
