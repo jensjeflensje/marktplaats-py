@@ -69,8 +69,9 @@ class SearchQuery:
         except Exception as e:
             raise e
 
-    def get_listings(self):
+    def get_listings(self) -> list[Listing]:
         listings = []
+        listing: dict
         for listing in self.body_json["listings"]:
             try:
                 listing_time = datetime.strptime(listing["date"], "%Y-%m-%dT%H:%M:%S%z")
