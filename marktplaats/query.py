@@ -1,4 +1,5 @@
-from datetime import datetime, timezone
+from datetime import datetime
+from enum import Enum
 
 import requests
 import json
@@ -6,9 +7,41 @@ import json
 from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
 
 
+class SortBy(Enum):
+    """
+    Enumeration of the different sorting methods Marktplaats supports.
+    The DATE method sorts by absolute time. So ascending is from oldest to newest.
+    """
+    DATE = "SORT_INDEX"
+    PRICE = "PRICE"
+    OPTIMIZED = "OPTIMIZED"
+    LOCATION = "LOCATION"
+
+
+class SortOrder(Enum):
+    DESC = "DECREASING"
+    ASC = "INCREASING"
+
+
 class SearchQuery:
-    def __init__(self, query, zip_code="", distance=1000000, price_from=0, price_to=1000000, limit=1, offset=0):
-        self.request = requests.get(
+    """
+    A search query for Marktplaats.
+    Raises a requests HTTPError if the request fails.
+    """
+
+    def __init__(
+            self,
+            query,
+            zip_code="",
+            distance=1000000,
+            price_from=0,
+            price_to=1000000,
+            limit=1,
+            offset=0,
+            sort_by=SortBy.OPTIMIZED,
+            sort_order=SortOrder.ASC,
+    ):
+        self.response = requests.get(
             "https://www.marktplaats.nl/lrp/api/search",
             params={
                 "attributeRanges[]":  [
@@ -21,6 +54,8 @@ class SearchQuery:
                 "viewOptions": "list-view",
                 "distanceMeters": str(distance),
                 "postcode": zip_code,
+                "sortBy": sort_by,
+                "sort_order": sort_order,
             },
             # Some headers to make the request look legit
             headers={
@@ -31,7 +66,10 @@ class SearchQuery:
             }
         )
 
-        self.body = self.request.text
+        # every request exception should raise here
+        self.response.raise_for_status()
+
+        self.body = self.response.text
         self.body_json = json.loads(self.body)
 
     def get_listings(self):
@@ -39,8 +77,8 @@ class SearchQuery:
         for listing in self.body_json["listings"]:
             try:
                 listing_time = datetime.strptime(listing["date"], "%Y-%m-%dT%H:%M:%S%z")
-            except Exception as e:
-                listing_time = datetime.now(timezone.utc)
+            except ValueError:
+                listing_time = None
 
             listing_obj = Listing(
                 listing["itemId"],
@@ -53,7 +91,8 @@ class SearchQuery:
                 "https://link.marktplaats.nl/" + listing["itemId"],
                 ListingImage.parse(listing.get("pictures")),
                 listing["categoryId"],
-                listing.get("attributes")
+                listing.get("attributes", []),
+                listing.get("extendedAttributes", []),
             )
             listings.append(listing_obj)
         return listings
