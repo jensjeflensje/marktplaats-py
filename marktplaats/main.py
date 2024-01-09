@@ -53,7 +53,7 @@ class SearchQuery:
                 "https://link.marktplaats.nl/" + listing["itemId"],
                 ListingImage.parse(listing.get("pictures")),
                 listing["categoryId"],
-                listing["attributes"],
+                listing["attributes"] if listing.get("attributes") else None,
             )
             listings.append(listing_obj)
         return listings
