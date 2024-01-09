@@ -1,6 +1,6 @@
 [project]
 name = "marktplaats"
-version = "0.1.2"
+version = "0.1.3"
 authors = [
   { name="Jens de Ruiter", email="me@jensderuiter.dev" },
 ]
