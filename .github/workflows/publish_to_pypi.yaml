@@ -13,6 +13,8 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
+    - name: Install buildtools
+      run: pip install build
     - name: Build package
       run: python3 -m build
     - name: Publish package distributions to PyPI
