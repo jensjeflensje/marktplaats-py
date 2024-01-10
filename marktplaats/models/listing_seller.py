@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 import requests
 
+from marktplaats.utils import REQUEST_HEADERS
+
 
 @dataclass
 class Seller:
@@ -34,12 +36,7 @@ class ListingSeller:
         request = requests.get(
             f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}",
             # Some headers to make the request look legit
-            headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
-                "Accept": "application/json",
-                "Sec-Fetch-Mode": "cors",
-                "Sec-Fetch-Site": "same-origin",
-            }
+            headers=REQUEST_HEADERS,
         )
 
         body = request.text

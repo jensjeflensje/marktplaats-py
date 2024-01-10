@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
 from marktplaats.models import ListingSeller
 from marktplaats.models.listing_location import ListingLocation
@@ -10,7 +11,7 @@ class Listing:
     id: str
     title: str
     description: str
-    date: datetime
+    date: Optional[datetime]
     seller: ListingSeller
     location: ListingLocation
     price: float
@@ -18,3 +19,4 @@ class Listing:
     images: list
     category_id: int
     attributes: list
+    extended_attributes: list
