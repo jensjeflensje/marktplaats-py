@@ -5,6 +5,7 @@ import requests
 import json
 
 from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
+from marktplaats.utils import REQUEST_HEADERS
 
 
 class SortBy(Enum):
@@ -33,7 +34,7 @@ class SearchQuery:
             self,
             query,
             zip_code="",
-            distance=1000000,
+            distance=1000000,  # in meters, basically unlimited
             price_from=0,
             price_to=1000000,
             limit=1,
@@ -58,12 +59,7 @@ class SearchQuery:
                 "sort_order": sort_order,
             },
             # Some headers to make the request look legit
-            headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
-                "Accept": "application/json",
-                "Sec-Fetch-Mode": "cors",
-                "Sec-Fetch-Site": "same-origin",
-            }
+            headers=REQUEST_HEADERS,
         )
 
         # every request exception should raise here
