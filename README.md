@@ -9,7 +9,7 @@ pip3 install marktplaats
 ## Example
 This is an example on how to use the library:
 ```py
-from marktplaats import SearchQuery
+from marktplaats import SearchQuery, SortBy, SortOrder
 
 search = SearchQuery("fiets", # Search query
                      zip_code="1016LV", # Zip code to base distance from
@@ -17,7 +17,9 @@ search = SearchQuery("fiets", # Search query
                      price_from=0, # Lowest price to search for
                      price_to=100, # Highest price to search for
                      limit=5, # Max listings (page size, max 25)
-                     offset=0) # Offset for listings (page * limit)
+                     offset=0, # Offset for listings (page * limit)
+                     sort_by=SortBy.OPTIMIZED, # DATE, PRICE, LOCATATION, OPTIMIZED
+                     sort_order=SortOrder.ASC) # ASCending or DESCending
 
 listings = search.get_listings()
 
