@@ -112,13 +112,21 @@ class TestSearchQuery(unittest.TestCase):
                 ]
             }"""
             
-            query = SearchQuery("fiets", price_from=10, price_to=200)
+            query = SearchQuery(
+                "fiets",
+                price_from=10,
+                price_to=200,
+                offered_since=datetime(2024, 12, 31, 14, 10, 0),
+            )
 
             get_request.assert_called_once_with(
                 "https://www.marktplaats.nl/lrp/api/search",
                 params={
-                    "attributeRanges[]":  [
+                    "attributeRanges[]": [
                         "PriceCents:1000:20000",
+                    ],
+                    "attributesByKey[]": [
+                        "offeredSince:1735650600000",
                     ],
                     "limit": "1",
                     "offset": "0",
@@ -127,8 +135,8 @@ class TestSearchQuery(unittest.TestCase):
                     "viewOptions": "list-view",
                     "distanceMeters": "1000000",  # basically unlimited
                     "postcode": "",
-                    "sortBy": SortBy.OPTIMIZED,
-                    "sort_order": SortOrder.ASC,
+                    "sortBy": "OPTIMIZED",
+                    "sortOrder": "INCREASING",
                 },
                 headers={
                     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",

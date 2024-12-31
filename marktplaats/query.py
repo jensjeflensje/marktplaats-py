@@ -24,6 +24,11 @@ class SortOrder(Enum):
     ASC = "INCREASING"
 
 
+def get_price_cents(price):
+    # Marktplaats uses the string "null" if the lower/upper bound is empty
+    return "null" if price is None else price * 100
+
+
 class SearchQuery:
     """
     A search query for Marktplaats.
@@ -35,29 +40,40 @@ class SearchQuery:
             query,
             zip_code="",
             distance=1000000,  # in meters, basically unlimited
-            price_from=0,
-            price_to=1000000,
+            price_from=None,
+            price_to=None,
             limit=1,
             offset=0,
             sort_by=SortBy.OPTIMIZED,
             sort_order=SortOrder.ASC,
+            offered_since=None,  # A datetime object
     ):
+        params = {
+            "limit": str(limit),
+            "offset": str(offset),
+            "query": str(query),
+            "searchInTitleAndDescription": "true",
+            "viewOptions": "list-view",
+            "distanceMeters": str(distance),
+            "postcode": zip_code,
+            "sortBy": sort_by.value,
+            "sortOrder": sort_order.value,
+        }
+
+        # Only add price parameters if any scoping is actually done, to match the website's behavior.
+        if price_from is not None or price_to is not None:
+            params["attributeRanges[]"] = [
+                f"PriceCents:{get_price_cents(price_from)}:{get_price_cents(price_to)}",
+            ]
+
+        if offered_since is not None:
+            params["attributesByKey[]"] = [
+                f"offeredSince:{int(offered_since.timestamp()) * 1000}",  # Unix timestamp millis
+            ]
+
         self.response = requests.get(
             "https://www.marktplaats.nl/lrp/api/search",
-            params={
-                "attributeRanges[]":  [
-                    f"PriceCents:{price_from * 100}:{price_to * 100}",
-                ],
-                "limit": str(limit),
-                "offset": str(offset),
-                "query": str(query),
-                "searchInTitleAndDescription": "true",
-                "viewOptions": "list-view",
-                "distanceMeters": str(distance),
-                "postcode": zip_code,
-                "sortBy": sort_by,
-                "sort_order": sort_order,
-            },
+            params=params,
             # Some headers to make the request look legit
             headers=REQUEST_HEADERS,
         )
