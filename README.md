@@ -9,6 +9,8 @@ pip3 install marktplaats
 ## Example
 This is an example on how to use the library:
 ```py
+from datetime import datetime, timedelta
+
 from marktplaats import SearchQuery, SortBy, SortOrder
 
 search = SearchQuery("fiets", # Search query
@@ -19,7 +21,8 @@ search = SearchQuery("fiets", # Search query
                      limit=5, # Max listings (page size, max 25)
                      offset=0, # Offset for listings (page * limit)
                      sort_by=SortBy.OPTIMIZED, # DATE, PRICE, LOCATATION, OPTIMIZED
-                     sort_order=SortOrder.ASC) # ASCending or DESCending
+                     sort_order=SortOrder.ASC, # ASCending or DESCending
+                     offered_since=datetime.now() - timedelta(days=7)) # Filter listings since a point in time
 
 listings = search.get_listings()
 
