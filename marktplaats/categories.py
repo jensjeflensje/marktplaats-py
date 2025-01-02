@@ -10,8 +10,12 @@ class L1Category:
 
     @classmethod
     def from_name(cls, name: str):
+        orig_name = name
         name = name.lower()
-        l1_category = l1_categories[name]
+        try:
+            l1_category = l1_categories[name]
+        except KeyError as err:
+            raise ValueError(f"Unknown L1 category name: {orig_name}") from err
         id_, name = l1_category["id"], l1_category["name"]
         return cls(id_, name)
 
@@ -27,8 +31,12 @@ class L2Category:
 
     @classmethod
     def from_name(cls, name: str):
+        orig_name = name
         name = name.lower()
-        l2_category = l2_categories[name]
+        try:
+            l2_category = l2_categories[name]
+        except KeyError as err:
+            raise ValueError(f"Unknown L2 category name: {orig_name}") from err
         id_, name, parent = l2_category["id"], l2_category["name"], l2_category["parent"]
         parent = L1Category.from_name(parent)
         return cls(id_, name, parent)
