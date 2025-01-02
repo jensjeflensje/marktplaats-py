@@ -2,6 +2,8 @@ import json
 
 from pathlib import Path
 
+from typing import Union
+
 
 class L1Category:
     def __init__(self, id_: int, name: str):
@@ -43,6 +45,13 @@ class L2Category:
 
     def __str__(self):
         return self.name
+
+
+def category_from_name(name: str) -> Union[L1Category, L2Category]:
+    try:
+        return L1Category.from_name(name)
+    except ValueError:
+        return L2Category.from_name(name)
 
 
 l1_categories_file = (Path(__file__).parent / "l1_categories.json").resolve()

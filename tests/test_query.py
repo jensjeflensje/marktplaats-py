@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime, timezone
 from unittest.mock import patch
 
-from marktplaats.categories import L2Category
+from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 
 from marktplaats import SearchQuery
@@ -118,7 +118,7 @@ class TestSearchQuery(unittest.TestCase):
                 price_from=10,
                 price_to=200,
                 offered_since=datetime(2024, 12, 31, 14, 10, 0),
-                category=L2Category.from_name("Beschrijfbare discs"),
+                category=category_from_name("Beschrijfbare discs"),
             )
 
             get_request.assert_called_once_with(
