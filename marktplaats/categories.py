@@ -15,7 +15,7 @@ class L1Category:
         orig_name = name
         name = name.lower()
         try:
-            l1_category = l1_categories[name]
+            l1_category = l1_categories.get_data()[name]
         except KeyError as err:
             raise ValueError(f"Unknown L1 category name: {orig_name}") from err
         id_, name = l1_category["id"], l1_category["name"]
@@ -36,7 +36,7 @@ class L2Category:
         orig_name = name
         name = name.lower()
         try:
-            l2_category = l2_categories[name]
+            l2_category = l2_categories.get_data()[name]
         except KeyError as err:
             raise ValueError(f"Unknown L2 category name: {orig_name}") from err
         id_, name, parent = l2_category["id"], l2_category["name"], l2_category["parent"]
@@ -54,11 +54,23 @@ def category_from_name(name: str) -> Union[L1Category, L2Category]:
         return L2Category.from_name(name)
 
 
+class Lazywrapper(object):
+    def __init__(self, filename: Path):
+        self.filename = filename
+        self._data = None
+
+    def get_data(self):
+        if self._data is None:
+            self._build_data()
+        return self._data
+
+    def _build_data(self) -> None:
+        with self.filename.open() as file:
+            print("Now doing thingy")
+            self._data = json.load(file)
+
+
 l1_categories_file = (Path(__file__).parent / "l1_categories.json").resolve()
+l1_categories = Lazywrapper(l1_categories_file)
 l2_categories_file = (Path(__file__).parent / "l2_categories.json").resolve()
-
-with l1_categories_file.open() as file:
-    l1_categories = json.load(file)
-
-with l2_categories_file.open() as file:
-    l2_categories = json.load(file)
+l2_categories = Lazywrapper(l2_categories_file)
