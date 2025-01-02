@@ -66,7 +66,6 @@ class Lazywrapper(object):
 
     def _build_data(self) -> None:
         with self.filename.open() as file:
-            print("Now doing thingy")
             self._data = json.load(file)
 
 
