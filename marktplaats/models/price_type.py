@@ -27,9 +27,9 @@ class PriceType(Enum):
         elif self == PriceType.SEE_DESCRIPTION:
             return "See description"
         elif self == PriceType.FIXED:
-            return f"{'€ ' if euro_sign else ''}{price}"
+            return f"{'€ ' if euro_sign else ''}{price:.2f}"
         elif self == PriceType.BID_FROM:
-            return f"{'€ ' if euro_sign else ''}{price}"
+            return f"{'€ ' if euro_sign else ''}{price:.2f}"
 
         assert False
 
@@ -43,8 +43,8 @@ class PriceType(Enum):
         elif self == PriceType.SEE_DESCRIPTION:
             return "Zie omschrijving"
         elif self == PriceType.FIXED:
-            return f"{'€ ' if euro_sign else ''}{price}"
+            return f"{'€ ' if euro_sign else ''}{price:.2f}"
         elif self == PriceType.BID_FROM:
-            return f"{'€ ' if euro_sign else ''}{price}"
+            return f"{'€ ' if euro_sign else ''}{price:.2f}"
 
         assert False
