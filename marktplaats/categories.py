@@ -21,6 +21,10 @@ class L1Category:
         id_, name = l1_category["id"], l1_category["name"]
         return cls(id_, name)
 
+    @classmethod
+    def from_id(cls, id_: int, name: str = "Unknown"):
+        cls(id_, name)
+
     def __str__(self):
         return self.name
 
@@ -42,6 +46,10 @@ class L2Category:
         id_, name, parent = l2_category["id"], l2_category["name"], l2_category["parent"]
         parent = L1Category.from_name(parent)
         return cls(id_, name, parent)
+
+    @classmethod
+    def from_id(cls, id_: int, parent: L1Category, name: str = "Unknown"):
+        cls(id_, name, parent)
 
     def __str__(self):
         return self.name
