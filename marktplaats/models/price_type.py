@@ -17,7 +17,7 @@ class PriceType(Enum):
     #  The `.price` is the asking price shown in the search results.
     BID_FROM = "MIN_BID"
 
-    def as_string_en(self, price: float) -> str:
+    def as_string_en(self, price: float, euro_sign: bool = True) -> str:
         if self == PriceType.FREE:
             return "Free"
         elif self == PriceType.BID:
@@ -27,13 +27,13 @@ class PriceType(Enum):
         elif self == PriceType.SEE_DESCRIPTION:
             return "See description"
         elif self == PriceType.FIXED:
-            return str(price)
+            return f"{'€ ' if euro_sign else ''}{price}"
         elif self == PriceType.BID_FROM:
-            return str(price)
+            return f"{'€ ' if euro_sign else ''}{price}"
 
         assert False
 
-    def as_string_nl(self, price: float) -> str:
+    def as_string_nl(self, price: float, euro_sign: bool = True) -> str:
         if self == PriceType.FREE:
             return "Gratis"
         elif self == PriceType.BID:
@@ -43,8 +43,8 @@ class PriceType(Enum):
         elif self == PriceType.SEE_DESCRIPTION:
             return "Zie omschrijving"
         elif self == PriceType.FIXED:
-            return str(price)
+            return f"{'€ ' if euro_sign else ''}{price}"
         elif self == PriceType.BID_FROM:
-            return str(price)
+            return f"{'€ ' if euro_sign else ''}{price}"
 
         assert False
