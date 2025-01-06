@@ -8,6 +8,7 @@ class ListingLocation:
     country_short: str
     latitude: float
     longitude: float
+    distance: int
 
     @classmethod
     def parse(cls, data):
@@ -17,5 +18,6 @@ class ListingLocation:
             data.get("countryAbbrevation"),
             data.get("latitude"),
             data.get("longitude"),
+            data.get("distanceMeters")
         )
 
