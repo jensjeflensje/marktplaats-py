@@ -17,31 +17,30 @@ class PriceType(Enum):
     #  The `.price` is the asking price shown in the search results.
     BID_FROM = "MIN_BID"
 
-    def as_string_en(self, price: float, euro_sign: bool = True) -> str:
-        if self == PriceType.FREE:
-            return "Free"
-        elif self == PriceType.BID:
-            return "Bid"
-        elif self == PriceType.RESERVED:
-            return "Reserved"
-        elif self == PriceType.SEE_DESCRIPTION:
-            return "See description"
-        elif self == PriceType.FIXED:
-            return f"{'€ ' if euro_sign else ''}{price:.2f}"
-        elif self == PriceType.BID_FROM:
-            return f"{'€ ' if euro_sign else ''}{price:.2f}"
+    def _as_string(self, price: float, euro_sign: bool, lang: str) -> str:
+        if lang not in ("en", "nl"):
+            raise ValueError(f"{lang:r} not in supported languages (nl, en)")
 
-        assert False
-
-    def as_string_nl(self, price: float, euro_sign: bool = True) -> str:
         if self == PriceType.FREE:
-            return "Gratis"
+            return {
+                "en": "Free",
+                "nl": "Gratis",
+            }[lang]
         elif self == PriceType.BID:
-            return "Bieden"
+            return {
+                "en": "Bid",
+                "nl": "Bieden",
+            }[lang]
         elif self == PriceType.RESERVED:
-            return "Gereserveerd"
+            return {
+                "en": "Reserved",
+                "nl": "Gereserveerd",
+            }[lang]
         elif self == PriceType.SEE_DESCRIPTION:
-            return "Zie omschrijving"
+            return {
+                "en": "See description",
+                "nl": "Zie omschrijving",
+            }[lang]
         elif self == PriceType.FIXED:
             return f"{'€ ' if euro_sign else ''}{price:.2f}"
         elif self == PriceType.BID_FROM:

@@ -23,8 +23,5 @@ class Listing:
     attributes: list
     extended_attributes: list
 
-    def price_as_string_en(self) -> str:
-        return self.price_type.as_string_en(self.price)
-
-    def price_as_string_nl(self) -> str:
-        return self.price_type.as_string_nl(self.price)
+    def price_as_string(self, euro_sign: bool = True, lang: str = "en") -> str:
+        return self.price_type._as_string(self.price, euro_sign, lang)
