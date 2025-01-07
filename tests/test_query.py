@@ -2,9 +2,10 @@ import unittest
 from datetime import datetime, timezone
 from unittest.mock import patch
 
+from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 
-from marktplaats import SearchQuery, SortBy, SortOrder
+from marktplaats import SearchQuery
 
 
 class TestSearchQuery(unittest.TestCase):
@@ -117,6 +118,7 @@ class TestSearchQuery(unittest.TestCase):
                 price_from=10,
                 price_to=200,
                 offered_since=datetime(2024, 12, 31, 14, 10, 0),
+                category=category_from_name("Beschrijfbare discs"),
             )
 
             get_request.assert_called_once_with(
@@ -137,6 +139,8 @@ class TestSearchQuery(unittest.TestCase):
                     "postcode": "",
                     "sortBy": "OPTIMIZED",
                     "sortOrder": "INCREASING",
+                    "l1CategoryId": "322",
+                    "l2CategoryId": "1415",
                 },
                 headers={
                     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
