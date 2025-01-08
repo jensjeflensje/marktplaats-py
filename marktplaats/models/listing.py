@@ -23,5 +23,8 @@ class Listing:
     attributes: list
     extended_attributes: list
 
+    def __eq__(self, other):
+        return self.id == other.id
+
     def price_as_string(self, euro_sign: bool = True, lang: str = "en") -> str:
         return self.price_type._as_string(self.price, euro_sign, lang)
