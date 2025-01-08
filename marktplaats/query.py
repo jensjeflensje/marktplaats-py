@@ -6,6 +6,7 @@ import json
 
 from marktplaats.categories import L2Category
 from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
+from marktplaats.models.price_type import PriceType
 from marktplaats.utils import REQUEST_HEADERS
 
 
@@ -111,6 +112,7 @@ class SearchQuery:
                 ListingSeller.parse(listing["sellerInformation"]),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
+                PriceType(listing["priceInfo"]["priceType"]),
                 "https://link.marktplaats.nl/" + listing["itemId"],
                 ListingImage.parse(listing.get("pictures")),
                 listing["categoryId"],

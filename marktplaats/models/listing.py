@@ -4,6 +4,7 @@ from typing import Optional
 
 from marktplaats.models import ListingSeller
 from marktplaats.models.listing_location import ListingLocation
+from marktplaats.models.price_type import PriceType
 
 
 @dataclass
@@ -15,8 +16,12 @@ class Listing:
     seller: ListingSeller
     location: ListingLocation
     price: float
+    price_type: PriceType
     link: str
     images: list
     category_id: int
     attributes: list
     extended_attributes: list
+
+    def price_as_string(self, euro_sign: bool = True, lang: str = "en") -> str:
+        return self.price_type._as_string(self.price, euro_sign, lang)

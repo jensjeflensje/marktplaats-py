@@ -5,7 +5,7 @@ from unittest.mock import patch
 from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 
-from marktplaats import SearchQuery
+from marktplaats import SearchQuery, SortBy, SortOrder, PriceType
 
 
 class TestSearchQuery(unittest.TestCase):
@@ -156,6 +156,7 @@ class TestSearchQuery(unittest.TestCase):
         listing = listings[0]
         self.assertEqual(75, listing.price)
         self.assertEqual(75, listing.price)
+        self.assertEqual(PriceType.FIXED, listing.price_type)
         self.assertEqual(1, len(listing.images))
         self.assertIsInstance(listing.location, ListingLocation)
         self.assertEqual(
