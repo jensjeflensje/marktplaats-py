@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 from marktplaats import SearchQuery, SortBy, SortOrder, category_from_name
 
-search = SearchQuery("fiets", # Search query
+search = SearchQuery("gazelle", # Search query
                      zip_code="1016LV", # Zip code to base distance from
                      distance=100000, # Max distance from the zip code for listings
                      price_from=0, # Lowest price to search for
@@ -23,7 +23,7 @@ search = SearchQuery("fiets", # Search query
                      sort_by=SortBy.OPTIMIZED, # DATE, PRICE, LOCATATION, OPTIMIZED
                      sort_order=SortOrder.ASC, # ASCending or DESCending
                      offered_since=datetime.now() - timedelta(days=7), # Filter listings since a point in time
-                     category=category_from_name("Tablet-hoezen")) # Filter in specific category (L1) or subcategory (L2)
+                     category=category_from_name("Fietsen en Brommers")) # Filter in specific category (L1) or subcategory (L2)
 
 listings = search.get_listings()
 
