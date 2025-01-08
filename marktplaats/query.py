@@ -4,7 +4,9 @@ from enum import Enum
 import requests
 import json
 
+from marktplaats.categories import L2Category
 from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
+from marktplaats.models.price_type import PriceType
 from marktplaats.utils import REQUEST_HEADERS
 
 
@@ -47,6 +49,7 @@ class SearchQuery:
             sort_by=SortBy.OPTIMIZED,
             sort_order=SortOrder.ASC,
             offered_since=None,  # A datetime object
+            category=None,
     ):
         params = {
             "limit": str(limit),
@@ -70,6 +73,15 @@ class SearchQuery:
             params["attributesByKey[]"] = [
                 f"offeredSince:{int(offered_since.timestamp()) * 1000}",  # Unix timestamp millis
             ]
+
+        if category:
+            # If it is an L2 category
+            if isinstance(category, L2Category):
+                params["l2CategoryId"] = str(category.id)
+                # Set the parent category as well
+                category = category.parent
+            # Set the L1 category in both cases
+            params["l1CategoryId"] = str(category.id)
 
         self.response = requests.get(
             "https://www.marktplaats.nl/lrp/api/search",
@@ -100,6 +112,7 @@ class SearchQuery:
                 ListingSeller.parse(listing["sellerInformation"]),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
+                PriceType(listing["priceInfo"]["priceType"]),
                 "https://link.marktplaats.nl/" + listing["itemId"],
                 ListingImage.parse(listing.get("pictures")),
                 listing["categoryId"],

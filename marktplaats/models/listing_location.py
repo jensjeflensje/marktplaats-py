@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -8,6 +9,7 @@ class ListingLocation:
     country_short: str
     latitude: float
     longitude: float
+    distance: Optional[int]
 
     @classmethod
     def parse(cls, data):
@@ -17,5 +19,6 @@ class ListingLocation:
             data.get("countryAbbrevation"),
             data.get("latitude"),
             data.get("longitude"),
+            None if data.get("distanceMeters") == -1000 else data.get("distanceMeters"),
         )
 
