@@ -20,3 +20,6 @@ class Listing:
     category_id: int
     attributes: list
     extended_attributes: list
+
+    def __eq__(self, other):
+        return self.id == other.id
