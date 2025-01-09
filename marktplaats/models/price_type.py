@@ -10,6 +10,8 @@ class PriceType(Enum):
     RESERVED = "RESERVED"
     # "Zie omschrijving", `.price` should be 0
     SEE_DESCRIPTION = "SEE_DESCRIPTION"
+    # "N.o.t.k.", `.price` should be 0
+    TO_BE_AGREED_UPON = "NOTK"
     # Just the price
     FIXED = "FIXED"
     # Just the price, but the API also lets us know there's a bidding option separate from the asking price
@@ -40,6 +42,11 @@ class PriceType(Enum):
             return {
                 "en": "See description",
                 "nl": "Zie omschrijving",
+            }[lang]
+        elif self == PriceType.TO_BE_AGREED_UPON:
+            return {
+                "en": "To be agreed upon",
+                "nl": "N.o.t.k.",
             }[lang]
         elif self == PriceType.FIXED:
             return f"{'€ ' if euro_sign else ''}{price:.2f}"
