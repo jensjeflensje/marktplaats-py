@@ -26,5 +26,8 @@ class Listing:
     def __eq__(self, other):
         return self.id == other.id
 
+    def __hash__(self):
+        return hash(self.id)
+
     def price_as_string(self, euro_sign: bool = True, lang: str = "en") -> str:
         return self.price_type._as_string(self.price, euro_sign, lang)
