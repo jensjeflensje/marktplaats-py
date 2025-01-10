@@ -5,10 +5,10 @@ from unittest.mock import patch
 from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 
-from marktplaats import SearchQuery, SortBy, SortOrder, PriceType
+from marktplaats import SearchQuery, PriceType
 
 
-class TestSearchQuery(unittest.TestCase):
+class BasicSearchQueryTest(unittest.TestCase):
     """
     Basic tests to test search query functionality.
     """
