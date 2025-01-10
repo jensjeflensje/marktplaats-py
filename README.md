@@ -31,6 +31,8 @@ for listing in listings:
     print(listing.title)
     print(listing.description)
     print(listing.price)
+    print(listing.price_as_string(lang="nl"))
+    print(listing.price_type)
     print(listing.link)
     
     # the location object
