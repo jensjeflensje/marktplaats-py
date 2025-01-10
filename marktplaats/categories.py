@@ -62,7 +62,7 @@ def category_from_name(name: str) -> Union[L1Category, L2Category]:
         return L2Category.from_name(name)
 
 
-class Lazywrapper(object):
+class LazyWrapper:
     def __init__(self, filename: Path):
         self.filename = filename
         self._data = None
@@ -78,6 +78,6 @@ class Lazywrapper(object):
 
 
 l1_categories_file = (Path(__file__).parent / "l1_categories.json").resolve()
-l1_categories = Lazywrapper(l1_categories_file)
+l1_categories = LazyWrapper(l1_categories_file)
 l2_categories_file = (Path(__file__).parent / "l2_categories.json").resolve()
-l2_categories = Lazywrapper(l2_categories_file)
+l2_categories = LazyWrapper(l2_categories_file)
