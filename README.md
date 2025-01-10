@@ -53,3 +53,6 @@ for listing in listings:
     
     print("-----------------------------")
 ```
+
+## Categories
+Filtering by Marktplaats category is possible. Please refer to the categories index at [CATEGORIES.md](./CATEGORIES.md)
