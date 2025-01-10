@@ -20,7 +20,7 @@ search = SearchQuery("gazelle", # Search query
                      price_to=100, # Highest price to search for
                      limit=5, # Max listings (page size, max 25)
                      offset=0, # Offset for listings (page * limit)
-                     sort_by=SortBy.OPTIMIZED, # DATE, PRICE, LOCATATION, OPTIMIZED
+                     sort_by=SortBy.OPTIMIZED, # DATE, PRICE, LOCATION, OPTIMIZED
                      sort_order=SortOrder.ASC, # ASCending or DESCending
                      offered_since=datetime.now() - timedelta(days=7), # Filter listings since a point in time
                      category=category_from_name("Fietsen en Brommers")) # Filter in specific category (L1) or subcategory (L2)
