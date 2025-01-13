@@ -26,6 +26,19 @@ class SortOrder(Enum):
     ASC = "INCREASING"
 
 
+class Condition(Enum):
+    """
+    Enumeration of different conditions for items listed on Marktplaats.
+    NEW, AS_GOOD_AS_NEW, and USED always work.
+    REFURBISHED and NOT_WORKING are specific to some categories.
+    """
+    NEW = 30
+    REFURBISHED = 14050
+    AS_GOOD_AS_NEW = 31
+    USED = 32
+    NOT_WORKING = 13940
+
+
 def get_price_cents(price):
     # Marktplaats uses the string "null" if the lower/upper bound is empty
     return "null" if price is None else price * 100
@@ -48,8 +61,10 @@ class SearchQuery:
             offset=0,
             sort_by=SortBy.OPTIMIZED,
             sort_order=SortOrder.ASC,
+            condition=None,
             offered_since=None,  # A datetime object
             category=None,
+            extra_attributes=None, # EXPERIMENTAL: list of integers, just like Condition
     ):
         params = {
             "limit": str(limit),
@@ -61,6 +76,7 @@ class SearchQuery:
             "postcode": zip_code,
             "sortBy": sort_by.value,
             "sortOrder": sort_order.value,
+            "attributesById[]": []
         }
 
         # Only add price parameters if any scoping is actually done, to match the website's behavior.
@@ -68,6 +84,12 @@ class SearchQuery:
             params["attributeRanges[]"] = [
                 f"PriceCents:{get_price_cents(price_from)}:{get_price_cents(price_to)}",
             ]
+
+        if condition is not None:
+            params["attributesById[]"].append(condition.value)
+
+        if extra_attributes is not None:
+            params["attributesById[]"].append(condition.value)
 
         if offered_since is not None:
             params["attributesByKey[]"] = [
