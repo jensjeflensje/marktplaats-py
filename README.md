@@ -11,7 +11,7 @@ This is an example on how to use the library:
 ```py
 from datetime import datetime, timedelta
 
-from marktplaats import SearchQuery, SortBy, SortOrder, category_from_name
+from marktplaats import SearchQuery, SortBy, SortOrder, Condition, category_from_name
 
 search = SearchQuery("gazelle", # Search query
                      zip_code="1016LV", # Zip code to base distance from
@@ -22,6 +22,7 @@ search = SearchQuery("gazelle", # Search query
                      offset=0, # Offset for listings (page * limit)
                      sort_by=SortBy.OPTIMIZED, # DATE, PRICE, LOCATION, OPTIMIZED
                      sort_order=SortOrder.ASC, # ASCending or DESCending
+                     condition=Condition.NEW, # NEW, AS_GOOD_AS_NEW, USED or category-specific
                      offered_since=datetime.now() - timedelta(days=7), # Filter listings since a point in time
                      category=category_from_name("Fietsen en Brommers")) # Filter in specific category (L1) or subcategory (L2)
 
