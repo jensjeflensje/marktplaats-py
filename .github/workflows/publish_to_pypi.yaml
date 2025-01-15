@@ -21,3 +21,21 @@ jobs:
       run: python3 -m build
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+  release-create:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract Maven project version
+        run: echo ::set-output name=version::$(grep -m 1 version pyproject.toml | tr -s ' ' | tr -d '"' | tr -d "'" | cut -d' ' -f3)
+        id: project
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.project.outputs.version }}
+          release_name: v${{ steps.project.outputs.version }}
+          body: New release ${{ steps.project.outputs.version }}
+          draft: false
+          prerelease: false
