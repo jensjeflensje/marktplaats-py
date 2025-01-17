@@ -1,4 +1,5 @@
 import json
+from collections.abc import Iterator
 
 from pathlib import Path
 
@@ -15,7 +16,7 @@ class L1Category:
         orig_name = name
         name = name.lower()
         try:
-            l1_category = l1_categories.get_data()[name]
+            l1_category = _l1_categories_raw.get_data()[name]
         except KeyError as err:
             raise ValueError(f"Unknown L1 category name: {orig_name}") from err
         id_, name = l1_category["id"], l1_category["name"]
@@ -27,6 +28,12 @@ class L1Category:
 
     def __str__(self):
         return self.name
+
+    def __eq__(self, other):
+        return self.id == other.id
+
+    def __hash__(self):
+        return hash(self.id)
 
 
 class L2Category:
@@ -40,7 +47,7 @@ class L2Category:
         orig_name = name
         name = name.lower()
         try:
-            l2_category = l2_categories.get_data()[name]
+            l2_category = _l2_categories_raw.get_data()[name]
         except KeyError as err:
             raise ValueError(f"Unknown L2 category name: {orig_name}") from err
         id_, name, parent = l2_category["id"], l2_category["name"], l2_category["parent"]
@@ -53,6 +60,12 @@ class L2Category:
 
     def __str__(self):
         return self.name
+
+    def __eq__(self, other):
+        return self.id == other.id
+
+    def __hash__(self):
+        return hash(self.id)
 
 
 def category_from_name(name: str) -> Union[L1Category, L2Category]:
@@ -77,7 +90,22 @@ class LazyWrapper:
             self._data = json.load(file)
 
 
-l1_categories_file = (Path(__file__).parent / "l1_categories.json").resolve()
-l1_categories = LazyWrapper(l1_categories_file)
-l2_categories_file = (Path(__file__).parent / "l2_categories.json").resolve()
-l2_categories = LazyWrapper(l2_categories_file)
+def get_l1_categories() -> Iterator[L1Category]:
+    for category in _l1_categories_raw.get_data().values():
+        yield L1Category(category["id"], category["name"])
+
+
+def get_l2_categories() -> Iterator[L2Category]:
+    for category in _l2_categories_raw.get_data().values():
+        parent = L1Category.from_name(category["parent"])
+        yield L2Category(category["id"], category["name"], parent)
+
+
+def get_subcategories(l1_category: L1Category) -> Iterator[L2Category]:
+    return (cat for cat in get_l2_categories() if cat.parent == l1_category)
+
+
+_l1_categories_file = (Path(__file__).parent / "l1_categories.json").resolve()
+_l1_categories_raw = LazyWrapper(_l1_categories_file)
+_l2_categories_file = (Path(__file__).parent / "l2_categories.json").resolve()
+_l2_categories_raw = LazyWrapper(_l2_categories_file)
