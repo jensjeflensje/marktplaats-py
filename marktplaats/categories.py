@@ -105,6 +105,15 @@ def get_subcategories(l1_category: L1Category) -> Iterator[L2Category]:
     return (cat for cat in get_l2_categories() if cat.parent == l1_category)
 
 
+def get_l2_categories_by_parent() -> dict[L1Category, list[L2Category]]:
+    categories = {}
+    for category in get_l2_categories():
+        if category.parent not in categories:
+            categories[category.parent] = []
+        categories[category.parent].append(category)
+    return categories
+
+
 _l1_categories_file = (Path(__file__).parent / "l1_categories.json").resolve()
 _l1_categories_raw = LazyWrapper(_l1_categories_file)
 _l2_categories_file = (Path(__file__).parent / "l2_categories.json").resolve()
