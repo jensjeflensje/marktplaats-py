@@ -25,7 +25,9 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     steps:
-      - name: Extract Maven project version
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Extract project version
         run: echo ::set-output name=version::$(grep -m 1 version pyproject.toml | tr -s ' ' | tr -d '"' | tr -d "'" | cut -d' ' -f3)
         id: project
       - name: Create Release
@@ -34,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.project.outputs.version }}
+          tag_name: v${{ steps.project.outputs.version }}
           release_name: v${{ steps.project.outputs.version }}
           body: New release ${{ steps.project.outputs.version }}
           draft: false
