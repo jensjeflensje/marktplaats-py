@@ -31,6 +31,8 @@ class L1Category:
         return self.name
 
     def __eq__(self, other):
+        if not isinstance(other, L1Category):
+            return NotImplemented
         return self.id == other.id
 
     def __hash__(self):
@@ -63,6 +65,8 @@ class L2Category:
         return self.name
 
     def __eq__(self, other):
+        if not isinstance(other, L2Category):
+            return NotImplemented
         return self.id == other.id
 
     def __hash__(self):

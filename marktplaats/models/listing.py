@@ -24,6 +24,8 @@ class Listing:
     extended_attributes: list
 
     def __eq__(self, other):
+        if not isinstance(other, Listing):
+            return NotImplemented
         return self.id == other.id
 
     def __hash__(self):
