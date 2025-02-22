@@ -14,6 +14,8 @@ class PriceType(Enum):
     TO_BE_AGREED_UPON = "NOTK"
     # 'Op aanvraag', `.price` should be 0
     ON_REQUEST = "ON_REQUEST"
+    # 'Ruilen', `.price` should be 0
+    EXCHANGE = "EXCHANGE"
     # Just the price
     FIXED = "FIXED"
     # Just the price, but the API also lets us know there's a bidding option separate from the asking price
@@ -57,6 +59,11 @@ class PriceType(Enum):
             return {
                 "en": "On request",
                 "nl": "Op aanvraag",
+            }[lang]
+        elif self == PriceType.EXCHANGE:
+            return {
+                "en": "Exchange",
+                "nl": "Ruilen",
             }[lang]
         elif self == PriceType.UNKNOWN:
             return {
