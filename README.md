@@ -3,7 +3,7 @@ A small Python package to request listings from marktplaats.nl. It supports pyth
 
 ## Installing
 ```shell
-pip3 install marktplaats
+pip install marktplaats
 ```
 
 ## Example
