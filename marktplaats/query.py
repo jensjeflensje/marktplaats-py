@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from enum import Enum
 
@@ -5,9 +6,13 @@ import requests
 import json
 
 from marktplaats.categories import L2Category
+from marktplaats.config import ISSUE_LINK
 from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
 from marktplaats.models.price_type import PriceType
 from marktplaats.utils import REQUEST_HEADERS
+
+
+logger = logging.getLogger(__name__)
 
 
 class SortBy(Enum):
@@ -129,6 +134,12 @@ class SearchQuery:
             try:
                 price_type = PriceType(listing["priceInfo"]["priceType"])
             except ValueError:
+                # this means marktplaats has a PriceType this library doesn't know about
+                logger.warning(f"Marktplaats-py found an unknown PriceType found for "
+                               f"listing {listing['itemId']}: '{listing['priceInfo']['priceType']}'. "
+                               f"This is not your fault. "
+                               f"Please create an issue on {ISSUE_LINK} and include this log message.")
+                # set a fallback value
                 price_type = PriceType.UNKNOWN
 
             listing_obj = Listing(

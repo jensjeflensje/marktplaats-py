@@ -1,0 +1,1 @@
+ISSUE_LINK = "https://github.com/jensjeflensje/marktplaats-py/issues"
