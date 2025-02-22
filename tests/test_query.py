@@ -130,6 +130,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                     "attributesByKey[]": [
                         "offeredSince:1735650600000",
                     ],
+                    "attributesById[]": [],
                     "limit": "1",
                     "offset": "0",
                     "query": "fiets",
