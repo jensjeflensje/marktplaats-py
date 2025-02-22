@@ -126,6 +126,11 @@ class SearchQuery:
             except ValueError:
                 listing_time = None
 
+            try:
+                price_type = PriceType(listing["priceInfo"]["priceType"])
+            except ValueError:
+                price_type = PriceType.UNKNOWN
+
             listing_obj = Listing(
                 listing["itemId"],
                 listing["title"],
@@ -134,7 +139,7 @@ class SearchQuery:
                 ListingSeller.parse(listing["sellerInformation"]),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
-                PriceType(listing["priceInfo"]["priceType"]),
+                price_type,
                 "https://link.marktplaats.nl/" + listing["itemId"],
                 ListingImage.parse(listing.get("pictures")),
                 listing["categoryId"],
