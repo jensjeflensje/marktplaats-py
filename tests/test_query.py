@@ -16,6 +16,7 @@ class BasicSearchQueryTest(unittest.TestCase):
     def test_request(self):
         with patch('requests.get') as get_request:
             get_request.return_value.text = """{
+                "totalResultCount": 100,
                 "listings": [
                     {
                         "itemId": "m2064554806",
@@ -165,6 +166,7 @@ class BasicSearchQueryTest(unittest.TestCase):
             listing.date
         )
         self.assertEqual("https://link.marktplaats.nl/m2064554806", listing.link)
+        self.assertEqual(100, query.total_result_count)
 
         self.assertEqual(7405065, listing.seller.id)
         self.assertFalse(listing.seller.is_verified)

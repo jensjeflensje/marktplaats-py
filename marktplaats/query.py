@@ -123,6 +123,13 @@ class SearchQuery:
         self.body = self.response.text
         self.body_json = json.loads(self.body)
 
+        self._set_query_data()
+
+    def _set_query_data(self):
+        # more fields will be added
+        # for now, this is a nice way to get the total result count when looping through pages
+        self.total_result_count = self.body_json.get('totalResultCount')
+
     def get_listings(self):
         listings = []
         for listing in self.body_json["listings"]:
