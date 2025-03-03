@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 
 import requests
@@ -123,18 +123,17 @@ class SearchQuery:
         self.body = self.response.text
         self.body_json = json.loads(self.body)
 
-        self._set_query_data()
-
-    def _set_query_data(self):
-        # more fields will be added
-        # for now, this is a nice way to get the total result count when looping through pages
-        self.total_result_count = self.body_json.get('totalResultCount')
-
-    def get_listings(self):
+    def get_listings(self) -> list[Listing]:
         listings = []
         for listing in self.body_json["listings"]:
             try:
-                listing_time = datetime.strptime(listing["date"], "%Y-%m-%dT%H:%M:%S%z")
+                date_str = listing["date"]
+                if date_str == "Eergisteren":
+                    listing_time = datetime.now() - timedelta(days=2)
+                elif date_str == "Gisteren":
+                    listing_time = datetime.now() - timedelta(days=1)
+                else:
+                    listing_time = datetime.strptime(date_str, "%d %b %y")
             except ValueError:
                 listing_time = None
 
