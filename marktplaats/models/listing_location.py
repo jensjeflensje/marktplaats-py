@@ -5,8 +5,8 @@ from typing import Optional
 @dataclass
 class ListingLocation:
     city: str
-    country: str
-    country_short: str
+    country: Optional[str]
+    country_short: Optional[str]
     latitude: float
     longitude: float
     distance: Optional[int]
