@@ -1,6 +1,6 @@
 import json
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from enum import Enum
 
 import requests
@@ -144,19 +144,24 @@ class SearchQuery:
         # for now, this is a nice way to get the total result count when looping through pages
         self.total_result_count = self.body_json.get("totalResultCount")
 
-    def _parse_date(self, date_str):
+    def _parse_date(self, date_str) -> date:
+        # marktplaats returns these relative words for the date
+        # OR a date like '10 mrt 24'
         if date_str == "Eergisteren":
-            return datetime.now() - timedelta(days=2)
-        if date_str == "Gisteren":
-            return datetime.now() - timedelta(days=1)
-        if date_str == "Vandaag":
-            return datetime.now()
+            result = datetime.now() - timedelta(days=2)
+        elif date_str == "Gisteren":
+            result = datetime.now() - timedelta(days=1)
+        elif date_str == "Vandaag":
+            result = datetime.now()
+        else:
+            date_str = self._replace_dutch_months(date_str)
+            result = datetime.strptime(date_str, "%d %b %y")
 
-        date_str = self._replace_dutch_months(date_str)
+        return result.date()
 
-        return datetime.strptime(date_str, "%d %b %y")
-
-    def _replace_dutch_months(self, date_str):
+    def _replace_dutch_months(self, date_str) -> str:
+        # marktplaats returns Dutch names for months
+        # so we need to convert them to english to be parsed
         for dutch, english in MONTH_MAPPING.items():
             date_str = date_str.replace(dutch, english)
         return date_str
