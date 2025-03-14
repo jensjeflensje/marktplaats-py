@@ -42,7 +42,7 @@ for listing in listings:
     # the seller object
     print(listing.seller)
     
-    # the datetime object
+    # the date object
     print(listing.date)
     
     # the full seller object (another request)
