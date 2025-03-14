@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 from marktplaats import SearchQuery, SortBy, SortOrder, Condition, category_from_name, PriceType, ListingLocation, \
     ListingSeller
@@ -38,11 +38,10 @@ class LiveSearchQueryTest(unittest.TestCase):
             self.assertIsInstance(listing.seller.name, str)
             self.assertIsInstance(listing.seller.is_verified, bool)
 
-            # the datetime object
-            # TODO: enable these once they actually work
-            # self.assertIsInstance(listing.date, datetime)
+            # the date object
+            self.assertIsInstance(listing.date, date)
             # should be greater than what we queried for
-            # self.assertGreater(listing.date, datetime.now() - timedelta(days=7))
+            self.assertGreater(listing.date, datetime.now().date() - timedelta(days=7))
 
             # the full seller object (another request)
             seller = listing.seller.get_seller()

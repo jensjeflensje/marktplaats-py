@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from unittest.mock import patch
 
 from marktplaats.categories import category_from_name
@@ -39,7 +39,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                             "latitude": 51.965397128056,
                             "longitude": 4.6119871732025
                         },
-                        "date": "2024-01-02T20:40:25Z",
+                        "date": "10 mrt 24",
                         "imageUrls": [
                             "//images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_82.jpg"
                         ],
@@ -162,7 +162,7 @@ class BasicSearchQueryTest(unittest.TestCase):
         self.assertEqual(1, len(listing.images))
         self.assertIsInstance(listing.location, ListingLocation)
         self.assertEqual(
-            datetime(year=2024, month=1, day=2, hour=20, minute=40, second=25, tzinfo=timezone.utc),
+            date(year=2024, month=3, day=10),
             listing.date
         )
         self.assertEqual("https://link.marktplaats.nl/m2064554806", listing.link)
