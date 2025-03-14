@@ -1,18 +1,32 @@
+import json
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 
 import requests
-import json
 
 from marktplaats.categories import L2Category
 from marktplaats.config import ISSUE_LINK
-from marktplaats.models import Listing, ListingSeller, ListingImage, ListingLocation
+from marktplaats.models import Listing, ListingImage, ListingLocation, ListingSeller
 from marktplaats.models.price_type import PriceType
 from marktplaats.utils import REQUEST_HEADERS
 
-
 logger = logging.getLogger(__name__)
+
+MONTH_MAPPING = {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mrt": "Mar",
+    "apr": "Apr",
+    "mei": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "okt": "Oct",
+    "nov": "Nov",
+    "dec": "Dec",
+}
 
 
 class SortBy(Enum):
@@ -20,6 +34,7 @@ class SortBy(Enum):
     Enumeration of the different sorting methods Marktplaats supports.
     The DATE method sorts by absolute time. So ascending is from oldest to newest.
     """
+
     DATE = "SORT_INDEX"
     PRICE = "PRICE"
     OPTIMIZED = "OPTIMIZED"
@@ -37,6 +52,7 @@ class Condition(Enum):
     NEW, AS_GOOD_AS_NEW, and USED always work.
     REFURBISHED and NOT_WORKING are specific to some categories.
     """
+
     NEW = 30
     REFURBISHED = 14050
     AS_GOOD_AS_NEW = 31
@@ -56,20 +72,20 @@ class SearchQuery:
     """
 
     def __init__(
-            self,
-            query,
-            zip_code="",
-            distance=1000000,  # in meters, basically unlimited
-            price_from=None,
-            price_to=None,
-            limit=1,
-            offset=0,
-            sort_by=SortBy.OPTIMIZED,
-            sort_order=SortOrder.ASC,
-            condition=None,
-            offered_since=None,  # A datetime object
-            category=None,
-            extra_attributes=None, # EXPERIMENTAL: list of integers, just like Condition
+        self,
+        query,
+        zip_code="",
+        distance=1000000,  # in meters, basically unlimited
+        price_from=None,
+        price_to=None,
+        limit=1,
+        offset=0,
+        sort_by=SortBy.OPTIMIZED,
+        sort_order=SortOrder.ASC,
+        condition=None,
+        offered_since=None,  # A datetime object
+        category=None,
+        extra_attributes=None,  # EXPERIMENTAL: list of integers, just like Condition
     ):
         params = {
             "limit": str(limit),
@@ -81,7 +97,7 @@ class SearchQuery:
             "postcode": zip_code,
             "sortBy": sort_by.value,
             "sortOrder": sort_order.value,
-            "attributesById[]": []
+            "attributesById[]": [],
         }
 
         # Only add price parameters if any scoping is actually done, to match the website's behavior.
@@ -123,29 +139,51 @@ class SearchQuery:
         self.body = self.response.text
         self.body_json = json.loads(self.body)
 
-        self._set_query_data()
-
     def _set_query_data(self):
         # more fields will be added
         # for now, this is a nice way to get the total result count when looping through pages
-        self.total_result_count = self.body_json.get('totalResultCount')
+        self.total_result_count = self.body_json.get("totalResultCount")
 
-    def get_listings(self):
+    def _parse_date(self, date_str):
+        if date_str == "Eergisteren":
+            return datetime.now() - timedelta(days=2)
+        if date_str == "Gisteren":
+            return datetime.now() - timedelta(days=1)
+        if date_str == "Vandaag":
+            return datetime.now()
+
+        date_str = self._replace_dutch_months(date_str)
+
+        return datetime.strptime(date_str, "%d %b %y")
+
+    def _replace_dutch_months(self, date_str):
+        for dutch, english in MONTH_MAPPING.items():
+            date_str = date_str.replace(dutch, english)
+        return date_str
+
+    def get_listings(self) -> list[Listing]:
         listings = []
         for listing in self.body_json["listings"]:
             try:
-                listing_time = datetime.strptime(listing["date"], "%Y-%m-%dT%H:%M:%S%z")
+                listing_time = self._parse_date(listing["date"])
             except ValueError:
+                logger.warning(
+                    f"Marktplaats-py found an unknown date format for listing {listing['itemId']}: '{listing['date']}'. "
+                    f"This is not your fault. "
+                    f"Please create an issue on {ISSUE_LINK} and include this log message."
+                )
                 listing_time = None
 
             try:
                 price_type = PriceType(listing["priceInfo"]["priceType"])
             except ValueError:
                 # this means marktplaats has a PriceType this library doesn't know about
-                logger.warning(f"Marktplaats-py found an unknown PriceType found for "
-                               f"listing {listing['itemId']}: '{listing['priceInfo']['priceType']}'. "
-                               f"This is not your fault. "
-                               f"Please create an issue on {ISSUE_LINK} and include this log message.")
+                logger.warning(
+                    f"Marktplaats-py found an unknown PriceType found for "
+                    f"listing {listing['itemId']}: '{listing['priceInfo']['priceType']}'. "
+                    f"This is not your fault. "
+                    f"Please create an issue on {ISSUE_LINK} and include this log message."
+                )
                 # set a fallback value
                 price_type = PriceType.UNKNOWN
 
