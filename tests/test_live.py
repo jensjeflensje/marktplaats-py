@@ -40,8 +40,8 @@ class LiveSearchQueryTest(unittest.TestCase):
 
             # the date object
             self.assertIsInstance(listing.date, date)
-            # should be greater than what we queried for
-            self.assertGreater(listing.date, datetime.now().date() - timedelta(days=7))
+            # should be greater or equal to what we queried for
+            self.assertGreaterEqual(listing.date, datetime.now().date() - timedelta(days=7))
 
             # the full seller object (another request)
             seller = listing.seller.get_seller()
