@@ -110,7 +110,7 @@ class SearchQuery:
             params["attributesById[]"].append(condition.value)
 
         if extra_attributes is not None:
-            params["attributesById[]"].append(condition.value)
+            params["attributesById[]"].extend(extra_attributes)
 
         if offered_since is not None:
             params["attributesByKey[]"] = [

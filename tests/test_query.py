@@ -120,6 +120,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                 price_to=200,
                 offered_since=datetime(2024, 12, 31, 14, 10, 0),
                 category=category_from_name("Beschrijfbare discs"),
+                extra_attributes=[1]
             )
 
             get_request.assert_called_once_with(
@@ -131,7 +132,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                     "attributesByKey[]": [
                         "offeredSince:1735650600000",
                     ],
-                    "attributesById[]": [],
+                    "attributesById[]": [1],
                     "limit": "1",
                     "offset": "0",
                     "query": "fiets",
