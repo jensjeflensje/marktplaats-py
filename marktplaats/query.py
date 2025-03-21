@@ -1,7 +1,7 @@
-import json
 import logging
 from datetime import datetime, timedelta, date
 from enum import Enum
+from json import JSONDecodeError
 
 import requests
 
@@ -133,11 +133,17 @@ class SearchQuery:
             headers=REQUEST_HEADERS,
         )
 
-        # every request exception should raise here
+        # This catches HTTP 4xx and 5xx errors
         self.response.raise_for_status()
 
-        self.body = self.response.text
-        self.body_json = json.loads(self.body)
+        # But if it's something else non-200, still fail fast.
+        if self.response.status_code != 200:
+            raise Exception(f"Received non-200 status code", self.response)
+
+        try:
+            self.body_json = self.response.json()
+        except JSONDecodeError:
+            raise Exception(f"Received invalid (non-json) response:", self.response.text)
 
         self._set_query_data()
 
