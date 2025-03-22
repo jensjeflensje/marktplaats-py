@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime, timedelta, date
 from enum import Enum
-from json import JSONDecodeError
 
 import requests
 
@@ -27,6 +26,14 @@ MONTH_MAPPING = {
     "nov": "Nov",
     "dec": "Dec",
 }
+
+
+class BadStatusCodeError(Exception):
+    pass
+
+
+class JSONDecodeError(Exception):
+    pass
 
 
 class SortBy(Enum):
@@ -138,12 +145,14 @@ class SearchQuery:
 
         # But if it's something else non-200, still fail fast.
         if self.response.status_code != 200:
-            raise Exception(f"Received non-200 status code", self.response)
+            raise BadStatusCodeError(f"Received non-200 status code", self.response)
 
         try:
             self.body_json = self.response.json()
-        except JSONDecodeError as err:
-            raise Exception(f"Received invalid (non-json) response:", self.response.text) from err
+        except requests.exceptions.JSONDecodeError as err:
+            # Note: this is not the same error type. This will propagate as:
+            #  json.decoder.JSONDecodeError -> requests.exceptions.JSONDecodeError -> marktplaats.JSONDecodeError
+            raise JSONDecodeError(f"Received invalid (non-json) response:", self.response.text) from err
 
         self._set_query_data()
 
