@@ -15,7 +15,8 @@ class BasicSearchQueryTest(unittest.TestCase):
 
     def test_request(self):
         with patch('requests.get') as get_request:
-            get_request.return_value.text = """{
+            get_request.return_value.status_code = 200
+            get_request.return_value.json.return_value = {
                 "totalResultCount": 100,
                 "listings": [
                     {
@@ -23,7 +24,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                         "title": "Batavus damesfiets 26 inch",
                         "description": "Degelijke batavus damesfiets 26 inch met slot, verlichting en versnellingen.",
                         "categorySpecificDescription": "Degelijke batavus damesfiets 26 inch met slot, verlichting en versnellingen.",
-                        "thinContent": true,
+                        "thinContent": True,
                         "priceInfo": {
                             "priceCents": 7500,
                             "priceType": "FIXED"
@@ -33,9 +34,9 @@ class BasicSearchQueryTest(unittest.TestCase):
                             "countryName": "Nederland",
                             "countryAbbreviation": "NL",
                             "distanceMeters": 1000,
-                            "isBuyerLocation": false,
-                            "onCountryLevel": false,
-                            "abroad": false,
+                            "isBuyerLocation": False,
+                            "onCountryLevel": False,
+                            "abroad": False,
                             "latitude": 51.965397128056,
                             "longitude": 4.6119871732025
                         },
@@ -46,15 +47,15 @@ class BasicSearchQueryTest(unittest.TestCase):
                         "sellerInformation": {
                             "sellerId": 7405065,
                             "sellerName": "Vogel",
-                            "showSoiUrl": true,
-                            "showWebsiteUrl": false,
-                            "isVerified": false
+                            "showSoiUrl": True,
+                            "showWebsiteUrl": False,
+                            "isVerified": False
                         },
                         "categoryId": 447,
                         "priorityProduct": "NONE",
-                        "videoOnVip": false,
-                        "urgencyFeatureActive": false,
-                        "napAvailable": false,
+                        "videoOnVip": False,
+                        "urgencyFeatureActive": False,
+                        "napAvailable": False,
                         "attributes": [
                             {
                                 "key": "condition",
@@ -112,7 +113,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                         "vipUrl": "/v/fietsen-en-brommers/fietsen-dames-damesfietsen/m2064554806-batavus-damesfiets-26-inch"
                     }
                 ]
-            }"""
+            }
             
             query = SearchQuery(
                 "fiets",
