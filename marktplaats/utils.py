@@ -4,3 +4,13 @@ REQUEST_HEADERS = {
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-origin",
 }
+
+
+class MessageObjectException(Exception):
+    def __init__(self, msg: str, obj: object):
+        super().__init__(msg, obj)
+        self.msg = msg
+        self.obj = obj
+
+    def __str__(self):
+        return f"{self.msg} {self.obj}"
