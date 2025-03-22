@@ -12,4 +12,4 @@ jobs:
       - name: Install pip packages
         run: pip install -r requirements.txt
       - name: Run tests
-        run: python -m unittest tests/test_live.py
+        run: python -m unittest tests/*.py
