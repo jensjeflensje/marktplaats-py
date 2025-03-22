@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime, timezone, date
+from datetime import datetime, date
 from unittest.mock import patch
 
 from marktplaats.categories import category_from_name
@@ -130,7 +130,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                         "PriceCents:1000:20000",
                     ],
                     "attributesByKey[]": [
-                        "offeredSince:1735650600000",
+                        f"offeredSince:{int(datetime(2024, 12, 31, 14, 10, 0).timestamp() * 1000)}",
                     ],
                     "attributesById[]": [1],
                     "limit": "1",
