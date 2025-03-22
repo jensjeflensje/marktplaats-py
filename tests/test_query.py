@@ -3,6 +3,7 @@ from datetime import datetime, timezone, date
 from unittest.mock import patch
 
 import requests
+import requests_mock
 
 from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
@@ -208,23 +209,25 @@ class BasicSearchQueryTest(unittest.TestCase):
         self.assertFalse(seller.identification)
         self.assertTrue(seller.phone_number)
 
-    def test_http_error_404(self):
+    def test_http_error_400(self):
         # This should be the same for other 4xx and 5xx errors
 
-        # This is the easiest way to fabricate an actual response object
-        response = requests.get("https://httpstat.us/404")
-
-        with patch('requests.get', return_value=response):
+        with requests_mock.Mocker() as m:
+            m.get(
+                "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+                status_code=400,
+            )
             with self.assertRaises(requests.HTTPError):
                 _query = SearchQuery("fiets")
 
     def test_http_error_204(self):
         # This should be the same for all other non-200 non-4xx non-5xx errors
 
-        # This is the easiest way to fabricate an actual response object
-        response = requests.get("https://httpstat.us/204")
-
-        with patch('requests.get', return_value=response):
+        with requests_mock.Mocker() as m:
+            m.get(
+                "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+                status_code=204,
+            )
             with self.assertRaises(BadStatusCodeError):
                 _query = SearchQuery("fiets")
 
