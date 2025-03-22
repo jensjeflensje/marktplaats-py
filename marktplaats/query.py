@@ -142,8 +142,8 @@ class SearchQuery:
 
         try:
             self.body_json = self.response.json()
-        except JSONDecodeError:
-            raise Exception(f"Received invalid (non-json) response:", self.response.text)
+        except JSONDecodeError as err:
+            raise Exception(f"Received invalid (non-json) response:", self.response.text) from err
 
         self._set_query_data()
 
