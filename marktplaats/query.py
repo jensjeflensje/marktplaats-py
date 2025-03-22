@@ -8,7 +8,7 @@ from marktplaats.categories import L2Category
 from marktplaats.config import ISSUE_LINK
 from marktplaats.models import Listing, ListingImage, ListingLocation, ListingSeller
 from marktplaats.models.price_type import PriceType
-from marktplaats.utils import REQUEST_HEADERS
+from marktplaats.utils import REQUEST_HEADERS, MessageObjectException
 
 logger = logging.getLogger(__name__)
 
@@ -28,11 +28,11 @@ MONTH_MAPPING = {
 }
 
 
-class BadStatusCodeError(Exception):
+class BadStatusCodeError(MessageObjectException):
     pass
 
 
-class JSONDecodeError(Exception):
+class JSONDecodeError(MessageObjectException):
     pass
 
 
@@ -145,7 +145,7 @@ class SearchQuery:
 
         # But if it's something else non-200, still fail fast.
         if self.response.status_code != 200:
-            raise BadStatusCodeError(f"Received non-200 status code", self.response)
+            raise BadStatusCodeError(f"Received non-200 status code:", self.response)
 
         try:
             self.body_json = self.response.json()

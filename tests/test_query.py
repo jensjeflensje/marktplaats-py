@@ -2,10 +2,12 @@ import unittest
 from datetime import datetime, timezone, date
 from unittest.mock import patch
 
+import requests
+
 from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 
-from marktplaats import SearchQuery, PriceType
+from marktplaats import SearchQuery, PriceType, BadStatusCodeError
 
 
 class BasicSearchQueryTest(unittest.TestCase):
@@ -205,6 +207,26 @@ class BasicSearchQueryTest(unittest.TestCase):
         self.assertTrue(seller.bank_account)
         self.assertFalse(seller.identification)
         self.assertTrue(seller.phone_number)
+
+    def test_http_error_404(self):
+        # This should be the same for other 4xx and 5xx errors
+
+        # This is the easiest way to fabricate an actual response object
+        response = requests.get("https://httpstat.us/404")
+
+        with patch('requests.get', return_value=response):
+            with self.assertRaises(requests.HTTPError):
+                _query = SearchQuery("fiets")
+
+    def test_http_error_204(self):
+        # This should be the same for all other non-200 non-4xx non-5xx errors
+
+        # This is the easiest way to fabricate an actual response object
+        response = requests.get("https://httpstat.us/204")
+
+        with patch('requests.get', return_value=response):
+            with self.assertRaises(BadStatusCodeError):
+                _query = SearchQuery("fiets")
 
 
 if __name__ == '__main__':
