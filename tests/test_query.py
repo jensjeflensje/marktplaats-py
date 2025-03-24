@@ -8,7 +8,7 @@ import requests_mock
 from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 
-from marktplaats import SearchQuery, PriceType, BadStatusCodeError
+from marktplaats import SearchQuery, PriceType, BadStatusCodeError, JSONDecodeError
 
 
 class BasicSearchQueryTest(unittest.TestCase):
@@ -229,6 +229,15 @@ class BasicSearchQueryTest(unittest.TestCase):
                 status_code=204,
             )
             with self.assertRaises(BadStatusCodeError):
+                _query = SearchQuery("fiets")
+
+    def test_invalid_json(self):
+        with requests_mock.Mocker() as m:
+            m.get(
+                "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+                text="this is some invalid JSON",
+            )
+            with self.assertRaises(JSONDecodeError):
                 _query = SearchQuery("fiets")
 
 
