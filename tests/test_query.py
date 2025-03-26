@@ -205,6 +205,10 @@ class BasicSearchQueryTest(unittest.TestCase):
         self.assertFalse(seller.identification)
         self.assertTrue(seller.phone_number)
 
+    def test_query_category_valueerror(self):
+        with self.assertRaises(ValueError):
+            _query = SearchQuery(price_to=10)
+
 
 if __name__ == '__main__':
     unittest.main()
