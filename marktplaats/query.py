@@ -1,4 +1,3 @@
-import json
 import logging
 from datetime import datetime, timedelta, date
 from enum import Enum
@@ -9,7 +8,7 @@ from marktplaats.categories import L2Category
 from marktplaats.config import ISSUE_LINK
 from marktplaats.models import Listing, ListingImage, ListingLocation, ListingSeller
 from marktplaats.models.price_type import PriceType
-from marktplaats.utils import REQUEST_HEADERS
+from marktplaats.utils import REQUEST_HEADERS, MessageObjectException
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +26,14 @@ MONTH_MAPPING = {
     "nov": "Nov",
     "dec": "Dec",
 }
+
+
+class BadStatusCodeError(MessageObjectException):
+    pass
+
+
+class JSONDecodeError(MessageObjectException):
+    pass
 
 
 class SortBy(Enum):
@@ -136,11 +143,19 @@ class SearchQuery:
             headers=REQUEST_HEADERS,
         )
 
-        # every request exception should raise here
+        # This catches HTTP 4xx and 5xx errors
         self.response.raise_for_status()
 
-        self.body = self.response.text
-        self.body_json = json.loads(self.body)
+        # But if it's something else non-200, still fail fast.
+        if self.response.status_code != 200:
+            raise BadStatusCodeError(f"Received non-200 status code:", self.response)
+
+        try:
+            self.body_json = self.response.json()
+        except requests.exceptions.JSONDecodeError as err:
+            # Note: this is not the same error type. This will propagate as:
+            #  json.decoder.JSONDecodeError -> requests.exceptions.JSONDecodeError -> marktplaats.JSONDecodeError
+            raise JSONDecodeError(f"Received invalid (non-json) response:", self.response.text) from err
 
         self._set_query_data()
 

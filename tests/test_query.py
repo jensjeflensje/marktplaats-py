@@ -2,10 +2,13 @@ import unittest
 from datetime import datetime, date
 from unittest.mock import patch
 
+import requests
+import requests_mock
+
 from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 
-from marktplaats import SearchQuery, PriceType
+from marktplaats import SearchQuery, PriceType, BadStatusCodeError, JSONDecodeError
 
 
 class BasicSearchQueryTest(unittest.TestCase):
@@ -15,7 +18,8 @@ class BasicSearchQueryTest(unittest.TestCase):
 
     def test_request(self):
         with patch('requests.get') as get_request:
-            get_request.return_value.text = """{
+            get_request.return_value.status_code = 200
+            get_request.return_value.json.return_value = {
                 "totalResultCount": 100,
                 "listings": [
                     {
@@ -23,7 +27,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                         "title": "Batavus damesfiets 26 inch",
                         "description": "Degelijke batavus damesfiets 26 inch met slot, verlichting en versnellingen.",
                         "categorySpecificDescription": "Degelijke batavus damesfiets 26 inch met slot, verlichting en versnellingen.",
-                        "thinContent": true,
+                        "thinContent": True,
                         "priceInfo": {
                             "priceCents": 7500,
                             "priceType": "FIXED"
@@ -33,9 +37,9 @@ class BasicSearchQueryTest(unittest.TestCase):
                             "countryName": "Nederland",
                             "countryAbbreviation": "NL",
                             "distanceMeters": 1000,
-                            "isBuyerLocation": false,
-                            "onCountryLevel": false,
-                            "abroad": false,
+                            "isBuyerLocation": False,
+                            "onCountryLevel": False,
+                            "abroad": False,
                             "latitude": 51.965397128056,
                             "longitude": 4.6119871732025
                         },
@@ -46,15 +50,15 @@ class BasicSearchQueryTest(unittest.TestCase):
                         "sellerInformation": {
                             "sellerId": 7405065,
                             "sellerName": "Vogel",
-                            "showSoiUrl": true,
-                            "showWebsiteUrl": false,
-                            "isVerified": false
+                            "showSoiUrl": True,
+                            "showWebsiteUrl": False,
+                            "isVerified": False
                         },
                         "categoryId": 447,
                         "priorityProduct": "NONE",
-                        "videoOnVip": false,
-                        "urgencyFeatureActive": false,
-                        "napAvailable": false,
+                        "videoOnVip": False,
+                        "urgencyFeatureActive": False,
+                        "napAvailable": False,
                         "attributes": [
                             {
                                 "key": "condition",
@@ -112,7 +116,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                         "vipUrl": "/v/fietsen-en-brommers/fietsen-dames-damesfietsen/m2064554806-batavus-damesfiets-26-inch"
                     }
                 ]
-            }"""
+            }
             
             query = SearchQuery(
                 "fiets",
@@ -204,6 +208,37 @@ class BasicSearchQueryTest(unittest.TestCase):
         self.assertTrue(seller.bank_account)
         self.assertFalse(seller.identification)
         self.assertTrue(seller.phone_number)
+
+    def test_http_error_400(self):
+        # This should be the same for other 4xx and 5xx errors
+
+        with requests_mock.Mocker() as m:
+            m.get(
+                "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+                status_code=400,
+            )
+            with self.assertRaises(requests.HTTPError):
+                _query = SearchQuery("fiets")
+
+    def test_http_error_204(self):
+        # This should be the same for all other non-200 non-4xx non-5xx errors
+
+        with requests_mock.Mocker() as m:
+            m.get(
+                "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+                status_code=204,
+            )
+            with self.assertRaises(BadStatusCodeError):
+                _query = SearchQuery("fiets")
+
+    def test_invalid_json(self):
+        with requests_mock.Mocker() as m:
+            m.get(
+                "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+                text="this is some invalid JSON",
+            )
+            with self.assertRaises(JSONDecodeError):
+                _query = SearchQuery("fiets")
 
     def test_query_category_valueerror(self):
         with self.assertRaises(ValueError):
