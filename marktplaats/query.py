@@ -88,7 +88,7 @@ class SearchQuery:
         extra_attributes=None,  # EXPERIMENTAL: list of integers, just like Condition
     ):
         if query == "" and category is None:
-            raise TypeError("Invalid arguments: When the query is empty, a category must be specified.")
+            raise ValueError("Invalid arguments: When the query is empty, a category must be specified.")
 
         params = {
             "limit": str(limit),
