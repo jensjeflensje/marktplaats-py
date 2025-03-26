@@ -73,7 +73,7 @@ class SearchQuery:
 
     def __init__(
         self,
-        query,
+        query="",
         zip_code="",
         distance=1000000,  # in meters, basically unlimited
         price_from=None,
@@ -87,6 +87,9 @@ class SearchQuery:
         category=None,
         extra_attributes=None,  # EXPERIMENTAL: list of integers, just like Condition
     ):
+        if query == "" and category is None:
+            raise ValueError("Invalid arguments: When the query is empty, a category must be specified.")
+
         params = {
             "limit": str(limit),
             "offset": str(offset),

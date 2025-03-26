@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 from marktplaats import SearchQuery, SortBy, SortOrder, Condition, category_from_name
 
-search = SearchQuery("gazelle", # Search query
+search = SearchQuery(query="gazelle", # Search query. Can be left out, but then category must be specified.
                      zip_code="1016LV", # Zip code to base distance from
                      distance=100000, # Max distance from the zip code for listings
                      price_from=0, # Lowest price to search for
