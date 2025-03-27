@@ -12,7 +12,7 @@ class LiveSearchQueryTest(unittest.TestCase):
     haven't deployed breaking changes.
     """
 
-    def _validate_response(self, search):
+    def _validate_response(self, search, check_time: bool = False):
         listings = search.get_listings()
 
         for listing in listings:
@@ -40,8 +40,9 @@ class LiveSearchQueryTest(unittest.TestCase):
 
             # the date object
             self.assertIsInstance(listing.date, date)
-            # should be greater or equal to what we queried for
-            self.assertGreaterEqual(listing.date, datetime.now().date() - timedelta(days=7))
+            if check_time:
+                # should be greater or equal to what we queried for
+                self.assertGreaterEqual(listing.date, datetime.now().date() - timedelta(days=7))
 
             # the full seller object (another request)
             seller = listing.seller.get_seller()
@@ -74,7 +75,7 @@ class LiveSearchQueryTest(unittest.TestCase):
                              offered_since=datetime.now() - timedelta(days=7),
                              category=category_from_name("Fietsen en Brommers"))
 
-        self._validate_response(search)
+        self._validate_response(search, check_time=True)
 
 
     def test_request_with_condition(self):
