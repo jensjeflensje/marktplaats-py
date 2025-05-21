@@ -48,8 +48,13 @@ for listing in listings:
     # the full seller object (another request)
     print(listing.seller.get_seller())
     
-    for image in listing.images:
-        print(image.medium)
+    # medium-sized cover image
+    print(listing.first_image.medium)
+    
+    # image urls for all the listing's image
+    # (this sends another HTTP request)
+    for image in listing.get_images():
+        print(image)
     
     
     print("-----------------------------")
