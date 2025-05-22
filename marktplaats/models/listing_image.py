@@ -58,5 +58,6 @@ def fetch_listing_images(listing_id: str) -> list[str]:
             for image in parsed["image"]:
                 # the returned images are in a format that don't include a scheme, so we add one manually
                 images.append(f"https:{image}")
+            break
 
     return images
