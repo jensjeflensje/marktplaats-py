@@ -42,7 +42,8 @@ def fetch_listing_images(listing_id: str) -> list[str]:
     """
     r = requests.get(
         f"https://link.marktplaats.nl/{listing_id}",
-        headers=REQUEST_HEADERS)
+        headers=REQUEST_HEADERS,
+    )
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 
     soup = BeautifulSoup(r.text, 'html.parser')
