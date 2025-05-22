@@ -34,9 +34,8 @@ class Listing:
         return self._images
 
     @property
-    def first_image(self) -> ListingFirstImage:
-        # marktplaats.nl requires at least 2 images per listing, so we should be safe here
-        return self._images[0]
+    def first_image(self) -> ListingFirstImage | None:
+        return self._images.get(0)
 
     def get_images(self) -> list[str]:
         return fetch_listing_images(self.id)
