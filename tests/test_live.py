@@ -84,6 +84,7 @@ class LiveSearchQueryTest(unittest.TestCase):
                              distance=100000,
                              price_from=0,
                              price_to=100,
+                             offered_since=datetime.now() - timedelta(days=7),
                              condition=Condition.NOT_WORKING,
                              category=category_from_name("Computers en Software"))
 

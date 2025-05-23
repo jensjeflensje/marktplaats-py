@@ -6,7 +6,7 @@ import requests
 
 from marktplaats.categories import L2Category
 from marktplaats.config import ISSUE_LINK
-from marktplaats.models import Listing, ListingImage, ListingLocation, ListingSeller
+from marktplaats.models import Listing, ListingFirstImage, ListingLocation, ListingSeller
 from marktplaats.models.price_type import PriceType
 from marktplaats.utils import REQUEST_HEADERS, MessageObjectException
 
@@ -222,7 +222,7 @@ class SearchQuery:
                 listing["priceInfo"]["priceCents"] / 100,
                 price_type,
                 "https://link.marktplaats.nl/" + listing["itemId"],
-                ListingImage.parse(listing.get("pictures")),
+                ListingFirstImage.parse(listing.get("pictures")),
                 listing["categoryId"],
                 listing.get("attributes", []),
                 listing.get("extendedAttributes", []),
