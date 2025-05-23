@@ -35,7 +35,12 @@ class Listing:
 
     @property
     def first_image(self) -> ListingFirstImage | None:
-        return self._images.get(0)
+        try:
+            return self._images[0]
+        except IndexError:
+            # there seem to be no images in the listing, so return None
+            return None
+
 
     def get_images(self) -> list[str]:
         return fetch_listing_images(self.id)
