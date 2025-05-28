@@ -8,7 +8,7 @@ from typing_extensions import Self
 
 @dataclass
 class ListingLocation:
-    city: str
+    city: str | None
     country: str | None
     country_short: str | None
     latitude: float
@@ -21,8 +21,8 @@ class ListingLocation:
             data.get("cityName"),
             data.get("countryName"),
             data.get("countryAbbrevation"),
-            data.get("latitude"),
-            data.get("longitude"),
+            data["latitude"],
+            data["longitude"],
             None if data.get("distanceMeters") == -1000 else data.get("distanceMeters"),
         )
 
