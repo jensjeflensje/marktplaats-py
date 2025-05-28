@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 import json
+from typing import Any
 
 import requests
 from bs4 import BeautifulSoup
+from typing_extensions import Self
 
 from marktplaats.utils import REQUEST_HEADERS
 
@@ -19,7 +21,7 @@ class ListingFirstImage:
     extra_large: str
 
     @classmethod
-    def parse(cls, data):
+    def parse(cls, data: list[dict[str, Any]]) -> list[Self]:
         if data is None:
             return []
         images = []
