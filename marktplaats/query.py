@@ -1,10 +1,12 @@
 import logging
+from collections.abc import Iterable
 from datetime import datetime, timedelta, date
 from enum import Enum
+from typing import Any
 
 import requests
 
-from marktplaats.categories import L2Category
+from marktplaats.categories import L2Category, L1Category
 from marktplaats.config import ISSUE_LINK
 from marktplaats.models import Listing, ListingFirstImage, ListingLocation, ListingSeller
 from marktplaats.models.price_type import PriceType
@@ -67,9 +69,33 @@ class Condition(Enum):
     NOT_WORKING = 13940
 
 
-def get_price_cents(price):
+def get_price_cents(price: int | None) -> str:
     # Marktplaats uses the string "null" if the lower/upper bound is empty
-    return "null" if price is None else price * 100
+    return "null" if price is None else str(price * 100)
+
+
+def replace_dutch_months(date_str: str) -> str:
+    # marktplaats returns Dutch names for months
+    # so we need to convert them to english to be parsed
+    for dutch, english in MONTH_MAPPING.items():
+        date_str = date_str.replace(dutch, english)
+    return date_str
+
+
+def parse_date(date_str: str) -> date:
+    # marktplaats returns these relative words for the date
+    # OR a date like '10 mrt 24'
+    if date_str == "Eergisteren":
+        result = datetime.now() - timedelta(days=2)
+    elif date_str == "Gisteren":
+        result = datetime.now() - timedelta(days=1)
+    elif date_str == "Vandaag":
+        result = datetime.now()
+    else:
+        date_str = replace_dutch_months(date_str)
+        result = datetime.strptime(date_str, "%d %b %y")
+
+    return result.date()
 
 
 class SearchQuery:
@@ -80,24 +106,24 @@ class SearchQuery:
 
     def __init__(
         self,
-        query="",
-        zip_code="",
-        distance=1000000,  # in meters, basically unlimited
-        price_from=None,
-        price_to=None,
-        limit=1,
-        offset=0,
-        sort_by=SortBy.OPTIMIZED,
-        sort_order=SortOrder.ASC,
-        condition=None,
-        offered_since=None,  # A datetime object
-        category=None,
-        extra_attributes=None,  # EXPERIMENTAL: list of integers, just like Condition
+        query: str = "",
+        zip_code: str = "",
+        distance: int = 1000000,  # in meters, basically unlimited
+        price_from: int | None = None,
+        price_to: int | None = None,
+        limit: int = 1,
+        offset: int = 0,
+        sort_by: SortBy = SortBy.OPTIMIZED,
+        sort_order: SortOrder = SortOrder.ASC,
+        condition: Condition | None = None,
+        offered_since: datetime | None = None,  # A datetime object
+        category: L1Category | L2Category | None = None,
+        extra_attributes: Iterable[int] | None = None,  # EXPERIMENTAL: list of integers, just like Condition
     ):
         if query == "" and category is None:
             raise ValueError("Invalid arguments: When the query is empty, a category must be specified.")
 
-        params = {
+        params: dict[str, Any] = {
             "limit": str(limit),
             "offset": str(offset),
             "query": str(query),
@@ -159,38 +185,16 @@ class SearchQuery:
 
         self._set_query_data()
 
-    def _set_query_data(self):
+    def _set_query_data(self) -> None:
         # more fields will be added
         # for now, this is a nice way to get the total result count when looping through pages
         self.total_result_count = self.body_json.get("totalResultCount")
-
-    def _parse_date(self, date_str) -> date:
-        # marktplaats returns these relative words for the date
-        # OR a date like '10 mrt 24'
-        if date_str == "Eergisteren":
-            result = datetime.now() - timedelta(days=2)
-        elif date_str == "Gisteren":
-            result = datetime.now() - timedelta(days=1)
-        elif date_str == "Vandaag":
-            result = datetime.now()
-        else:
-            date_str = self._replace_dutch_months(date_str)
-            result = datetime.strptime(date_str, "%d %b %y")
-
-        return result.date()
-
-    def _replace_dutch_months(self, date_str) -> str:
-        # marktplaats returns Dutch names for months
-        # so we need to convert them to english to be parsed
-        for dutch, english in MONTH_MAPPING.items():
-            date_str = date_str.replace(dutch, english)
-        return date_str
 
     def get_listings(self) -> list[Listing]:
         listings = []
         for listing in self.body_json["listings"]:
             try:
-                listing_time = self._parse_date(listing["date"])
+                listing_time = parse_date(listing["date"])
             except ValueError:
                 logger.warning(
                     f"Marktplaats-py found an unknown date format for listing {listing['itemId']}: '{listing['date']}'. "
