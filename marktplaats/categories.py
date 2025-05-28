@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import json
-from builtins import _NotImplementedType
 from collections import defaultdict
 from collections.abc import Iterator, Mapping
 
 from pathlib import Path
+from types import NotImplementedType
 
 from typing import Any
 from typing_extensions import Self
@@ -34,7 +34,7 @@ class L1Category:
     def __str__(self) -> str:
         return self.name
 
-    def __eq__(self, other: object) -> _NotImplementedType | bool:
+    def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, L1Category):
             return NotImplemented
         return self.id == other.id
@@ -68,7 +68,7 @@ class L2Category:
     def __str__(self) -> str:
         return self.name
 
-    def __eq__(self, other: object) -> _NotImplementedType | bool:
+    def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, L2Category):
             return NotImplemented
         return self.id == other.id
