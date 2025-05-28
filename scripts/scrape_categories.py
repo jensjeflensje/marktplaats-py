@@ -17,17 +17,20 @@ url = "https://www.marktplaats.nl/"
 soup = parse(url)
 print(f"(url: {url}) ", end="", flush=True)
 select = soup.find("select", {"id": "categoryId"})
+assert isinstance(select, Tag)
 for option in select.children:
     assert isinstance(option, Tag)
+    value = option["value"]
+    assert isinstance(value, str)
     if (
         # "Kies categorie:"
         option.get("disabled") is not None
         # "Alle categorieën…"
-        or option["value"] == "0"
+        or value == "0"
     ):
         continue
     l1_categories[option.text.lower()] = {
-        "id": int(option["value"]),
+        "id": int(value),
         "name": option.text,
     }
 
@@ -54,19 +57,22 @@ for l1_category in l1_categories.values():
     soup = parse(url)
     print(f"(url: {url}) ", end="", flush=True)
     select = soup.find("select", {"id": "categoryId"})
+    assert isinstance(select, Tag)
     for option in select.children:
         assert isinstance(option, Tag)
+        value = option["value"]
+        assert isinstance(value, str)
         if (
             # "Kies categorie:"
             option.get("disabled") is not None
             # "Alle categorieën…"
             or option["value"] == "0"
             # The L1 category itself
-            or int(option["value"]) == l1_category["id"]
+            or int(value) == l1_category["id"]
         ):
             continue
         l2_categories[option.text.lower()] = {
-            "id": int(option["value"]),
+            "id": int(value),
             "name": option.text,
             "parent": l1_category["name"],
         }

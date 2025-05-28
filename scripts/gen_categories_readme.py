@@ -4,10 +4,10 @@ import json
 
 def main():
     try:
-        with open("marktplaats/l1_categories.json", "r") as l1, \
-                open("marktplaats/l2_categories.json", "r") as l2:
-            l1_categories = json.loads(l1.read())
-            l2_categories = json.loads(l2.read())
+        with open("marktplaats/l1_categories.json", "r") as l1_file, \
+                open("marktplaats/l2_categories.json", "r") as l2_file:
+            l1_categories = json.loads(l1_file.read())
+            l2_categories = json.loads(l2_file.read())
     except OSError:
         print("Category files not found! Are you executing this script from the project root?")
         return

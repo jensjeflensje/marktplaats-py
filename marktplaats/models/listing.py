@@ -1,6 +1,6 @@
 import warnings
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date
 from typing import Optional
 
 from marktplaats.models import ListingSeller, ListingFirstImage
@@ -14,7 +14,7 @@ class Listing:
     id: str
     title: str
     description: str
-    date: Optional[datetime]
+    date: Optional[date]
     seller: ListingSeller
     location: ListingLocation
     price: float
