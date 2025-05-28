@@ -1,27 +1,32 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [ "hatch-requirements-txt", "hatchling" ]
+
 [project]
 name = "marktplaats"
 version = "0.3.0"
-authors = [
-  { name="Jens de Ruiter", email="me@jensderuiter.dev" },
-]
 description = "A small Python package to request listings from marktplaats.nl"
 readme = "README.md"
+authors = [
+  { name = "Jens de Ruiter", email = "me@jensderuiter.dev" },
+]
 requires-python = ">=3.7"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
-dynamic = ["dependencies"]
+dynamic = [ "dependencies" ]
+
+urls.bugs = "https://github.com/jensjeflensje/marktplaats-py/issues"
+urls.homepage = "https://github.com/jensjeflensje/marktplaats-py"
 
 [tool.hatch.metadata.hooks.requirements_txt]
-files = ["requirements.txt"]
-
-[project.urls]
-"Homepage" = "https://github.com/jensjeflensje/marktplaats-py"
-"Bug Tracker" = "https://github.com/jensjeflensje/marktplaats-py/issues"
-
-[build-system]
-requires = ["hatchling", "hatch-requirements-txt"]
-build-backend = "hatchling.build"
-
+files = [ "requirements.txt" ]
