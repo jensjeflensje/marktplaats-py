@@ -1,8 +1,16 @@
 import unittest
 from datetime import datetime, timedelta, date
 
-from marktplaats import SearchQuery, SortBy, SortOrder, Condition, category_from_name, PriceType, ListingLocation, \
-    ListingSeller
+from marktplaats import (
+    SearchQuery,
+    SortBy,
+    SortOrder,
+    Condition,
+    category_from_name,
+    PriceType,
+    ListingLocation,
+    ListingSeller,
+)
 from marktplaats.models.listing_seller import Seller
 
 
@@ -43,7 +51,9 @@ class LiveSearchQueryTest(unittest.TestCase):
             assert isinstance(listing.date, date)  # for the type checker
             if check_time:
                 # should be greater or equal to what we queried for
-                self.assertGreaterEqual(listing.date, datetime.now().date() - timedelta(days=7))
+                self.assertGreaterEqual(
+                    listing.date, datetime.now().date() - timedelta(days=7)
+                )
 
             # the full seller object (another request)
             seller = listing.seller.get_seller()
@@ -64,33 +74,36 @@ class LiveSearchQueryTest(unittest.TestCase):
                 self.assertIsInstance(image.extra_large, str)
 
     def test_request(self) -> None:
-        search = SearchQuery("fiets",
-                             zip_code="1016LV",
-                             distance=100000,
-                             price_from=0,
-                             price_to=100,
-                             limit=5,
-                             offset=0,
-                             sort_by=SortBy.LOCATION,
-                             sort_order=SortOrder.ASC,
-                             offered_since=datetime.now() - timedelta(days=7),
-                             category=category_from_name("Fietsen en Brommers"))
+        search = SearchQuery(
+            "fiets",
+            zip_code="1016LV",
+            distance=100000,
+            price_from=0,
+            price_to=100,
+            limit=5,
+            offset=0,
+            sort_by=SortBy.LOCATION,
+            sort_order=SortOrder.ASC,
+            offered_since=datetime.now() - timedelta(days=7),
+            category=category_from_name("Fietsen en Brommers"),
+        )
 
         self._validate_response(search, check_time=True)
 
-
     def test_request_with_condition(self) -> None:
-        search = SearchQuery("schijf",
-                             zip_code="1016LV",
-                             distance=100000,
-                             price_from=0,
-                             price_to=100,
-                             offered_since=datetime.now() - timedelta(days=7),
-                             condition=Condition.NOT_WORKING,
-                             category=category_from_name("Computers en Software"))
+        search = SearchQuery(
+            "schijf",
+            zip_code="1016LV",
+            distance=100000,
+            price_from=0,
+            price_to=100,
+            offered_since=datetime.now() - timedelta(days=7),
+            condition=Condition.NOT_WORKING,
+            category=category_from_name("Computers en Software"),
+        )
 
         self._validate_response(search)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

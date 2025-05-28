@@ -17,7 +17,7 @@ class BasicSearchQueryTest(unittest.TestCase):
     """
 
     def test_request(self) -> None:
-        with patch('requests.get') as get_request:
+        with patch("requests.get") as get_request:
             get_request.return_value.status_code = 200
             get_request.return_value.json.return_value = {
                 "totalResultCount": 100,
@@ -28,10 +28,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                         "description": "Degelijke batavus damesfiets 26 inch met slot, verlichting en versnellingen.",
                         "categorySpecificDescription": "Degelijke batavus damesfiets 26 inch met slot, verlichting en versnellingen.",
                         "thinContent": True,
-                        "priceInfo": {
-                            "priceCents": 7500,
-                            "priceType": "FIXED"
-                        },
+                        "priceInfo": {"priceCents": 7500, "priceType": "FIXED"},
                         "location": {
                             "cityName": "Nieuwerkerk aan den IJssel",
                             "countryName": "Nederland",
@@ -41,7 +38,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                             "onCountryLevel": False,
                             "abroad": False,
                             "latitude": 51.965397128056,
-                            "longitude": 4.6119871732025
+                            "longitude": 4.6119871732025,
                         },
                         "date": "10 mrt 24",
                         "imageUrls": [
@@ -52,7 +49,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                             "sellerName": "Vogel",
                             "showSoiUrl": True,
                             "showWebsiteUrl": False,
-                            "isVerified": False
+                            "isVerified": False,
                         },
                         "categoryId": 447,
                         "priorityProduct": "NONE",
@@ -63,41 +60,28 @@ class BasicSearchQueryTest(unittest.TestCase):
                             {
                                 "key": "condition",
                                 "value": "Gebruikt",
-                                "values": [
-                                    "Gebruikt"
-                                ]
+                                "values": ["Gebruikt"],
                             },
                             {
                                 "key": "delivery",
                                 "value": "Ophalen",
-                                "values": [
-                                    "Ophalen"
-                                ]
-                            }
+                                "values": ["Ophalen"],
+                            },
                         ],
                         "extendedAttributes": [
                             {
                                 "key": "condition",
                                 "value": "Gebruikt",
-                                "values": [
-                                    "Gebruikt"
-                                ]
+                                "values": ["Gebruikt"],
                             },
                             {
                                 "key": "delivery",
                                 "value": "Ophalen",
-                                "values": [
-                                    "Ophalen"
-                                ]
-                            }
+                                "values": ["Ophalen"],
+                            },
                         ],
-                        "traits": [
-                            "PACKAGE_FREE"
-                        ],
-                        "verticals": [
-                            "bicycles_and_mopeds",
-                            "bicycles_ladies_bike"
-                        ],
+                        "traits": ["PACKAGE_FREE"],
+                        "verticals": ["bicycles_and_mopeds", "bicycles_ladies_bike"],
                         "pictures": [
                             {
                                 "id": 9322832634,
@@ -107,24 +91,21 @@ class BasicSearchQueryTest(unittest.TestCase):
                                 "mediumUrl": "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_82.jpg",
                                 "largeUrl": "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_83.jpg",
                                 "extraExtraLargeUrl": "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_85.jpg",
-                                "aspectRatio": {
-                                    "width": 3,
-                                    "height": 4
-                                }
+                                "aspectRatio": {"width": 3, "height": 4},
                             }
                         ],
-                        "vipUrl": "/v/fietsen-en-brommers/fietsen-dames-damesfietsen/m2064554806-batavus-damesfiets-26-inch"
+                        "vipUrl": "/v/fietsen-en-brommers/fietsen-dames-damesfietsen/m2064554806-batavus-damesfiets-26-inch",
                     }
-                ]
+                ],
             }
-            
+
             query = SearchQuery(
                 "fiets",
                 price_from=10,
                 price_to=200,
                 offered_since=datetime(2024, 12, 31, 14, 10, 0),
                 category=category_from_name("Beschrijfbare discs"),
-                extra_attributes=[1]
+                extra_attributes=[1],
             )
 
             get_request.assert_called_once_with(
@@ -166,17 +147,14 @@ class BasicSearchQueryTest(unittest.TestCase):
         self.assertEqual(PriceType.FIXED, listing.price_type)
         self.assertEqual(1, len(listing.images))
         self.assertIsInstance(listing.location, ListingLocation)
-        self.assertEqual(
-            date(year=2024, month=3, day=10),
-            listing.date
-        )
+        self.assertEqual(date(year=2024, month=3, day=10), listing.date)
         self.assertEqual("https://link.marktplaats.nl/m2064554806", listing.link)
         self.assertEqual(100, query.total_result_count)
 
         self.assertEqual(7405065, listing.seller.id)
         self.assertFalse(listing.seller.is_verified)
 
-        with patch('requests.get') as get_request:
+        with patch("requests.get") as get_request:
             get_request.return_value.text = """{
                 "bankAccount": true,
                 "phoneNumber": true,
@@ -245,5 +223,5 @@ class BasicSearchQueryTest(unittest.TestCase):
             _query = SearchQuery(price_to=10)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
