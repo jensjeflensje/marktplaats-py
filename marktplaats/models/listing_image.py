@@ -15,6 +15,7 @@ class ListingFirstImage:
     Data format for the listing image that marktplaats responds with when doing a search query.
     The get_images() method will not use this format, but instead return a list of URLs.
     """
+
     extra_small: str
     medium: str
     large: str
@@ -26,12 +27,14 @@ class ListingFirstImage:
             return []
         images = []
         for image_data in data:
-            images.append(cls(
-                image_data["extraSmallUrl"],
-                image_data["mediumUrl"],
-                image_data["largeUrl"],
-                image_data["extraExtraLargeUrl"],
-            ))
+            images.append(
+                cls(
+                    image_data["extraSmallUrl"],
+                    image_data["mediumUrl"],
+                    image_data["largeUrl"],
+                    image_data["extraExtraLargeUrl"],
+                )
+            )
         return images
 
 
@@ -48,7 +51,7 @@ def fetch_listing_images(listing_id: str) -> list[str]:
     )
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 
-    soup = BeautifulSoup(r.text, 'html.parser')
+    soup = BeautifulSoup(r.text, "html.parser")
 
     images = []
 

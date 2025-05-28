@@ -57,9 +57,11 @@ class L2Category:
             l2_category = _l2_categories_raw.get_data()[name]
         except KeyError as err:
             raise ValueError(f"Unknown L2 category name: {orig_name}") from err
-        id_, name, parent = l2_category["id"], l2_category["name"], l2_category["parent"]
-        parent = L1Category.from_name(parent)
-        return cls(id_, name, parent)
+        return cls(
+            id_=l2_category["id"],
+            name=l2_category["name"],
+            parent=L1Category.from_name(l2_category["parent"]),
+        )
 
     @classmethod
     def from_id(cls, id_: int, parent: L1Category, name: str = "Unknown") -> None:

@@ -30,10 +30,12 @@ class Listing:
 
     @property
     def images(self) -> list[ListingFirstImage]:
-        warnings.warn("Listing.images is deprecated since marktplaats version 0.3.0. "
-                      "Please use Listing.first_image or Listing.get_images() instead.",
-                      category=DeprecationWarning,
-                      stacklevel=2)
+        warnings.warn(
+            "Listing.images is deprecated since marktplaats version 0.3.0. "
+            "Please use Listing.first_image or Listing.get_images() instead.",
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
         return self._images
 
     @property
@@ -43,7 +45,6 @@ class Listing:
         except IndexError:
             # there seem to be no images in the listing, so return None
             return None
-
 
     def get_images(self) -> list[str]:
         return fetch_listing_images(self.id)

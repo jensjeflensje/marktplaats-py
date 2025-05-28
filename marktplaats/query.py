@@ -8,7 +8,12 @@ import requests
 
 from marktplaats.categories import L2Category, L1Category
 from marktplaats.config import ISSUE_LINK
-from marktplaats.models import Listing, ListingFirstImage, ListingLocation, ListingSeller
+from marktplaats.models import (
+    Listing,
+    ListingFirstImage,
+    ListingLocation,
+    ListingSeller,
+)
 from marktplaats.models.price_type import PriceType
 from marktplaats.utils import REQUEST_HEADERS, MessageObjectException
 
@@ -118,10 +123,13 @@ class SearchQuery:
         condition: Condition | None = None,
         offered_since: datetime | None = None,  # A datetime object
         category: L1Category | L2Category | None = None,
-        extra_attributes: Iterable[int] | None = None,  # EXPERIMENTAL: list of integers, just like Condition
+        extra_attributes: Iterable[int]
+        | None = None,  # EXPERIMENTAL: list of integers, just like Condition
     ):
         if query == "" and category is None:
-            raise ValueError("Invalid arguments: When the query is empty, a category must be specified.")
+            raise ValueError(
+                "Invalid arguments: When the query is empty, a category must be specified."
+            )
 
         params: dict[str, Any] = {
             "limit": str(limit),
@@ -174,14 +182,16 @@ class SearchQuery:
 
         # But if it's something else non-200, still fail fast.
         if self.response.status_code != 200:
-            raise BadStatusCodeError(f"Received non-200 status code:", self.response)
+            raise BadStatusCodeError("Received non-200 status code:", self.response)
 
         try:
             self.body_json = self.response.json()
         except requests.exceptions.JSONDecodeError as err:
             # Note: this is not the same error type. This will propagate as:
             #  json.decoder.JSONDecodeError -> requests.exceptions.JSONDecodeError -> marktplaats.JSONDecodeError
-            raise JSONDecodeError(f"Received invalid (non-json) response:", self.response.text) from err
+            raise JSONDecodeError(
+                "Received invalid (non-json) response:", self.response.text
+            ) from err
 
         self._set_query_data()
 

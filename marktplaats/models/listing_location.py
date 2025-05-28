@@ -25,4 +25,3 @@ class ListingLocation:
             data["longitude"] if data["longitude"] != 0 else None,
             None if data.get("distanceMeters") == -1000 else data.get("distanceMeters"),
         )
-
