@@ -12,5 +12,5 @@ class MessageObjectException(Exception):
         self.msg = msg
         self.obj = obj
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.msg} {self.obj}"
