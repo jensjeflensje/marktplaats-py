@@ -9,26 +9,96 @@ description = "A small Python package to request listings from marktplaats.nl"
 readme = "README.md"
 license = "MIT"
 authors = [
-  { name = "Jens de Ruiter", email = "me@jensderuiter.dev" },
+    { name = "Jens de Ruiter", email = "me@jensderuiter.dev" },
 ]
 requires-python = ">=3.9"
 classifiers = [
-  "License :: OSI Approved :: MIT License",
-  "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-  "requests>=2.28.2",
-  "BeautifulSoup4>=4.13.4",
-  "typing-extensions>=4.13.2",
+    "beautifulsoup4>=4.13.4",
+    "requests>=2.28.2",
+    "typing-extensions>=4.13.2",
 ]
 
 urls.bugs = "https://github.com/jensjeflensje/marktplaats-py/issues"
 urls.homepage = "https://github.com/jensjeflensje/marktplaats-py"
+
+[tool.ruff]
+lint.select = [ "ALL" ]
+
+lint.ignore = [
+    # General:
+    "COM812", # Conflict with formatter
+    "CPY",    # No copyright statements
+    "D1",     # Docstrings should not be enforced by default
+    "D203",   # Choose D203 or D211
+    "D212",   # Choose D212 or D213
+    "S404",   # Uses of subprocess are rejected, no need to reject the imports as well
+    # Project:
+]
+
+lint.flake8-tidy-imports.ban-relative-imports = "all"                  # For consistency
+lint.isort.lines-after-imports = 2
+lint.isort.required-imports = [ "from __future__ import annotations" ]
+
+lint.preview = true
+
+[tool.pyproject-fmt]
+indent = 4
+
+[tool.mypy]
+exclude = '^tests/'
+show_error_context = true
+show_error_codes = true
+pretty = true
+
+warn_unused_configs = true
+
+strict = true # All strict checks are already listed below, only here for future-proofing
+
+# It already warns for the import, so we do not want to warn for each individual use.
+# If the import is silenced, there's nothing else we can do so silence the uses as well.
+# disallow_any_unimported = true
+disallow_any_decorated = true
+disallow_any_explicit = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = true
+warn_unreachable = true
+
+extra_checks = true
+implicit_reexport = false
+strict_concatenate = true
+strict_equality = true
+strict_bytes = true
+
+enable_error_code = [
+    "redundant-self",
+    "deprecated",
+    "redundant-expr",
+    "possibly-undefined",
+    "truthy-bool",
+    "truthy-iterable",
+    "ignore-without-code",
+    "unused-awaitable",
+    "possibly-undefined",
+    "mutable-override",
+]
