@@ -40,6 +40,7 @@ class LiveSearchQueryTest(unittest.TestCase):
 
             # the date object
             self.assertIsInstance(listing.date, date)
+            assert isinstance(listing.date, date)  # for the type checker
             if check_time:
                 # should be greater or equal to what we queried for
                 self.assertGreaterEqual(listing.date, datetime.now().date() - timedelta(days=7))
