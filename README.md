@@ -35,28 +35,28 @@ for listing in listings:
     print(listing.price_as_string(lang="nl"))
     print(listing.price_type)
     print(listing.link)
-    
+
     # the location object
     print(listing.location)
-    
+
     # the seller object
     print(listing.seller)
-    
+
     # the date object
     print(listing.date)
-    
+
     # the full seller object (another request)
     print(listing.seller.get_seller())
-    
+
     # medium-sized cover image
     print(listing.first_image.medium)
-    
+
     # image urls for all the listing's image
     # (this sends another HTTP request)
     for image in listing.get_images():
         print(image)
-    
-    
+
+
     print("-----------------------------")
 ```
 
