@@ -1,10 +1,14 @@
+from __future__ import annotations
+
 import json
+from builtins import _NotImplementedType
 from collections import defaultdict
 from collections.abc import Iterator, Mapping
 
 from pathlib import Path
 
-from typing import Union
+from typing import Any
+from typing_extensions import Self
 
 
 class L1Category:
@@ -13,7 +17,7 @@ class L1Category:
         self.name = name
 
     @classmethod
-    def from_name(cls, name: str):
+    def from_name(cls, name: str) -> Self:
         orig_name = name
         name = name.lower()
         try:
@@ -24,18 +28,18 @@ class L1Category:
         return cls(id_, name)
 
     @classmethod
-    def from_id(cls, id_: int, name: str = "Unknown"):
+    def from_id(cls, id_: int, name: str = "Unknown") -> None:
         cls(id_, name)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> _NotImplementedType | bool:
         if not isinstance(other, L1Category):
             return NotImplemented
         return self.id == other.id
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.id)
 
 
@@ -46,7 +50,7 @@ class L2Category:
         self.parent = parent
 
     @classmethod
-    def from_name(cls, name: str):
+    def from_name(cls, name: str) -> Self:
         orig_name = name
         name = name.lower()
         try:
@@ -58,22 +62,22 @@ class L2Category:
         return cls(id_, name, parent)
 
     @classmethod
-    def from_id(cls, id_: int, parent: L1Category, name: str = "Unknown"):
+    def from_id(cls, id_: int, parent: L1Category, name: str = "Unknown") -> None:
         cls(id_, name, parent)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> _NotImplementedType | bool:
         if not isinstance(other, L2Category):
             return NotImplemented
         return self.id == other.id
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.id)
 
 
-def category_from_name(name: str) -> Union[L1Category, L2Category]:
+def category_from_name(name: str) -> L1Category | L2Category:
     try:
         return L1Category.from_name(name)
     except ValueError:
@@ -83,11 +87,12 @@ def category_from_name(name: str) -> Union[L1Category, L2Category]:
 class LazyWrapper:
     def __init__(self, filename: Path):
         self.filename = filename
-        self._data = None
+        self._data: dict[Any, Any] | None = None
 
-    def get_data(self):
+    def get_data(self) -> dict[Any, Any]:
         if self._data is None:
             self._build_data()
+            assert self._data is not None
         return self._data
 
     def _build_data(self) -> None:
