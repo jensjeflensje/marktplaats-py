@@ -10,7 +10,7 @@ readme = "README.md"
 authors = [
   { name = "Jens de Ruiter", email = "me@jensderuiter.dev" },
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
