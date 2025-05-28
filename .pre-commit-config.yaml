@@ -26,11 +26,6 @@ repos:
       - id: name-tests-test
         args: [ "--pytest-test-first" ]
       #      - id: no-commit-to-branch
-      - id: pretty-format-json
-        args:
-          - --autofix
-          - --indent=4
-          - --no-sort-keys
       - id: trailing-whitespace
       # Python
       - id: debug-statements
