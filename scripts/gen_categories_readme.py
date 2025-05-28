@@ -1,12 +1,15 @@
 # please execute this script from the project root directory
+from __future__ import annotations
+
 import json
 
 
 def main() -> None:
     try:
-        with open("marktplaats/l1_categories.json", "r") as l1_file, open(
-            "marktplaats/l2_categories.json", "r"
-        ) as l2_file:
+        with (
+            open("marktplaats/l1_categories.json") as l1_file,
+            open("marktplaats/l2_categories.json") as l2_file,
+        ):
             l1_categories = json.loads(l1_file.read())
             l2_categories = json.loads(l2_file.read())
     except OSError:

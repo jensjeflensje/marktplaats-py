@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import shutil
 import subprocess
 from pathlib import Path
@@ -13,6 +15,7 @@ def check(new: Path) -> None:
     code = run(
         ["diff", new, old],
         stdout=subprocess.DEVNULL,
+        check=False,
     ).returncode
 
     if code:

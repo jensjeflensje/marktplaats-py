@@ -1,15 +1,17 @@
+from __future__ import annotations
+
 import unittest
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 
 from marktplaats import (
+    Condition,
+    ListingLocation,
+    ListingSeller,
+    PriceType,
     SearchQuery,
     SortBy,
     SortOrder,
-    Condition,
     category_from_name,
-    PriceType,
-    ListingLocation,
-    ListingSeller,
 )
 from marktplaats.models.listing_seller import Seller
 

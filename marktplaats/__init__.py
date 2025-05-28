@@ -1,24 +1,26 @@
-from .query import (
-    BadStatusCodeError as BadStatusCodeError,
-    JSONDecodeError as JSONDecodeError,
-    SortBy as SortBy,
-    SortOrder as SortOrder,
-    Condition as Condition,
-    SearchQuery as SearchQuery,
-)
-from .models import (
-    ListingFirstImage as ListingFirstImage,
-    ListingSeller as ListingSeller,
-    ListingLocation as ListingLocation,
-    Listing as Listing,
-    PriceType as PriceType,
-)
+from __future__ import annotations
+
 from .categories import (
+    L1Category as L1Category,
+    L2Category as L2Category,
     category_from_name as category_from_name,
     get_l1_categories as get_l1_categories,
     get_l2_categories as get_l2_categories,
-    get_subcategories as get_subcategories,
     get_l2_categories_by_parent as get_l2_categories_by_parent,
-    L1Category as L1Category,
-    L2Category as L2Category,
+    get_subcategories as get_subcategories,
+)
+from .models import (
+    Listing as Listing,
+    ListingFirstImage as ListingFirstImage,
+    ListingLocation as ListingLocation,
+    ListingSeller as ListingSeller,
+    PriceType as PriceType,
+)
+from .query import (
+    BadStatusCodeError as BadStatusCodeError,
+    Condition as Condition,
+    JSONDecodeError as JSONDecodeError,
+    SearchQuery as SearchQuery,
+    SortBy as SortBy,
+    SortOrder as SortOrder,
 )

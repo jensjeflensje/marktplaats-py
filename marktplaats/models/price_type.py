@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 
 
@@ -35,46 +37,44 @@ class PriceType(Enum):
                 "en": "Free",
                 "nl": "Gratis",
             }[lang]
-        elif self == PriceType.BID:
+        if self == PriceType.BID:
             return {
                 "en": "Bid",
                 "nl": "Bieden",
             }[lang]
-        elif self == PriceType.RESERVED:
+        if self == PriceType.RESERVED:
             return {
                 "en": "Reserved",
                 "nl": "Gereserveerd",
             }[lang]
-        elif self == PriceType.SEE_DESCRIPTION:
+        if self == PriceType.SEE_DESCRIPTION:
             return {
                 "en": "See description",
                 "nl": "Zie omschrijving",
             }[lang]
-        elif self == PriceType.TO_BE_AGREED_UPON:
+        if self == PriceType.TO_BE_AGREED_UPON:
             return {
                 "en": "To be agreed upon",
                 "nl": "N.o.t.k.",
             }[lang]
-        elif self == PriceType.ON_REQUEST:
+        if self == PriceType.ON_REQUEST:
             return {
                 "en": "On request",
                 "nl": "Op aanvraag",
             }[lang]
-        elif self == PriceType.EXCHANGE:
+        if self == PriceType.EXCHANGE:
             return {
                 "en": "Exchange",
                 "nl": "Ruilen",
             }[lang]
-        elif self == PriceType.UNKNOWN:
+        if self == PriceType.UNKNOWN:
             return {
                 # we don't want a real translation for these
                 # as they're the result of an error in the library
                 "en": "UNKNOWN",
                 "nl": "UNKNOWN",
             }[lang]
-        elif self == PriceType.FIXED:
-            return f"{'€ ' if euro_sign else ''}{price:.2f}"
-        elif self == PriceType.BID_FROM:
+        if self == PriceType.FIXED or self == PriceType.BID_FROM:
             return f"{'€ ' if euro_sign else ''}{price:.2f}"
 
         assert False

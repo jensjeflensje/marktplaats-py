@@ -1,14 +1,15 @@
+from __future__ import annotations
+
 import unittest
-from datetime import datetime, date
+from datetime import date, datetime
 from unittest.mock import patch
 
 import requests
 import requests_mock
 
+from marktplaats import BadStatusCodeError, JSONDecodeError, PriceType, SearchQuery
 from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
-
-from marktplaats import SearchQuery, PriceType, BadStatusCodeError, JSONDecodeError
 
 
 class BasicSearchQueryTest(unittest.TestCase):

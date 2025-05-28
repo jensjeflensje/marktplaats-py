@@ -3,11 +3,10 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from collections.abc import Iterator, Mapping
-
 from pathlib import Path
 from types import NotImplementedType
-
 from typing import Any
+
 from typing_extensions import Self
 
 

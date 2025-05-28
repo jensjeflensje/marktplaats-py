@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 import logging
 from collections.abc import Iterable
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 from enum import Enum
 from typing import Any
 
 import requests
 
-from marktplaats.categories import L2Category, L1Category
+from marktplaats.categories import L1Category, L2Category
 from marktplaats.config import ISSUE_LINK
 from marktplaats.models import (
     Listing,
@@ -16,6 +18,7 @@ from marktplaats.models import (
 )
 from marktplaats.models.price_type import PriceType
 from marktplaats.utils import REQUEST_HEADERS, MessageObjectException
+
 
 logger = logging.getLogger(__name__)
 
