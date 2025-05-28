@@ -16,7 +16,7 @@ class BasicSearchQueryTest(unittest.TestCase):
     Basic tests to test search query functionality.
     """
 
-    def test_request(self):
+    def test_request(self) -> None:
         with patch('requests.get') as get_request:
             get_request.return_value.status_code = 200
             get_request.return_value.json.return_value = {
@@ -209,7 +209,7 @@ class BasicSearchQueryTest(unittest.TestCase):
         self.assertFalse(seller.identification)
         self.assertTrue(seller.phone_number)
 
-    def test_http_error_400(self):
+    def test_http_error_400(self) -> None:
         # This should be the same for other 4xx and 5xx errors
 
         with requests_mock.Mocker() as m:
@@ -220,7 +220,7 @@ class BasicSearchQueryTest(unittest.TestCase):
             with self.assertRaises(requests.HTTPError):
                 _query = SearchQuery("fiets")
 
-    def test_http_error_204(self):
+    def test_http_error_204(self) -> None:
         # This should be the same for all other non-200 non-4xx non-5xx errors
 
         with requests_mock.Mocker() as m:
@@ -231,7 +231,7 @@ class BasicSearchQueryTest(unittest.TestCase):
             with self.assertRaises(BadStatusCodeError):
                 _query = SearchQuery("fiets")
 
-    def test_invalid_json(self):
+    def test_invalid_json(self) -> None:
         with requests_mock.Mocker() as m:
             m.get(
                 "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
@@ -240,7 +240,7 @@ class BasicSearchQueryTest(unittest.TestCase):
             with self.assertRaises(JSONDecodeError):
                 _query = SearchQuery("fiets")
 
-    def test_query_category_valueerror(self):
+    def test_query_category_valueerror(self) -> None:
         with self.assertRaises(ValueError):
             _query = SearchQuery(price_to=10)
 

@@ -12,7 +12,7 @@ class LiveSearchQueryTest(unittest.TestCase):
     haven't deployed breaking changes.
     """
 
-    def _validate_response(self, search, check_time: bool = False):
+    def _validate_response(self, search: SearchQuery, check_time: bool = False) -> None:
         listings = search.get_listings()
 
         for listing in listings:
@@ -62,7 +62,7 @@ class LiveSearchQueryTest(unittest.TestCase):
                 self.assertIsInstance(image.large, str)
                 self.assertIsInstance(image.extra_large, str)
 
-    def test_request(self):
+    def test_request(self) -> None:
         search = SearchQuery("fiets",
                              zip_code="1016LV",
                              distance=100000,
@@ -78,7 +78,7 @@ class LiveSearchQueryTest(unittest.TestCase):
         self._validate_response(search, check_time=True)
 
 
-    def test_request_with_condition(self):
+    def test_request_with_condition(self) -> None:
         search = SearchQuery("schijf",
                              zip_code="1016LV",
                              distance=100000,

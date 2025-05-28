@@ -11,7 +11,7 @@ class ImageFetchTest(unittest.TestCase):
     Basic tests to test image scraping.
     """
 
-    def test_parse_images(self):
+    def test_parse_images(self) -> None:
         dir_path = os.path.dirname(os.path.realpath(__file__))
         with open(os.path.join(dir_path, 'mock/image_response.html'), 'r') as file:
             mock_response = file.read()
