@@ -76,7 +76,11 @@ for l1_category in l1_categories.values():
             "name": option.text,
             "parent": l1_category["name"],
         }
-    found = len(list(filter(lambda x: x["parent"] == l1_category["name"], l2_categories.values())))
+    found = len(
+        list(
+            filter(lambda x: x["parent"] == l1_category["name"], l2_categories.values())
+        )
+    )
     print(f"Found {found}")
     if found == 0:
         raise Exception(f"Found no L2 categories for {l1_category['name']}")
