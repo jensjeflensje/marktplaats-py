@@ -7,6 +7,7 @@ name = "marktplaats"
 version = "0.3.0"
 description = "A small Python package to request listings from marktplaats.nl"
 readme = "README.md"
+license = "MIT"
 authors = [
   { name = "Jens de Ruiter", email = "me@jensderuiter.dev" },
 ]
