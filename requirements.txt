@@ -1,3 +1,0 @@
-requests>=2.28.2
-BeautifulSoup4==4.13.4
-typing-extensions>=4.13.2
