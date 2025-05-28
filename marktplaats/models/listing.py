@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import warnings
 from dataclasses import dataclass
 from datetime import date
-from typing import Optional
+from types import NotImplementedType
+from typing import Any
 
 from marktplaats.models import ListingSeller, ListingFirstImage
 from marktplaats.models.listing_image import fetch_listing_images
@@ -14,7 +17,7 @@ class Listing:
     id: str
     title: str
     description: str
-    date: Optional[date]
+    date: date | None
     seller: ListingSeller
     location: ListingLocation
     price: float
@@ -22,8 +25,8 @@ class Listing:
     link: str
     _images: list[ListingFirstImage]
     category_id: int
-    attributes: list
-    extended_attributes: list
+    attributes: list[dict[str, Any]]
+    extended_attributes: list[dict[str, Any]]
 
     @property
     def images(self) -> list[ListingFirstImage]:
@@ -45,12 +48,12 @@ class Listing:
     def get_images(self) -> list[str]:
         return fetch_listing_images(self.id)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, Listing):
             return NotImplemented
         return self.id == other.id
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.id)
 
     def price_as_string(self, euro_sign: bool = True, lang: str = "en") -> str:
