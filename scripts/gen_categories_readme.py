@@ -2,7 +2,7 @@
 import json
 
 
-def main():
+def main() -> None:
     try:
         with open("marktplaats/l1_categories.json", "r") as l1_file, \
                 open("marktplaats/l2_categories.json", "r") as l2_file:
