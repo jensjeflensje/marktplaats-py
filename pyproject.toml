@@ -45,7 +45,9 @@ lint.ignore = [
     # Project:
 ]
 
-lint.flake8-tidy-imports.ban-relative-imports = "all"                  # For consistency
+lint.flake8-tidy-imports.ban-relative-imports = "all" # For consistency
+
+lint.isort.combine-as-imports = true
 lint.isort.lines-after-imports = 2
 lint.isort.required-imports = [ "from __future__ import annotations" ]
 
