@@ -2,19 +2,23 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 
 def main() -> None:
     try:
-        with (
-            open("marktplaats/l1_categories.json", encoding="utf-8") as l1_file,
-            open("marktplaats/l2_categories.json", encoding="utf-8") as l2_file,
-        ):
-            l1_categories = json.loads(l1_file.read())
-            l2_categories = json.loads(l2_file.read())
+        l1_categories = json.loads(
+            Path("marktplaats/l1_categories.json")
+            .read_text(encoding="utf-8")
+        )
+        l2_categories = json.loads(
+            Path("marktplaats/l2_categories.json")
+            .read_text(encoding="utf-8")
+        )
     except OSError:
         print(
-            "Category files not found! Are you executing this script from the project root?"
+            "Category files not found! "
+            "Are you executing this script from the project root?"
         )
         return
 
@@ -33,8 +37,7 @@ This file acts as a human-readable index of all categories.
         for l2_category in l2:
             output += f"- {l2_category['name']} ({l2_category['id']})\n"
 
-    with open("./CATEGORIES.md", "w", encoding="utf-8") as file:
-        file.write(output)
+    Path("./CATEGORIES.md").write_text(output, encoding="utf-8")
 
     print("Success!")
 
