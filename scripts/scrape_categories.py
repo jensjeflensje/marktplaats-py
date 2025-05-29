@@ -85,16 +85,17 @@ for l1_category in l1_categories.values():
     )
     print(f"Found {found}")
     if found == 0:
-        raise Exception(f"Found no L2 categories for {l1_category['name']}")
+        msg = f"Found no L2 categories for {l1_category['name']}"
+        raise Exception(msg)
 
 print(f"Found in total {len(l2_categories)}")
 
 print("Writing to files... ", end="", flush=True)
 
-with open("l1_categories.json", "w") as file:
+with open("l1_categories.json", "w", encoding="utf-8") as file:
     json.dump(l1_categories, file)
 
-with open("l2_categories.json", "w") as file:
+with open("l2_categories.json", "w", encoding="utf-8") as file:
     json.dump(l2_categories, file)
 
 print("Done")

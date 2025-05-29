@@ -7,8 +7,8 @@ import json
 def main() -> None:
     try:
         with (
-            open("marktplaats/l1_categories.json") as l1_file,
-            open("marktplaats/l2_categories.json") as l2_file,
+            open("marktplaats/l1_categories.json", encoding="utf-8") as l1_file,
+            open("marktplaats/l2_categories.json", encoding="utf-8") as l2_file,
         ):
             l1_categories = json.loads(l1_file.read())
             l2_categories = json.loads(l2_file.read())
@@ -33,7 +33,7 @@ This file acts as a human-readable index of all categories.
         for l2_category in l2:
             output += f"- {l2_category['name']} ({l2_category['id']})\n"
 
-    with open("./CATEGORIES.md", "w") as file:
+    with open("./CATEGORIES.md", "w", encoding="utf-8") as file:
         file.write(output)
 
     print("Success!")
