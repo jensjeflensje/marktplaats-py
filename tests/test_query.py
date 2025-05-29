@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from unittest.mock import patch  # TODO: switch to something else?
+from unittest.mock import (
+    patch,  # TODO(GideonBear): switch to something else?  # noqa: FIX002, TD003
+)
 
 import pytest
 import requests
