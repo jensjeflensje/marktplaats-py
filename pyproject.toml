@@ -54,13 +54,18 @@ lint.ignore = [
 ]
 
 lint.per-file-ignores."scripts/**/*.py" = [
-    "T201", # We can print in scripts
+    "INP001", # `scripts` is not a package
+    "S603",   # Use of subprocess
+    "S607",   # Partial executable path
+    "T201",   # We can print in scripts
 ]
 lint.per-file-ignores."tests/**/*.py" = [
     "E501",    # If the formatter doesn't fix the line length, it's good enough
+    "FBT",     # We don't care about boolean parameters in tests
     "INP001",  # Tests are supposed to be an implicit namespace
     "PLR2004", # Magic values are allowed in tests
     "S101",    # Assert is allowed in tests
+    "DTZ",     # We can use naive timezones in tests
 ]
 
 lint.flake8-tidy-imports.ban-relative-imports = "all" # For consistency
