@@ -49,7 +49,7 @@ lint.ignore = [
     "D1",     # Docstrings should not be enforced by default
     "D203",   # Choose D203 or D211
     "D212",   # Choose D212 or D213
-    "S404", # Uses of subprocess are rejected, no need to reject the imports as well
+    "S404",   # Uses of subprocess are rejected, no need to reject the imports as well
     # Project:
 ]
 

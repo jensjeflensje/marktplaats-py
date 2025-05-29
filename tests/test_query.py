@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import pytest
 import unittest
 from datetime import date, datetime
 from unittest.mock import patch
 
+import pytest
 import requests
 import requests_mock
 
@@ -141,19 +141,19 @@ class TestBasicSearchQuery:
             )
 
         listings = query.get_listings()
-        assert 1 == len(listings)
+        assert len(listings) == 1
 
         listing = listings[0]
-        assert 75 == listing.price
-        assert 75 == listing.price
-        assert PriceType.FIXED == listing.price_type
-        assert 1 == len(listing.images)
+        assert listing.price == 75
+        assert listing.price == 75
+        assert listing.price_type == PriceType.FIXED
+        assert len(listing.images) == 1
         assert isinstance(listing.location, ListingLocation)
         assert date(year=2024, month=3, day=10) == listing.date
-        assert "https://link.marktplaats.nl/m2064554806" == listing.link
-        assert 100 == query.total_result_count
+        assert listing.link == "https://link.marktplaats.nl/m2064554806"
+        assert query.total_result_count == 100
 
-        assert 7405065 == listing.seller.id
+        assert listing.seller.id == 7405065
         assert not listing.seller.is_verified
 
         with patch("requests.get") as get_request:
@@ -182,9 +182,9 @@ class TestBasicSearchQuery:
                 },
             )
 
-        assert not seller.is_verified# should still be false
-        assert 7405065 == seller.id# should still be the same
-        assert 5 == seller.average_score
+        assert not seller.is_verified  # should still be false
+        assert seller.id == 7405065  # should still be the same
+        assert seller.average_score == 5
         assert seller.bank_account
         assert not seller.identification
         assert seller.phone_number
