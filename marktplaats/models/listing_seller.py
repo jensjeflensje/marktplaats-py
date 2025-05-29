@@ -36,7 +36,9 @@ class ListingSeller:
         )
 
     def get_seller(self) -> Seller:
-        request = get_request(f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}")
+        request = get_request(
+            f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}"
+        )
 
         body = request.text
         body_json = json.loads(body)

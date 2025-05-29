@@ -210,9 +210,12 @@ class SearchQuery:
                 listing_time = parse_date(listing["date"])
             except ValueError:
                 logger.warning(
-                    f"Marktplaats-py found an unknown date format for listing {listing['itemId']}: '{listing['date']}'. "
-                    f"This is not your fault. "
-                    f"Please create an issue on {ISSUE_LINK} and include this log message."
+                    "Marktplaats-py found an unknown date format for listing %s: '%s'. "
+                    "This is not your fault. "
+                    "Please create an issue on %s and include this log message.",
+                    listing["itemId"],
+                    listing["date"],
+                    ISSUE_LINK,
                 )
                 listing_time = None
 
@@ -221,10 +224,13 @@ class SearchQuery:
             except ValueError:
                 # this means marktplaats has a PriceType this library doesn't know about
                 logger.warning(
-                    f"Marktplaats-py found an unknown PriceType found for "
-                    f"listing {listing['itemId']}: '{listing['priceInfo']['priceType']}'. "
-                    f"This is not your fault. "
-                    f"Please create an issue on {ISSUE_LINK} and include this log message."
+                    "Marktplaats-py found an unknown PriceType found for "
+                    "listing %s: '%s'. "
+                    "This is not your fault. "
+                    "Please create an issue on %s and include this log message.",
+                    listing["itemId"],
+                    listing["priceInfo"]["priceType"],
+                    ISSUE_LINK,
                 )
                 # set a fallback value
                 price_type = PriceType.UNKNOWN
