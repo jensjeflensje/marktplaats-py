@@ -31,6 +31,13 @@ dependencies = [
 urls.bugs = "https://github.com/jensjeflensje/marktplaats-py/issues"
 urls.homepage = "https://github.com/jensjeflensje/marktplaats-py"
 
+[dependency-groups]
+dev = [
+    "beautifulsoup4>=4.13.4",
+    "requests>=2.32.3",
+    "requests-mock>=1.12.1",
+]
+
 [tool.ruff]
 lint.select = [ "ALL" ]
 
@@ -105,11 +112,4 @@ enable_error_code = [
     "unused-awaitable",
     "possibly-undefined",
     "mutable-override",
-]
-
-[dependency-groups]
-dev = [
-    "beautifulsoup4>=4.13.4",
-    "requests>=2.32.3",
-    "requests-mock>=1.12.1",
 ]
