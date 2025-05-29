@@ -14,9 +14,7 @@ from marktplaats.models import ListingLocation
 
 
 class TestBasicSearchQuery:
-    """
-    Basic tests to test search query functionality.
-    """
+    """Basic tests to test search query functionality."""
 
     def test_request(self) -> None:
         with patch("requests.get") as get_request:
