@@ -10,7 +10,7 @@ REQUEST_HEADERS = {
 
 
 class MessageObjectException(Exception):
-    def __init__(self, msg: str, obj: object):
+    def __init__(self, msg: str, obj: object) -> None:
         super().__init__(msg, obj)
         self.msg = msg
         self.obj = obj

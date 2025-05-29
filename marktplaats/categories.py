@@ -2,16 +2,19 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
-from collections.abc import Iterator, Mapping
 from pathlib import Path
-from types import NotImplementedType
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
 
 
+if TYPE_CHECKING:
+    from collections.abc import Iterator, Mapping
+    from types import NotImplementedType
+
+
 class L1Category:
-    def __init__(self, id_: int, name: str):
+    def __init__(self, id_: int, name: str) -> None:
         self.id = id_
         self.name = name
 
@@ -22,7 +25,8 @@ class L1Category:
         try:
             l1_category = _l1_categories_raw.get_data()[name]
         except KeyError as err:
-            raise ValueError(f"Unknown L1 category name: {orig_name}") from err
+            msg = f"Unknown L1 category name: {orig_name}"
+            raise ValueError(msg) from err
         id_, name = l1_category["id"], l1_category["name"]
         return cls(id_, name)
 
@@ -43,7 +47,7 @@ class L1Category:
 
 
 class L2Category:
-    def __init__(self, id_: int, name: str, parent: L1Category):
+    def __init__(self, id_: int, name: str, parent: L1Category) -> None:
         self.id = id_
         self.name = name
         self.parent = parent
@@ -55,7 +59,8 @@ class L2Category:
         try:
             l2_category = _l2_categories_raw.get_data()[name]
         except KeyError as err:
-            raise ValueError(f"Unknown L2 category name: {orig_name}") from err
+            msg = f"Unknown L2 category name: {orig_name}"
+            raise ValueError(msg) from err
         return cls(
             id_=l2_category["id"],
             name=l2_category["name"],
@@ -86,7 +91,7 @@ def category_from_name(name: str) -> L1Category | L2Category:
 
 
 class LazyWrapper:
-    def __init__(self, filename: Path):
+    def __init__(self, filename: Path) -> None:
         self.filename = filename
         self._data: dict[Any, Any] | None = None
 

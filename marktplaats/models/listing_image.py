@@ -27,17 +27,12 @@ class ListingFirstImage:
     def parse(cls, data: list[dict[str, Any]]) -> list[Self]:
         if data is None:
             return []
-        images = []
-        for image_data in data:
-            images.append(
-                cls(
+        return [cls(
                     image_data["extraSmallUrl"],
                     image_data["mediumUrl"],
                     image_data["largeUrl"],
                     image_data["extraExtraLargeUrl"],
-                )
-            )
-        return images
+                ) for image_data in data]
 
 
 def fetch_listing_images(listing_id: str) -> list[str]:
@@ -62,9 +57,8 @@ def fetch_listing_images(listing_id: str) -> list[str]:
         parsed = json.loads(data.text)
         # the list of image URLs is hidden within the product object
         if type(parsed) is dict and parsed["@type"] == "Product":
-            for image in parsed["image"]:
-                # the returned images are in a format that don't include a scheme, so we add one manually
-                images.append(f"https:{image}")
+            # the returned images are in a format that don't include a scheme, so we add one manually
+            images.extend(f"https:{image}" for image in parsed["image"])
             break
 
     return images

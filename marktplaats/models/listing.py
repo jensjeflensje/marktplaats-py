@@ -2,14 +2,18 @@ from __future__ import annotations
 
 import warnings
 from dataclasses import dataclass
-from datetime import date
-from types import NotImplementedType
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
-from marktplaats.models.listing_location import ListingLocation
-from marktplaats.models.listing_seller import ListingSeller
-from marktplaats.models.price_type import PriceType
+
+
+if TYPE_CHECKING:
+    from datetime import date
+    from types import NotImplementedType
+
+    from marktplaats.models.listing_location import ListingLocation
+    from marktplaats.models.listing_seller import ListingSeller
+    from marktplaats.models.price_type import PriceType
 
 
 @dataclass

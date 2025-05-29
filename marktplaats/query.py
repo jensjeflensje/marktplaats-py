@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Iterable
 from datetime import date, datetime, timedelta
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import requests
 
@@ -18,6 +17,10 @@ from marktplaats.models import (
 )
 from marktplaats.models.price_type import PriceType
 from marktplaats.utils import REQUEST_HEADERS, MessageObjectException
+
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
 logger = logging.getLogger(__name__)
@@ -128,10 +131,11 @@ class SearchQuery:
         category: L1Category | L2Category | None = None,
         extra_attributes: Iterable[int]
         | None = None,  # EXPERIMENTAL: list of integers, just like Condition
-    ):
+    ) -> None:
         if query == "" and category is None:
+            msg = "Invalid arguments: When the query is empty, a category must be specified."
             raise ValueError(
-                "Invalid arguments: When the query is empty, a category must be specified."
+                msg
             )
 
         params: dict[str, Any] = {
@@ -185,15 +189,17 @@ class SearchQuery:
 
         # But if it's something else non-200, still fail fast.
         if self.response.status_code != 200:
-            raise BadStatusCodeError("Received non-200 status code:", self.response)
+            msg = "Received non-200 status code:"
+            raise BadStatusCodeError(msg, self.response)
 
         try:
             self.body_json = self.response.json()
         except requests.exceptions.JSONDecodeError as err:
             # Note: this is not the same error type. This will propagate as:
             #  json.decoder.JSONDecodeError -> requests.exceptions.JSONDecodeError -> marktplaats.JSONDecodeError
+            msg = "Received invalid (non-json) response:"
             raise JSONDecodeError(
-                "Received invalid (non-json) response:", self.response.text
+                msg, self.response.text
             ) from err
 
         self._set_query_data()

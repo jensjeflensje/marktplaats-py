@@ -29,8 +29,9 @@ class PriceType(Enum):
     UNKNOWN = "UNKNOWN"
 
     def _as_string(self, price: float, euro_sign: bool, lang: str) -> str:
-        if lang not in ("en", "nl"):
-            raise ValueError(f"{lang:r} not in supported languages (nl, en)")
+        if lang not in {"en", "nl"}:
+            msg = f"{lang:r} not in supported languages (nl, en)"
+            raise ValueError(msg)
 
         if self == PriceType.FREE:
             return {
@@ -74,7 +75,7 @@ class PriceType(Enum):
                 "en": "UNKNOWN",
                 "nl": "UNKNOWN",
             }[lang]
-        if self == PriceType.FIXED or self == PriceType.BID_FROM:
+        if self in {PriceType.FIXED, PriceType.BID_FROM}:
             return f"{'€ ' if euro_sign else ''}{price:.2f}"
 
-        assert False
+        raise AssertionError
