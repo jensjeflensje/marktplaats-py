@@ -57,8 +57,9 @@ lint.per-file-ignores."scripts/*" = [
     "T201", # We can print in scripts
 ]
 lint.per-file-ignores."tests/*" = [
-    "S101",    # Assert is allowed in tests
+    "E501",    # If the formatter doesn't fix the line length, it's good enough
     "PLR2004", # Magic values are allowed in tests
+    "S101",    # Assert is allowed in tests
 ]
 
 lint.flake8-tidy-imports.ban-relative-imports = "all" # For consistency
