@@ -134,9 +134,7 @@ class SearchQuery:
     ) -> None:
         if query == "" and category is None:
             msg = "Invalid arguments: When the query is empty, a category must be specified."
-            raise ValueError(
-                msg
-            )
+            raise ValueError(msg)
 
         params: dict[str, Any] = {
             "limit": str(limit),
@@ -198,9 +196,7 @@ class SearchQuery:
             # Note: this is not the same error type. This will propagate as:
             #  json.decoder.JSONDecodeError -> requests.exceptions.JSONDecodeError -> marktplaats.JSONDecodeError
             msg = "Received invalid (non-json) response:"
-            raise JSONDecodeError(
-                msg, self.response.text
-            ) from err
+            raise JSONDecodeError(msg, self.response.text) from err
 
         self._set_query_data()
 

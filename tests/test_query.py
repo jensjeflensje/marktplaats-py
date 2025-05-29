@@ -222,5 +222,8 @@ def test_invalid_json() -> None:
 
 
 def test_query_category_valueerror() -> None:
-    with pytest.raises(ValueError, match="^Invalid arguments: When the query is empty, a category must be specified.$"):
+    with pytest.raises(
+        ValueError,
+        match="^Invalid arguments: When the query is empty, a category must be specified.$",
+    ):
         _query = SearchQuery(price_to=10)

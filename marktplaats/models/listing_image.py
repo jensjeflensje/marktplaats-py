@@ -27,12 +27,15 @@ class ListingFirstImage:
     def parse(cls, data: list[dict[str, Any]]) -> list[Self]:
         if data is None:
             return []
-        return [cls(
-                    image_data["extraSmallUrl"],
-                    image_data["mediumUrl"],
-                    image_data["largeUrl"],
-                    image_data["extraExtraLargeUrl"],
-                ) for image_data in data]
+        return [
+            cls(
+                image_data["extraSmallUrl"],
+                image_data["mediumUrl"],
+                image_data["largeUrl"],
+                image_data["extraExtraLargeUrl"],
+            )
+            for image_data in data
+        ]
 
 
 def fetch_listing_images(listing_id: str) -> list[str]:
