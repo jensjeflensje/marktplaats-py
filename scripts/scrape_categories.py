@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from string import ascii_lowercase
 
 from bs4 import BeautifulSoup, Tag
@@ -25,7 +26,7 @@ for option in select.children:
     value = option["value"]
     assert isinstance(value, str)
     if (
-        # "Kies categorie:"
+        # "Kies categorie:"  # noqa: ERA001 this is not code
         option.get("disabled") is not None
         # "Alle categorieën…"
         or value == "0"
@@ -67,7 +68,7 @@ for l1_category in l1_categories.values():
         value = option["value"]
         assert isinstance(value, str)
         if (
-            # "Kies categorie:"
+            # "Kies categorie:"  # noqa: ERA001 this is not code
             option.get("disabled") is not None
             # "Alle categorieën…"
             or option["value"] == "0"
@@ -94,10 +95,10 @@ print(f"Found in total {len(l2_categories)}")
 
 print("Writing to files... ", end="", flush=True)
 
-with open("l1_categories.json", "w", encoding="utf-8") as file:
+with Path("l1_categories.json").open("w", encoding="utf-8") as file:
     json.dump(l1_categories, file)
 
-with open("l2_categories.json", "w", encoding="utf-8") as file:
+with Path("l2_categories.json").open("w", encoding="utf-8") as file:
     json.dump(l2_categories, file)
 
 print("Done")

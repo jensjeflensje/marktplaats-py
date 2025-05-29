@@ -54,9 +54,11 @@ lint.ignore = [
 
 lint.per-file-ignores."scripts/**/*.py" = [
     "INP001", # `scripts` is not a package
+    "S101",   # We assume we don't run scripts with -O
     "S603",   # Use of subprocess
     "S607",   # Partial executable path
     "T201",   # We can print in scripts
+    "TRY002", # In scripts, we throw `Exception` to just crash.
 ]
 lint.per-file-ignores."tests/**/*.py" = [
     "DTZ",     # We can use naive timezones in tests

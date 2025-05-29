@@ -112,7 +112,7 @@ def parse_date(date_str: str) -> date:
 class SearchQuery:
     """
     A search query for Marktplaats.
-    Raises a requests HTTPError if the request fails.
+    Raises a requests.HTTPError if the request fails.
     """
 
     def __init__(
