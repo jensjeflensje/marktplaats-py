@@ -6,9 +6,9 @@ from datetime import date
 from types import NotImplementedType
 from typing import Any
 
-from marktplaats.models import ListingFirstImage, ListingSeller
-from marktplaats.models.listing_image import fetch_listing_images
+from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
 from marktplaats.models.listing_location import ListingLocation
+from marktplaats.models.listing_seller import ListingSeller
 from marktplaats.models.price_type import PriceType
 
 
