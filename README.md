@@ -11,20 +11,22 @@ This is an example on how to use the library:
 ```py
 from datetime import datetime, timedelta
 
-from marktplaats import SearchQuery, SortBy, SortOrder, Condition, category_from_name
+from marktplaats import Condition, SearchQuery, SortBy, SortOrder, category_from_name
 
-search = SearchQuery(query="gazelle", # Search query. Can be left out, but then category must be specified.
-                     zip_code="1016LV", # Zip code to base distance from
-                     distance=100000, # Max distance from the zip code for listings
-                     price_from=0, # Lowest price to search for
-                     price_to=100, # Highest price to search for
-                     limit=5, # Max listings (page size, max 100)
-                     offset=0, # Offset for listings (page * limit)
-                     sort_by=SortBy.OPTIMIZED, # DATE, PRICE, LOCATION, OPTIMIZED
-                     sort_order=SortOrder.ASC, # ASCending or DESCending
-                     condition=Condition.NEW, # NEW, AS_GOOD_AS_NEW, USED or category-specific
-                     offered_since=datetime.now() - timedelta(days=7), # Filter listings since a point in time
-                     category=category_from_name("Fietsen en Brommers")) # Filter in specific category (L1) or subcategory (L2)
+search = SearchQuery(
+    query="gazelle",  # Search query. Can be left out, but then category must be specified.
+    zip_code="1016LV",  # Zip code to base distance from
+    distance=100000,  # Max distance from the zip code for listings
+    price_from=0,  # Lowest price to search for
+    price_to=100,  # Highest price to search for
+    limit=5,  # Max listings (page size, max 100)
+    offset=0,  # Offset for listings (page * limit)
+    sort_by=SortBy.OPTIMIZED,  # DATE, PRICE, LOCATION, OPTIMIZED
+    sort_order=SortOrder.ASC,  # ASCending or DESCending
+    condition=Condition.NEW,  # NEW, AS_GOOD_AS_NEW, USED or category-specific
+    offered_since=datetime.now() - timedelta(days=7),  # Filter listings since a point in time
+    category=category_from_name("Fietsen en Brommers"),  # Filter in specific category (L1) or subcategory (L2)
+)
 
 listings = search.get_listings()
 
@@ -55,7 +57,6 @@ for listing in listings:
     # (this sends another HTTP request)
     for image in listing.get_images():
         print(image)
-
 
     print("-----------------------------")
 ```
