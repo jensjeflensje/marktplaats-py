@@ -23,5 +23,5 @@ class ListingLocation:
             data.get("countryAbbrevation"),
             data["latitude"] if data["latitude"] != 0 else None,
             data["longitude"] if data["longitude"] != 0 else None,
-            None if data.get("distanceMeters") == -1000 else data.get("distanceMeters"),
+            data.get("distanceMeters") if data.get("distanceMeters") != -1000 else None,
         )
