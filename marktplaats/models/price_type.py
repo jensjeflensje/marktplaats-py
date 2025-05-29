@@ -20,7 +20,8 @@ class PriceType(Enum):
     EXCHANGE = "EXCHANGE"
     # Just the price
     FIXED = "FIXED"
-    # Just the price, but the API also lets us know there's a bidding option separate from the asking price
+    # Just the price, but the API also lets us know
+    #  there's a bidding option separate from the asking price
     #  This bid does not start from `.price`, but from another unknown value.
     #  The `.price` is the asking price shown in the search results.
     BID_FROM = "MIN_BID"
@@ -28,7 +29,13 @@ class PriceType(Enum):
     # Used when the price type marktplaats returns doesn't match any of our price types
     UNKNOWN = "UNKNOWN"
 
-    def _as_string(self, price: float, euro_sign: bool, lang: str) -> str:
+    def _as_string(  # noqa: C901, PLR0911 Too complex and too much return statements
+            self,
+            price: float,
+            *,
+            euro_sign: bool,
+            lang: str,
+    ) -> str:
         if lang not in {"en", "nl"}:
             msg = f"{lang:r} not in supported languages (nl, en)"
             raise ValueError(msg)

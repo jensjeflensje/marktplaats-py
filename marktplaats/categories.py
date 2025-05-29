@@ -98,7 +98,7 @@ class LazyWrapper:
     def get_data(self) -> dict[Any, Any]:
         if self._data is None:
             self._build_data()
-            assert self._data is not None
+            assert self._data is not None  # noqa: S101 Assert for typechecker
         return self._data
 
     def _build_data(self) -> None:

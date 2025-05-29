@@ -13,8 +13,9 @@ from marktplaats.utils import get_request
 class ListingFirstImage:
     """
     Data format for the listing image that marktplaats responds with when doing a search query.
+
     The get_images() method will not use this format, but instead return a list of URLs.
-    """
+    """  # noqa: E501 Line too long, we can't easily wrap it in the docstring
 
     extra_small: str
     medium: str
@@ -38,11 +39,12 @@ class ListingFirstImage:
 
 def fetch_listing_images(listing_id: str) -> list[str]:
     """
-    Returns a list of image URLs for a given listing.
+    Return a list of image URLs for a given listing.
+
     It scrapes the listing page and parses the ld+json objects on that page.
     :param listing_id: The listing ID to get images for.
     :return: A list of image URLs (https).
-    """
+    """  # noqa: DOC201 TODO: all the docstrings are a bit inconsistent
     r = get_request(f"https://link.marktplaats.nl/{listing_id}")
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 
@@ -55,7 +57,8 @@ def fetch_listing_images(listing_id: str) -> list[str]:
         parsed = json.loads(data.text)
         # the list of image URLs is hidden within the product object
         if type(parsed) is dict and parsed["@type"] == "Product":
-            # the returned images are in a format that don't include a scheme, so we add one manually
+            # the returned images are in a format that don't include a scheme,
+            #  so we add one manually
             images.extend(f"https:{image}" for image in parsed["image"])
             break
 

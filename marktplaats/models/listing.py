@@ -61,5 +61,13 @@ class Listing:  # type: ignore[misc] # this will be removed when explicit-any is
     def __hash__(self) -> int:
         return hash(self.id)
 
-    def price_as_string(self, euro_sign: bool = True, lang: str = "en") -> str:
-        return self.price_type._as_string(self.price, euro_sign, lang)
+    def price_as_string(
+            self,
+            euro_sign: bool = True,  # noqa: FBT001, FBT002 TODO: consider making the arguments keyword-only (self, *, euro_sign...)
+            lang: str = "en",
+    ) -> str:
+        return self.price_type._as_string(  # noqa: SLF001 private member access
+            self.price,
+            euro_sign=euro_sign,
+            lang=lang,
+        )
