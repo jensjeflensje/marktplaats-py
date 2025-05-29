@@ -8,7 +8,7 @@ from requests import get
 
 
 def parse(url: str) -> BeautifulSoup:
-    resp = get(url)
+    resp = get(url, timeout=15)
     return BeautifulSoup(resp.text, "html.parser")
 
 

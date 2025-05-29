@@ -3,11 +3,10 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 
-import requests
 from bs4 import BeautifulSoup
 from typing_extensions import Self
 
-from marktplaats.utils import REQUEST_HEADERS
+from marktplaats.utils import get_request
 
 
 @dataclass
@@ -44,10 +43,7 @@ def fetch_listing_images(listing_id: str) -> list[str]:
     :param listing_id: The listing ID to get images for.
     :return: A list of image URLs (https).
     """
-    r = requests.get(
-        f"https://link.marktplaats.nl/{listing_id}",
-        headers=REQUEST_HEADERS,
-    )
+    r = get_request(f"https://link.marktplaats.nl/{listing_id}")
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 
     soup = BeautifulSoup(r.text, "html.parser")

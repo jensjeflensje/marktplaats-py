@@ -16,7 +16,7 @@ from marktplaats.models import (
     ListingSeller,
 )
 from marktplaats.models.price_type import PriceType
-from marktplaats.utils import REQUEST_HEADERS, MessageObjectException
+from marktplaats.utils import MessageObjectException, get_request
 
 
 if TYPE_CHECKING:
@@ -175,11 +175,9 @@ class SearchQuery:
             # Set the L1 category in both cases
             params["l1CategoryId"] = str(category.id)
 
-        self.response = requests.get(
+        self.response = get_request(
             "https://www.marktplaats.nl/lrp/api/search",
             params=params,
-            # Some headers to make the request look legit
-            headers=REQUEST_HEADERS,
         )
 
         # This catches HTTP 4xx and 5xx errors

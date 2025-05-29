@@ -4,10 +4,9 @@ import json
 from dataclasses import dataclass
 from typing import Any
 
-import requests
 from typing_extensions import Self
 
-from marktplaats.utils import REQUEST_HEADERS
+from marktplaats.utils import get_request
 
 
 @dataclass
@@ -37,11 +36,7 @@ class ListingSeller:
         )
 
     def get_seller(self) -> Seller:
-        request = requests.get(
-            f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}",
-            # Some headers to make the request look legit
-            headers=REQUEST_HEADERS,
-        )
+        request = get_request(f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}")
 
         body = request.text
         body_json = json.loads(body)
