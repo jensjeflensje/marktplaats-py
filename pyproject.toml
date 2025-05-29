@@ -50,6 +50,7 @@ lint.ignore = [
     "D212",    # Choose D212 or D213
     "PLC0414", # (project) TODO: https://github.com/astral-sh/ruff/issues/18365
     "S404",    # Uses of subprocess are rejected, no need to reject the imports as well
+    "DTZ",     # We use naive timezones everywhere TODO: maybe this should be looked at
 ]
 
 lint.per-file-ignores."scripts/**/*.py" = [
@@ -61,7 +62,6 @@ lint.per-file-ignores."scripts/**/*.py" = [
     "TRY002", # In scripts, we throw `Exception` to just crash.
 ]
 lint.per-file-ignores."tests/**/*.py" = [
-    "DTZ",     # We can use naive timezones in tests
     "E501",    # If the formatter doesn't fix the line length, it's good enough
     "FBT",     # We don't care about boolean parameters in tests
     "INP001",  # Tests are supposed to be an implicit namespace

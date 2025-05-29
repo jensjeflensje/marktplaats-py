@@ -52,6 +52,7 @@ class JSONDecodeError(MessageObjectException):
 class SortBy(Enum):
     """
     Enumeration of the different sorting methods Marktplaats supports.
+
     The DATE method sorts by absolute time. So ascending is from oldest to newest.
     """
 
@@ -69,6 +70,7 @@ class SortOrder(Enum):
 class Condition(Enum):
     """
     Enumeration of different conditions for items listed on Marktplaats.
+
     NEW, AS_GOOD_AS_NEW, and USED always work.
     REFURBISHED and NOT_WORKING are specific to some categories.
     """
@@ -112,10 +114,11 @@ def parse_date(date_str: str) -> date:
 class SearchQuery:
     """
     A search query for Marktplaats.
+
     Raises a requests.HTTPError if the request fails.
     """
 
-    def __init__(
+    def __init__(  # noqa: PLR0917, PLR0913 TODO: consider making the arguments keyword-only (self, *, query...)
         self,
         query: str = "",
         zip_code: str = "",
@@ -132,8 +135,11 @@ class SearchQuery:
         extra_attributes: Iterable[int]
         | None = None,  # EXPERIMENTAL: list of integers, just like Condition
     ) -> None:
-        if query == "" and category is None:
-            msg = "Invalid arguments: When the query is empty, a category must be specified."
+        if not query and category is None:
+            msg = (
+                "Invalid arguments: When the query is empty, "
+                "a category must be specified."
+            )
             raise ValueError(msg)
 
         params: dict[str, Any] = {
@@ -149,7 +155,8 @@ class SearchQuery:
             "attributesById[]": [],
         }
 
-        # Only add price parameters if any scoping is actually done, to match the website's behavior.
+        # Only add price parameters if any scoping is actually done,
+        #  to match the website's behavior.
         if price_from is not None or price_to is not None:
             params["attributeRanges[]"] = [
                 f"PriceCents:{get_price_cents(price_from)}:{get_price_cents(price_to)}",
@@ -163,7 +170,8 @@ class SearchQuery:
 
         if offered_since is not None:
             params["attributesByKey[]"] = [
-                f"offeredSince:{int(offered_since.timestamp()) * 1000}",  # Unix timestamp millis
+                # Unix timestamp millis
+                f"offeredSince:{int(offered_since.timestamp()) * 1000}",
             ]
 
         if category:
@@ -184,7 +192,7 @@ class SearchQuery:
         self.response.raise_for_status()
 
         # But if it's something else non-200, still fail fast.
-        if self.response.status_code != 200:
+        if self.response.status_code != 200:  # noqa: PLR2004 HTTP status codes are a universal constant
             msg = "Received non-200 status code:"
             raise BadStatusCodeError(msg, self.response)
 
@@ -192,15 +200,18 @@ class SearchQuery:
             self.body_json = self.response.json()
         except requests.exceptions.JSONDecodeError as err:
             # Note: this is not the same error type. This will propagate as:
-            #  json.decoder.JSONDecodeError -> requests.exceptions.JSONDecodeError -> marktplaats.JSONDecodeError
+            #  json.decoder.JSONDecodeError
+            #  -> requests.exceptions.JSONDecodeError
+            #  -> marktplaats.JSONDecodeError
             msg = "Received invalid (non-json) response:"
             raise JSONDecodeError(msg, self.response.text) from err
 
         self._set_query_data()
 
     def _set_query_data(self) -> None:
-        # more fields will be added
-        # for now, this is a nice way to get the total result count when looping through pages
+        # More fields will be added.
+        # For now, this is a nice way to get the total result count
+        #  when looping through pages.
         self.total_result_count = self.body_json.get("totalResultCount")
 
     def get_listings(self) -> list[Listing]:
