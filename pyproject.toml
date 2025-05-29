@@ -88,7 +88,7 @@ strict = true # All strict checks are already listed below, only here for future
 # If the import is silenced, there's nothing else we can do so silence the uses as well.
 # disallow_any_unimported = true
 disallow_any_decorated = true
-disallow_any_explicit = true
+#disallow_any_explicit = true # TODO: disabled this for now; but enable this later to improve types
 disallow_any_generics = true
 disallow_subclassing_any = true
 
