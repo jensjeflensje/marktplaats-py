@@ -106,3 +106,8 @@ enable_error_code = [
     "possibly-undefined",
     "mutable-override",
 ]
+
+[dependency-groups]
+dev = [
+    "requests-mock>=1.12.1",
+]
