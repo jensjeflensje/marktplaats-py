@@ -30,11 +30,11 @@ class PriceType(Enum):
     UNKNOWN = "UNKNOWN"
 
     def _as_string(  # noqa: C901, PLR0911 Too complex and too much return statements
-            self,
-            price: float,
-            *,
-            euro_sign: bool,
-            lang: str,
+        self,
+        price: float,
+        *,
+        euro_sign: bool,
+        lang: str,
     ) -> str:
         if lang not in {"en", "nl"}:
             msg = f"{lang:r} not in supported languages (nl, en)"
