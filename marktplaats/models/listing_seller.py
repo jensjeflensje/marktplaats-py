@@ -29,7 +29,7 @@ class ListingSeller:
     is_verified: bool
 
     @classmethod
-    def parse(cls, data: dict[str, Any]) -> Self:
+    def parse(cls, data: dict[str, Any]) -> Self:  # type: ignore[misc] # this will be removed when explicit-any is enabled
         return cls(
             data["sellerId"],
             data["sellerName"],

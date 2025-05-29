@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Any
 
 import requests
 from bs4 import BeautifulSoup
@@ -24,7 +23,7 @@ class ListingFirstImage:
     extra_large: str
 
     @classmethod
-    def parse(cls, data: list[dict[str, Any]]) -> list[Self]:
+    def parse(cls, data: list[dict[str, str]] | None) -> list[Self]:
         if data is None:
             return []
         return [
@@ -53,7 +52,7 @@ def fetch_listing_images(listing_id: str) -> list[str]:
 
     soup = BeautifulSoup(r.text, "html.parser")
 
-    images = []
+    images: list[str] = []
 
     # get the data objects from the HTML response
     for data in soup.select('script[type="application/ld+json"]'):

@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class Listing:
+class Listing:  # type: ignore[misc] # this will be removed when explicit-any is enabled
     id: str
     title: str
     description: str
