@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pytest
 import unittest
 from datetime import date, datetime
 from unittest.mock import patch
@@ -12,7 +13,7 @@ from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 
 
-class BasicSearchQueryTest(unittest.TestCase):
+class TestBasicSearchQuery:
     """
     Basic tests to test search query functionality.
     """
@@ -140,20 +141,20 @@ class BasicSearchQueryTest(unittest.TestCase):
             )
 
         listings = query.get_listings()
-        self.assertEqual(1, len(listings))
+        assert 1 == len(listings)
 
         listing = listings[0]
-        self.assertEqual(75, listing.price)
-        self.assertEqual(75, listing.price)
-        self.assertEqual(PriceType.FIXED, listing.price_type)
-        self.assertEqual(1, len(listing.images))
-        self.assertIsInstance(listing.location, ListingLocation)
-        self.assertEqual(date(year=2024, month=3, day=10), listing.date)
-        self.assertEqual("https://link.marktplaats.nl/m2064554806", listing.link)
-        self.assertEqual(100, query.total_result_count)
+        assert 75 == listing.price
+        assert 75 == listing.price
+        assert PriceType.FIXED == listing.price_type
+        assert 1 == len(listing.images)
+        assert isinstance(listing.location, ListingLocation)
+        assert date(year=2024, month=3, day=10) == listing.date
+        assert "https://link.marktplaats.nl/m2064554806" == listing.link
+        assert 100 == query.total_result_count
 
-        self.assertEqual(7405065, listing.seller.id)
-        self.assertFalse(listing.seller.is_verified)
+        assert 7405065 == listing.seller.id
+        assert not listing.seller.is_verified
 
         with patch("requests.get") as get_request:
             get_request.return_value.text = """{
@@ -181,12 +182,12 @@ class BasicSearchQueryTest(unittest.TestCase):
                 },
             )
 
-        self.assertFalse(seller.is_verified)  # should still be false
-        self.assertEqual(7405065, seller.id)  # should still be the same
-        self.assertEqual(5, seller.average_score)
-        self.assertTrue(seller.bank_account)
-        self.assertFalse(seller.identification)
-        self.assertTrue(seller.phone_number)
+        assert not seller.is_verified# should still be false
+        assert 7405065 == seller.id# should still be the same
+        assert 5 == seller.average_score
+        assert seller.bank_account
+        assert not seller.identification
+        assert seller.phone_number
 
     def test_http_error_400(self) -> None:
         # This should be the same for other 4xx and 5xx errors
@@ -196,7 +197,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                 "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
                 status_code=400,
             )
-            with self.assertRaises(requests.HTTPError):
+            with pytest.raises(requests.HTTPError):
                 _query = SearchQuery("fiets")
 
     def test_http_error_204(self) -> None:
@@ -207,7 +208,7 @@ class BasicSearchQueryTest(unittest.TestCase):
                 "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
                 status_code=204,
             )
-            with self.assertRaises(BadStatusCodeError):
+            with pytest.raises(BadStatusCodeError):
                 _query = SearchQuery("fiets")
 
     def test_invalid_json(self) -> None:
@@ -216,11 +217,11 @@ class BasicSearchQueryTest(unittest.TestCase):
                 "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
                 text="this is some invalid JSON",
             )
-            with self.assertRaises(JSONDecodeError):
+            with pytest.raises(JSONDecodeError):
                 _query = SearchQuery("fiets")
 
     def test_query_category_valueerror(self) -> None:
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             _query = SearchQuery(price_to=10)
 
 

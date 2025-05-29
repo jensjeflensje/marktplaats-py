@@ -20,4 +20,4 @@ jobs:
         run: uv sync
 
       - name: Run tests
-        run: python -m unittest tests/test_live.py
+        run: pytest tests/test_live.py

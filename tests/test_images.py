@@ -8,7 +8,7 @@ import requests_mock
 from marktplaats.models.listing_image import fetch_listing_images
 
 
-class ImageFetchTest(unittest.TestCase):
+class TestImageFetch:
     """
     Basic tests to test image scraping.
     """
@@ -25,8 +25,8 @@ class ImageFetchTest(unittest.TestCase):
             )
 
             urls = fetch_listing_images("m123456789")
-            self.assertEqual(len(urls), 9)
-            self.assertTrue(urls[0].startswith("https://images.marktplaats.com"))
+            assert len(urls) == 9
+            assert urls[0].startswith("https://images.marktplaats.com")
 
 
 if __name__ == "__main__":
