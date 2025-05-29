@@ -43,6 +43,8 @@ print("Finding L2 categories...")
 l2_categories = {}
 
 for l1_category in l1_categories.values():
+    assert isinstance(l1_category["name"], str)
+
     print(f"Finding for {l1_category['name']}... ", end="", flush=True)
 
     # Replace some characters with dashes
