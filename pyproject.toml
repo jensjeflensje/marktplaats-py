@@ -53,6 +53,13 @@ lint.ignore = [
     # Project:
 ]
 
+lint.per-file-ignores."scripts/*" = [
+    "T201", # We can print in scripts
+]
+lint.per-file-ignores."tests/*" = [
+    "S101", # Assert is allowed in tests
+]
+
 lint.flake8-tidy-imports.ban-relative-imports = "all" # For consistency
 
 lint.isort.combine-as-imports = true
