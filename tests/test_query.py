@@ -137,6 +137,7 @@ def test_request() -> None:
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
             },
+            timeout=15,
         )
 
     listings = query.get_listings()
@@ -173,12 +174,14 @@ def test_request() -> None:
 
         get_request.assert_called_once_with(
             "https://www.marktplaats.nl/v/api/seller-profile/7405065",
+            params=None,
             headers={
                 "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
                 "Accept": "application/json",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
             },
+            timeout=15,
         )
 
     assert not seller.is_verified  # should still be false
