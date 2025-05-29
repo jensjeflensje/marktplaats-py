@@ -43,14 +43,13 @@ dev = [
 lint.select = [ "ALL" ]
 
 lint.ignore = [
-    # General:
-    "COM812", # Conflict with formatter
-    "CPY",    # No copyright statements
-    "D1",     # Docstrings should not be enforced by default
-    "D203",   # Choose D203 or D211
-    "D212",   # Choose D212 or D213
-    "S404",   # Uses of subprocess are rejected, no need to reject the imports as well
-    # Project:
+    "COM812",  # Conflict with formatter
+    "CPY",     # No copyright statements
+    "D1",      # Docstrings should not be enforced by default
+    "D203",    # Choose D203 or D211
+    "D212",    # Choose D212 or D213
+    "PLC0414", # (project) TODO: https://github.com/astral-sh/ruff/issues/18365
+    "S404",    # Uses of subprocess are rejected, no need to reject the imports as well
 ]
 
 lint.per-file-ignores."scripts/**/*.py" = [
@@ -60,12 +59,12 @@ lint.per-file-ignores."scripts/**/*.py" = [
     "T201",   # We can print in scripts
 ]
 lint.per-file-ignores."tests/**/*.py" = [
+    "DTZ",     # We can use naive timezones in tests
     "E501",    # If the formatter doesn't fix the line length, it's good enough
     "FBT",     # We don't care about boolean parameters in tests
     "INP001",  # Tests are supposed to be an implicit namespace
     "PLR2004", # Magic values are allowed in tests
     "S101",    # Assert is allowed in tests
-    "DTZ",     # We can use naive timezones in tests
 ]
 
 lint.flake8-tidy-imports.ban-relative-imports = "all" # For consistency
