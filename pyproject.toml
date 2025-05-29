@@ -58,6 +58,7 @@ lint.per-file-ignores."scripts/**/*.py" = [
 ]
 lint.per-file-ignores."tests/**/*.py" = [
     "E501",    # If the formatter doesn't fix the line length, it's good enough
+    "INP001",  # Tests are supposed to be an implicit namespace
     "PLR2004", # Magic values are allowed in tests
     "S101",    # Assert is allowed in tests
 ]
