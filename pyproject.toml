@@ -109,5 +109,7 @@ enable_error_code = [
 
 [dependency-groups]
 dev = [
+    "beautifulsoup4>=4.13.4",
+    "requests>=2.32.3",
     "requests-mock>=1.12.1",
 ]
