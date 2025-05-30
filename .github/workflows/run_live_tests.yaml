@@ -19,5 +19,5 @@ jobs:
       - name: Install requirements
         run: uv sync
 
-      - name: Run tests
+      - name: Run live tests
         run: .venv/bin/pytest tests/test_live.py
