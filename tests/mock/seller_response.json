@@ -1,0 +1,12 @@
+{
+    "bankAccount": true,
+    "phoneNumber": true,
+    "identification": false,
+    "paymentMethod": {
+        "name": "ideal"
+    },
+    "numberOfReviews": 26,
+    "averageScore": 5,
+    "smbVerified": false,
+    "profilePictures": {}
+}
