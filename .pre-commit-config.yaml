@@ -1,0 +1,68 @@
+minimum_pre_commit_version: '4.2.0'
+
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      # General
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-illegal-windows-names
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-xml
+      - id: check-yaml
+      - id: destroyed-symlinks
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [ "--fix=lf" ]
+      - id: fix-byte-order-marker
+      - id: name-tests-test
+        args: [ "--pytest-test-first" ]
+      #      - id: no-commit-to-branch
+      - id: trailing-whitespace
+      # Python
+      - id: debug-statements
+
+  - repo: https://github.com/GideonBear/pre-commit-enforce-https
+    rev: v1.3.0
+    hooks:
+      - id: enforce-https
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.11
+    hooks:
+      - id: ruff-check
+        args: [ "--fix" ]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.15.0
+    hooks:
+      - id: mypy
+        pass_filenames: false # Check all files to be thorough
+        args: # Removes default `--ignore-missing-imports`
+          - .
+        additional_dependencies:
+          - types-requests
+          - types-beautifulsoup4
+          - requests-mock
+
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: "v2.6.0"
+    hooks:
+      - id: pyproject-fmt
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.33.0
+    hooks:
+      - id: check-github-workflows
+        args: ["--verbose"]
+      - id: check-dependabot
+        args: ["--verbose"]

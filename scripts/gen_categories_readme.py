@@ -1,15 +1,23 @@
 # please execute this script from the project root directory
+from __future__ import annotations
+
 import json
+from pathlib import Path
 
 
-def main():
+def main() -> None:
     try:
-        with open("marktplaats/l1_categories.json", "r") as l1, \
-                open("marktplaats/l2_categories.json", "r") as l2:
-            l1_categories = json.loads(l1.read())
-            l2_categories = json.loads(l2.read())
+        l1_categories = json.loads(
+            Path("marktplaats/l1_categories.json").read_text(encoding="utf-8")
+        )
+        l2_categories = json.loads(
+            Path("marktplaats/l2_categories.json").read_text(encoding="utf-8")
+        )
     except OSError:
-        print("Category files not found! Are you executing this script from the project root?")
+        print(
+            "Category files not found! "
+            "Are you executing this script from the project root?"
+        )
         return
 
     output = """# Categories
@@ -27,8 +35,7 @@ This file acts as a human-readable index of all categories.
         for l2_category in l2:
             output += f"- {l2_category['name']} ({l2_category['id']})\n"
 
-    with open("./CATEGORIES.md", "w") as file:
-        file.write(output)
+    Path("./CATEGORIES.md").write_text(output, encoding="utf-8")
 
     print("Success!")
 

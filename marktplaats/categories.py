@@ -1,79 +1,89 @@
+from __future__ import annotations
+
 import json
 from collections import defaultdict
-from collections.abc import Iterator, Mapping
-
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
-from typing import Union
+from typing_extensions import Self
+
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator, Mapping
+    from types import NotImplementedType
 
 
 class L1Category:
-    def __init__(self, id_: int, name: str):
+    def __init__(self, id_: int, name: str) -> None:
         self.id = id_
         self.name = name
 
     @classmethod
-    def from_name(cls, name: str):
+    def from_name(cls, name: str) -> Self:
         orig_name = name
         name = name.lower()
         try:
             l1_category = _l1_categories_raw.get_data()[name]
         except KeyError as err:
-            raise ValueError(f"Unknown L1 category name: {orig_name}") from err
+            msg = f"Unknown L1 category name: {orig_name}"
+            raise ValueError(msg) from err
         id_, name = l1_category["id"], l1_category["name"]
         return cls(id_, name)
 
     @classmethod
-    def from_id(cls, id_: int, name: str = "Unknown"):
+    def from_id(cls, id_: int, name: str = "Unknown") -> None:
         cls(id_, name)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, L1Category):
             return NotImplemented
         return self.id == other.id
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.id)
 
 
 class L2Category:
-    def __init__(self, id_: int, name: str, parent: L1Category):
+    def __init__(self, id_: int, name: str, parent: L1Category) -> None:
         self.id = id_
         self.name = name
         self.parent = parent
 
     @classmethod
-    def from_name(cls, name: str):
+    def from_name(cls, name: str) -> Self:
         orig_name = name
         name = name.lower()
         try:
             l2_category = _l2_categories_raw.get_data()[name]
         except KeyError as err:
-            raise ValueError(f"Unknown L2 category name: {orig_name}") from err
-        id_, name, parent = l2_category["id"], l2_category["name"], l2_category["parent"]
-        parent = L1Category.from_name(parent)
-        return cls(id_, name, parent)
+            msg = f"Unknown L2 category name: {orig_name}"
+            raise ValueError(msg) from err
+        return cls(
+            id_=l2_category["id"],
+            name=l2_category["name"],
+            parent=L1Category.from_name(l2_category["parent"]),
+        )
 
     @classmethod
-    def from_id(cls, id_: int, parent: L1Category, name: str = "Unknown"):
+    def from_id(cls, id_: int, parent: L1Category, name: str = "Unknown") -> None:
         cls(id_, name, parent)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, L2Category):
             return NotImplemented
         return self.id == other.id
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.id)
 
 
-def category_from_name(name: str) -> Union[L1Category, L2Category]:
+def category_from_name(name: str) -> L1Category | L2Category:
     try:
         return L1Category.from_name(name)
     except ValueError:
@@ -81,13 +91,14 @@ def category_from_name(name: str) -> Union[L1Category, L2Category]:
 
 
 class LazyWrapper:
-    def __init__(self, filename: Path):
+    def __init__(self, filename: Path) -> None:
         self.filename = filename
-        self._data = None
+        self._data: dict[Any, Any] | None = None
 
-    def get_data(self):
+    def get_data(self) -> dict[Any, Any]:
         if self._data is None:
             self._build_data()
+            assert self._data is not None  # noqa: S101 Assert for typechecker
         return self._data
 
     def _build_data(self) -> None:

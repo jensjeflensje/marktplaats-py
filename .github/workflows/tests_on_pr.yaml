@@ -7,9 +7,15 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Install pip packages
-        run: pip install -r requirements.txt -r tests/requirements.txt
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install requirements
+        run: uv sync
+
       - name: Run tests
-        run: python -m unittest tests/*.py
+        run: .venv/bin/pytest

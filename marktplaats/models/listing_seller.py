@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import json
 from dataclasses import dataclass
+from typing import Any
 
-import requests
+from typing_extensions import Self
 
-from marktplaats.utils import REQUEST_HEADERS
+from marktplaats.utils import get_request
 
 
 @dataclass
@@ -25,18 +28,16 @@ class ListingSeller:
     is_verified: bool
 
     @classmethod
-    def parse(cls, data):
+    def parse(cls, data: dict[str, Any]) -> Self:  # type: ignore[misc] # this will be removed when explicit-any is enabled
         return cls(
             data["sellerId"],
             data["sellerName"],
             data["isVerified"],
         )
 
-    def get_seller(self):
-        request = requests.get(
-            f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}",
-            # Some headers to make the request look legit
-            headers=REQUEST_HEADERS,
+    def get_seller(self) -> Seller:
+        request = get_request(
+            f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}"
         )
 
         body = request.text
