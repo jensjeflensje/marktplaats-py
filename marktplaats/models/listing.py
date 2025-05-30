@@ -63,7 +63,8 @@ class Listing:  # type: ignore[misc] # this will be removed when explicit-any is
 
     def price_as_string(
         self,
-        euro_sign: bool = True,  # noqa: FBT001, FBT002 TODO: consider making the arguments keyword-only (self, *, euro_sign...)
+        *,
+        euro_sign: bool = True,
         lang: str = "en",
     ) -> str:
         return self.price_type._as_string(  # noqa: SLF001 private member access
