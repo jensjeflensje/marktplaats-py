@@ -4,7 +4,7 @@ requires = [ "hatchling" ]
 
 [project]
 name = "marktplaats"
-version = "0.3.0"
+version = "0.3.1"
 description = "A small Python package to request listings from marktplaats.nl"
 readme = "README.md"
 license = "MIT"
