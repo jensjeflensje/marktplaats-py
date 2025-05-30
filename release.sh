@@ -1,3 +1,4 @@
+#! /bin/sh
 # Usage: release.sh  <patch|minor|major>
 
 set -e
