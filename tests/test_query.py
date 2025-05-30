@@ -6,7 +6,13 @@ import pytest
 import requests
 import requests_mock
 
-from marktplaats import BadStatusCodeError, JSONDecodeError, PriceType, SearchQuery
+from marktplaats import (
+    BadStatusCodeError,
+    JSONDecodeError,
+    ListingFirstImage,
+    PriceType,
+    SearchQuery,
+)
 from marktplaats.categories import category_from_name
 from marktplaats.models import ListingLocation
 from tests.utils import get_mock_file
@@ -76,6 +82,31 @@ def test_request() -> None:
         ),
     ):
         assert len(listing.images) == 1
+    with pytest.warns(
+        DeprecationWarning,
+        match=(
+            r"^Listing.images is deprecated since marktplaats version 0\.3\.0\. "
+            r"Please use Listing\.first_image or Listing\.get_images\(\) instead.$"
+        ),
+    ):
+        assert listing.images[0] is listing.first_image
+    assert isinstance(listing.first_image, ListingFirstImage)
+    assert (
+        listing.first_image.extra_small
+        == "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_14.jpg"
+    )
+    assert (
+        listing.first_image.medium
+        == "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_82.jpg"
+    )
+    assert (
+        listing.first_image.large
+        == "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_83.jpg"
+    )
+    assert (
+        listing.first_image.extra_large
+        == "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_85.jpg"
+    )
     assert isinstance(listing.location, ListingLocation)
     assert date(year=2024, month=3, day=10) == listing.date
     assert listing.link == "https://link.marktplaats.nl/m2064554806"
