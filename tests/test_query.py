@@ -147,7 +147,14 @@ def test_request() -> None:
     assert listing.price == 75
     assert listing.price == 75
     assert listing.price_type == PriceType.FIXED
-    assert len(listing.images) == 1
+    with pytest.warns(
+        DeprecationWarning,
+        match=(
+            r"^Listing.images is deprecated since marktplaats version 0\.3\.0\. "
+            r"Please use Listing\.first_image or Listing\.get_images\(\) instead.$"
+        ),
+    ):
+        assert len(listing.images) == 1
     assert isinstance(listing.location, ListingLocation)
     assert date(year=2024, month=3, day=10) == listing.date
     assert listing.link == "https://link.marktplaats.nl/m2064554806"
