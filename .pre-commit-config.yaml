@@ -25,6 +25,7 @@ repos:
       - id: fix-byte-order-marker
       - id: name-tests-test
         args: [ "--pytest-test-first" ]
+        exclude: "^tests/utils.py$"
       #      - id: no-commit-to-branch
       - id: trailing-whitespace
       # Python
