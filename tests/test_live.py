@@ -66,11 +66,11 @@ def _validate_response(search: SearchQuery, check_time: bool = False) -> None:
         assert isinstance(seller.identification, bool)
         assert isinstance(seller.phone_number, bool)
 
-        for image in listing.images:
-            assert isinstance(image.extra_small, str)
-            assert isinstance(image.medium, str)
-            assert isinstance(image.large, str)
-            assert isinstance(image.extra_large, str)
+        image = listing.first_image
+        assert isinstance(image.extra_small, str)
+        assert isinstance(image.medium, str)
+        assert isinstance(image.large, str)
+        assert isinstance(image.extra_large, str)
 
 
 def test_request() -> None:
