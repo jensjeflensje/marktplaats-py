@@ -1,3 +1,5 @@
+# Usage: release.sh  <patch|minor|major>
+
 set -e
 
 if ! (git update-index -q --refresh && git diff-files --quiet && git diff-index --quiet HEAD --); then
