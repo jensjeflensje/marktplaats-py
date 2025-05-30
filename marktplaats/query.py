@@ -5,7 +5,9 @@ from datetime import date, datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, Any
 
-import requests
+from requests.exceptions import (  # noqa: TID251 Not doing any requests
+    JSONDecodeError as requests_JSONDecodeError,
+)
 
 from marktplaats.categories import L1Category, L2Category
 from marktplaats.config import ISSUE_LINK
@@ -198,7 +200,7 @@ class SearchQuery:
 
         try:
             self.body_json = self.response.json()
-        except requests.exceptions.JSONDecodeError as err:
+        except requests_JSONDecodeError as err:
             # Note: this is not the same error type. This will propagate as:
             #  json.decoder.JSONDecodeError
             #  -> requests.exceptions.JSONDecodeError

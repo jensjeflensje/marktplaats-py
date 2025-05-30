@@ -59,6 +59,7 @@ lint.per-file-ignores."scripts/**/*.py" = [
     "S603",   # Use of subprocess
     "S607",   # Partial executable path
     "T201",   # We can print in scripts
+    "TID251", # The banned APIs only apply to marktplaats itself
     "TRY002", # In scripts, we throw `Exception` to just crash.
 ]
 lint.per-file-ignores."tests/**/*.py" = [
@@ -67,9 +68,12 @@ lint.per-file-ignores."tests/**/*.py" = [
     "INP001",  # Tests are supposed to be an implicit namespace
     "PLR2004", # Magic values are allowed in tests
     "S101",    # Assert is allowed in tests
+    "TID251",  # The banned APIs only apply to marktplaats itself
 ]
 
 lint.flake8-tidy-imports.ban-relative-imports = "all" # For consistency
+
+lint.flake8-tidy-imports.banned-api."requests" = { msg = "Use utils.get_request instead" }
 
 lint.isort.combine-as-imports = true
 lint.isort.lines-after-imports = 2
