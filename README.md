@@ -1,5 +1,5 @@
 # marktplaats-py
-A small Python package to request listings from marktplaats.nl. It supports python 3.7+.
+A small Python package to request listings from marktplaats.nl. It supports python 3.9+.
 
 ## Installing
 ```shell
