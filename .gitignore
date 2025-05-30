@@ -1,3 +1,7 @@
+# MacOS finder creates this file sometimes
+.DS_Store
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
