@@ -3,8 +3,8 @@ from __future__ import annotations
 from abc import ABC
 from typing import Any
 
-import requests
-from requests import Response
+import requests  # noqa: TID251 This is the only allowed use
+from requests import Response  # noqa: TID251 Not doing any requests
 
 
 REQUEST_HEADERS = {
