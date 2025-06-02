@@ -16,7 +16,7 @@ class ListingLocation:
     distance: int | None
 
     @classmethod
-    def parse(cls, data: dict[str, Any]) -> Self:  # type: ignore[misc] # this will be removed when explicit-any is enabled
+    def parse(cls, data: dict[str, Any]) -> Self:
         return cls(
             data.get("cityName"),
             data.get("countryName"),
