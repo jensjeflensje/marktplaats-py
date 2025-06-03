@@ -1,0 +1,98 @@
+{
+  "totalResultCount": 100,
+  "listings": [
+    {
+      "itemId": "m2064554806",
+      "title": "Batavus damesfiets 26 inch",
+      "description": "Degelijke batavus damesfiets 26 inch met slot, verlichting en versnellingen.",
+      "categorySpecificDescription": "Degelijke batavus damesfiets 26 inch met slot, verlichting en versnellingen.",
+      "thinContent": true,
+      "priceInfo": {
+        "priceCents": 7500,
+        "priceType": "FIXED"
+      },
+      "location": {
+        "cityName": "Nieuwerkerk aan den IJssel",
+        "countryName": "Nederland",
+        "countryAbbreviation": "NL",
+        "distanceMeters": 1000,
+        "isBuyerLocation": false,
+        "onCountryLevel": false,
+        "abroad": false,
+        "latitude": 51.965397128056,
+        "longitude": 4.6119871732025
+      },
+      "date": "10 mrt 24",
+      "imageUrls": [
+        "//images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_82.jpg"
+      ],
+      "sellerInformation": {
+        "sellerId": 7405065,
+        "sellerName": "Vogel",
+        "showSoiUrl": true,
+        "showWebsiteUrl": false,
+        "isVerified": false
+      },
+      "categoryId": 447,
+      "priorityProduct": "NONE",
+      "videoOnVip": false,
+      "urgencyFeatureActive": false,
+      "napAvailable": false,
+      "attributes": [
+        {
+          "key": "condition",
+          "value": "Gebruikt",
+          "values": [
+            "Gebruikt"
+          ]
+        },
+        {
+          "key": "delivery",
+          "value": "Ophalen",
+          "values": [
+            "Ophalen"
+          ]
+        }
+      ],
+      "extendedAttributes": [
+        {
+          "key": "condition",
+          "value": "Gebruikt",
+          "values": [
+            "Gebruikt"
+          ]
+        },
+        {
+          "key": "delivery",
+          "value": "Ophalen",
+          "values": [
+            "Ophalen"
+          ]
+        }
+      ],
+      "traits": [
+        "PACKAGE_FREE"
+      ],
+      "verticals": [
+        "bicycles_and_mopeds",
+        "bicycles_ladies_bike"
+      ],
+      "pictures": [
+        {
+          "id": 9322832634,
+          "mediaId": "",
+          "url": "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_#.jpg",
+          "extraSmallUrl": "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_14.jpg",
+          "mediumUrl": "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_82.jpg",
+          "largeUrl": "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_83.jpg",
+          "extraExtraLargeUrl": "https://images.marktplaats.com/api/v1/listing-mp-p/images/63/636424bb-b0bd-458b-964c-747af344c793?rule=ecg_mp_eps$_85.jpg",
+          "aspectRatio": {
+            "width": 3,
+            "height": 4
+          }
+        }
+      ],
+      "vipUrl": "/v/fietsen-en-brommers/fietsen-dames-damesfietsen/m2064554806-batavus-damesfiets-26-inch"
+    }
+  ]
+}
