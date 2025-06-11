@@ -2,11 +2,16 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from bs4 import BeautifulSoup
 from typing_extensions import Self
 
 from marktplaats.utils import get_request
+
+
+if TYPE_CHECKING:
+    from marktplaats.api_types import Picture
 
 
 @dataclass
@@ -23,7 +28,7 @@ class ListingFirstImage:
     extra_large: str
 
     @classmethod
-    def parse(cls, data: list[dict[str, str]] | None) -> list[Self]:
+    def parse(cls, data: list[Picture] | None) -> list[Self]:
         if data is None:
             return []
         return [
