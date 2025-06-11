@@ -3,11 +3,12 @@ from __future__ import annotations
 import logging
 from datetime import date, datetime, timedelta
 from enum import Enum
-from typing import TYPE_CHECKING, NotRequired, TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 from requests.exceptions import (  # noqa: TID251 Not doing any requests
     JSONDecodeError as requests_JSONDecodeError,
 )
+from typing_extensions import NotRequired
 
 from marktplaats.categories import L1Category, L2Category
 from marktplaats.config import ISSUE_LINK
