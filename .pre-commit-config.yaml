@@ -73,3 +73,7 @@ repos:
     hooks:
       - id: renovate-config-validator
         args: [--strict]
+
+ci:
+  skip:
+    - renovate-config-validator
