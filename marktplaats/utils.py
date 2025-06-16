@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 from abc import ABC
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import requests  # noqa: TID251 This is the only allowed use
 from requests import Response  # noqa: TID251 Not doing any requests
+
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
 REQUEST_HEADERS = {
@@ -18,7 +22,10 @@ REQUEST_HEADERS = {
 }
 
 
-def get_request(url: str, params: dict[str, Any] | None = None) -> Response:
+def get_request(  # type: ignore[explicit-any] # This is Any to avoid replicating the actual type of the `params` parameter
+    url: str,
+    params: Mapping[str, Any] | None = None,
+) -> Response:
     return requests.get(
         url,
         params=params,
