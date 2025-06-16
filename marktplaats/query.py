@@ -3,11 +3,12 @@ from __future__ import annotations
 import logging
 from datetime import date, datetime, timedelta
 from enum import Enum
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, TypedDict
 
 from requests.exceptions import (  # noqa: TID251 Not doing any requests
     JSONDecodeError as requests_JSONDecodeError,
 )
+from typing_extensions import NotRequired
 
 from marktplaats.categories import L1Category, L2Category
 from marktplaats.config import ISSUE_LINK
@@ -23,6 +24,8 @@ from marktplaats.utils import MessageObjectException, get_request
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+
+    from marktplaats.api_types import QueryResponse
 
 
 logger = logging.getLogger(__name__)
@@ -113,6 +116,28 @@ def parse_date(date_str: str) -> date:
     return result.date()
 
 
+# Cannot use declarative syntax because of '[]'
+Params = TypedDict(
+    "Params",
+    {
+        "limit": str,
+        "offset": str,
+        "query": str,
+        "searchInTitleAndDescription": str,
+        "viewOptions": str,
+        "distanceMeters": str,
+        "postcode": str,
+        "sortBy": str,
+        "sortOrder": str,
+        "attributesById[]": NotRequired[list[int]],
+        "attributeRanges[]": NotRequired[list[str]],
+        "attributesByKey[]": NotRequired[list[str]],
+        "l1CategoryId": NotRequired[str],
+        "l2CategoryId": NotRequired[str],
+    },
+)
+
+
 class SearchQuery:
     """
     A search query for Marktplaats.
@@ -145,7 +170,7 @@ class SearchQuery:
             )
             raise ValueError(msg)
 
-        params: dict[str, Any] = {
+        params: Params = {
             "limit": str(limit),
             "offset": str(offset),
             "query": str(query),
@@ -200,7 +225,7 @@ class SearchQuery:
             raise BadStatusCodeError(msg, self.response)
 
         try:
-            self.body_json = self.response.json()
+            self.body_json: QueryResponse = self.response.json()
         except requests_JSONDecodeError as err:
             # Note: this is not the same error type. This will propagate as:
             #  json.decoder.JSONDecodeError
