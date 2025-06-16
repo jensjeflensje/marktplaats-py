@@ -120,9 +120,10 @@ class SearchQuery:
     Raises a requests.HTTPError if the request fails.
     """
 
-    def __init__(  # noqa: PLR0917, PLR0913 TODO: consider making the arguments keyword-only (self, *, query...)
+    def __init__(  # noqa: PLR0913 too many arguments
         self,
         query: str = "",
+        *,
         zip_code: str = "",
         distance: int = 1000000,  # in meters, basically unlimited
         price_from: int | None = None,
