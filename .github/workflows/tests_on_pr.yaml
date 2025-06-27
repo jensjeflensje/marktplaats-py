@@ -6,6 +6,9 @@ jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['minimum', 'default']
     steps:
       - uses: actions/checkout@v4
 
@@ -13,6 +16,12 @@ jobs:
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
+
+      - name: Change python version
+        if: matrix.python-version == 'minimum'
+        run: |
+          version=$(sed -n 's/^requires-python *= *[">=]*\([0-9.]*\).*/\1/p' pyproject.toml)
+          uv python pin $version
 
       - name: Install requirements
         run: uv sync
