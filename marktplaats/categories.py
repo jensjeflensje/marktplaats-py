@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Generic, TypedDict, TypeVar
 
 from typing_extensions import Self
 
@@ -90,12 +90,16 @@ def category_from_name(name: str) -> L1Category | L2Category:
         return L2Category.from_name(name)
 
 
-class LazyWrapper:
+KT = TypeVar("KT")
+VT = TypeVar("VT")
+
+
+class LazyWrapper(Generic[KT, VT]):
     def __init__(self, filename: Path) -> None:
         self.filename = filename
-        self._data: dict[Any, Any] | None = None
+        self._data: Mapping[KT, VT] | None = None
 
-    def get_data(self) -> dict[Any, Any]:
+    def get_data(self) -> Mapping[KT, VT]:
         if self._data is None:
             self._build_data()
             assert self._data is not None  # noqa: S101 Assert for typechecker
@@ -128,7 +132,18 @@ def get_l2_categories_by_parent() -> Mapping[L1Category, list[L2Category]]:
     return categories
 
 
+class _L1CategoryData(TypedDict):
+    id: int
+    name: str
+
+
+class _L2CategoryData(TypedDict):
+    id: int
+    name: str
+    parent: str
+
+
 _l1_categories_file = (Path(__file__).parent / "l1_categories.json").resolve()
-_l1_categories_raw = LazyWrapper(_l1_categories_file)
+_l1_categories_raw: LazyWrapper[str, _L1CategoryData] = LazyWrapper(_l1_categories_file)
 _l2_categories_file = (Path(__file__).parent / "l2_categories.json").resolve()
-_l2_categories_raw = LazyWrapper(_l2_categories_file)
+_l2_categories_raw: LazyWrapper[str, _L2CategoryData] = LazyWrapper(_l2_categories_file)

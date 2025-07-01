@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import warnings
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
 
@@ -11,13 +11,14 @@ if TYPE_CHECKING:
     from datetime import date
     from types import NotImplementedType
 
+    from marktplaats.api_types import Attribute
     from marktplaats.models.listing_location import ListingLocation
     from marktplaats.models.listing_seller import ListingSeller
     from marktplaats.models.price_type import PriceType
 
 
 @dataclass
-class Listing:  # type: ignore[misc] # this will be removed when explicit-any is enabled
+class Listing:
     id: str
     title: str
     description: str
@@ -29,8 +30,8 @@ class Listing:  # type: ignore[misc] # this will be removed when explicit-any is
     link: str
     _images: list[ListingFirstImage]
     category_id: int
-    attributes: list[dict[str, Any]]
-    extended_attributes: list[dict[str, Any]]
+    attributes: list[Attribute]
+    extended_attributes: list[Attribute]
 
     @property
     def images(self) -> list[ListingFirstImage]:
@@ -63,7 +64,8 @@ class Listing:  # type: ignore[misc] # this will be removed when explicit-any is
 
     def price_as_string(
         self,
-        euro_sign: bool = True,  # noqa: FBT001, FBT002 TODO: consider making the arguments keyword-only (self, *, euro_sign...)
+        *,
+        euro_sign: bool = True,
         lang: str = "en",
     ) -> str:
         return self.price_type._as_string(  # noqa: SLF001 private member access

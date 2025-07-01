@@ -2,11 +2,15 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING
 
 from typing_extensions import Self
 
 from marktplaats.utils import get_request
+
+
+if TYPE_CHECKING:
+    from marktplaats.api_types import SellerInformation
 
 
 @dataclass
@@ -28,7 +32,7 @@ class ListingSeller:
     is_verified: bool
 
     @classmethod
-    def parse(cls, data: dict[str, Any]) -> Self:  # type: ignore[misc] # this will be removed when explicit-any is enabled
+    def parse(cls, data: SellerInformation) -> Self:
         return cls(
             data["sellerId"],
             data["sellerName"],
