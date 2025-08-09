@@ -10,7 +10,7 @@ run(["python", "scripts/scrape_categories.py"], check=True)
 
 
 def check(new: Path) -> None:
-    old = Path("marktplaats") / new
+    old = Path("src/marktplaats") / new
 
     code = run(
         ["diff", new, old],
