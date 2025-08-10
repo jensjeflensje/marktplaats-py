@@ -68,13 +68,12 @@ def _validate_response(search: SearchQuery, check_time: bool = False) -> None:
         assert isinstance(seller.phone_number, bool)
 
         image = listing.first_image
-        if isinstance(image, ListingFirstImage):
+        if image is not None:
+            assert isinstance(image, ListingFirstImage)
             assert isinstance(image.extra_small, str)
             assert isinstance(image.medium, str)
             assert isinstance(image.large, str)
             assert isinstance(image.extra_large, str)
-        else:
-            assert image is None
 
 
 def test_request() -> None:
