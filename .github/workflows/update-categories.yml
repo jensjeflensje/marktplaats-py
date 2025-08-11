@@ -20,9 +20,11 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Run script
+      - name: Run update_categories.py
         run: python scripts/update_categories.py
 
+      - name: Run gen_categories_readme.py
+        run: python scripts/gen_categories_readme.py
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
