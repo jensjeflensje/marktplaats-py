@@ -15,16 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.x"
+          enable-cache: true
+
+      - name: Install requirements
+        run: uv sync
 
       - name: Run update_categories.py
         run: python scripts/update_categories.py
 
       - name: Run gen_categories_readme.py
         run: python scripts/gen_categories_readme.py
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
