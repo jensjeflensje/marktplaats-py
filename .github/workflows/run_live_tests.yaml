@@ -16,8 +16,5 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install requirements
-        run: uv sync
-
       - name: Run live tests
-        run: .venv/bin/pytest tests/test_live.py
+        run: uv run pytest tests/test_live.py

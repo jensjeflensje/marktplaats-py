@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta
 
 from marktplaats import (
     Condition,
+    ListingFirstImage,
     ListingLocation,
     ListingSeller,
     PriceType,
@@ -67,10 +68,12 @@ def _validate_response(search: SearchQuery, check_time: bool = False) -> None:
         assert isinstance(seller.phone_number, bool)
 
         image = listing.first_image
-        assert isinstance(image.extra_small, str)
-        assert isinstance(image.medium, str)
-        assert isinstance(image.large, str)
-        assert isinstance(image.extra_large, str)
+        if image is not None:
+            assert isinstance(image, ListingFirstImage)
+            assert isinstance(image.extra_small, str)
+            assert isinstance(image.medium, str)
+            assert isinstance(image.large, str)
+            assert isinstance(image.extra_large, str)
 
 
 def test_request() -> None:

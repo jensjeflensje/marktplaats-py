@@ -23,8 +23,5 @@ jobs:
           version=$(sed -n 's/^requires-python *= *[">=]*\([0-9.]*\).*/\1/p' pyproject.toml)
           uv python pin $version
 
-      - name: Install requirements
-        run: uv sync
-
       - name: Run tests
-        run: .venv/bin/pytest
+        run: uv run pytest

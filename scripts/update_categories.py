@@ -3,16 +3,14 @@ from __future__ import annotations
 import shutil
 import subprocess
 from pathlib import Path
-from subprocess import run
 
-
-run(["python", "scripts/scrape_categories.py"], check=True)
+from scripts import scrape_categories
 
 
 def check(new: Path) -> None:
     old = Path("src/marktplaats") / new
 
-    code = run(
+    code = subprocess.run(
         ["diff", new, old],
         stdout=subprocess.DEVNULL,
         check=False,
@@ -28,5 +26,12 @@ def check(new: Path) -> None:
         print("Done")
 
 
-check(Path("l1_categories.json"))
-check(Path("l2_categories.json"))
+def main() -> None:
+    scrape_categories.main()
+
+    check(Path("l1_categories.json"))
+    check(Path("l2_categories.json"))
+
+
+if __name__ == "__main__":
+    main()
