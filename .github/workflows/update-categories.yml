@@ -20,14 +20,11 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install requirements
-        run: uv sync
-
       - name: Run update_categories.py
-        run: .venv/bin/python scripts/update_categories.py
+        run: uv run python scripts/update_categories.py
 
       - name: Run gen_categories_readme.py
-        run: .venv/bin/python scripts/gen_categories_readme.py
+        run: uv run python scripts/gen_categories_readme.py
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
