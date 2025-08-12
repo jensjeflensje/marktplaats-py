@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  precommit-autoupdate:
+  update-categories:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
