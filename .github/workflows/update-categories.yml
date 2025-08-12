@@ -1,0 +1,34 @@
+name: Update categories
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-categories:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run update_categories.py
+        run: python scripts/update_categories.py
+
+      - name: Run gen_categories_readme.py
+        run: python scripts/gen_categories_readme.py
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: update-categories
+          title: "Update categories"
+          commit-message: "Update categories"
+          body: "Automated weekly category update."
