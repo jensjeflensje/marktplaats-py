@@ -20,7 +20,7 @@ repos:
       - id: destroyed-symlinks
       - id: detect-private-key
       - id: end-of-file-fixer
-        exclude: "^marktplaats/.*.json"
+        exclude: "^src/marktplaats/.*.json"
       - id: mixed-line-ending
         args: [ "--fix=lf" ]
       - id: fix-byte-order-marker

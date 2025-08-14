@@ -8,7 +8,7 @@ from scripts import scrape_categories
 
 
 def check(new: Path) -> None:
-    old = Path("marktplaats") / new
+    old = Path("src/marktplaats") / new
 
     code = subprocess.run(
         ["diff", new, old],
