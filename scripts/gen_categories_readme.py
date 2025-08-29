@@ -8,10 +8,10 @@ from pathlib import Path
 def main() -> None:
     try:
         l1_categories = json.loads(
-            Path("marktplaats/l1_categories.json").read_text(encoding="utf-8")
+            Path("src/marktplaats/l1_categories.json").read_text(encoding="utf-8")
         )
         l2_categories = json.loads(
-            Path("marktplaats/l2_categories.json").read_text(encoding="utf-8")
+            Path("src/marktplaats/l2_categories.json").read_text(encoding="utf-8")
         )
     except OSError:
         print(
