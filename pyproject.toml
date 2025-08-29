@@ -1,6 +1,6 @@
 [build-system]
-build-backend = "hatchling.build"
-requires = [ "hatchling" ]
+build-backend = "uv_build"
+requires = [ "uv-build>=0.8.8,<0.9" ]
 
 [project]
 name = "marktplaats"
