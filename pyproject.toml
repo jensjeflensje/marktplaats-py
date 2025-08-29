@@ -4,7 +4,7 @@ requires = [ "uv-build>=0.8.8,<0.9" ]
 
 [project]
 name = "marktplaats"
-version = "0.3.1"
+version = "0.3.2"
 description = "A small Python package to request listings from marktplaats.nl"
 readme = "README.md"
 license = "MIT"
