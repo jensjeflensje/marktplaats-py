@@ -20,22 +20,18 @@ def main() -> None:
     url = "https://www.marktplaats.nl/"
     soup = parse(url)
     print(f"(url: {url}) ", end="", flush=True)
-    select = soup.find("select", {"id": "categoryId"})
-    assert isinstance(select, Tag)
-    for option in select.children:
-        assert isinstance(option, Tag)
-        value = option["value"]
-        assert isinstance(value, str)
-        if (
-            # "Kies categorie:"  # noqa: ERA001 this is not code
-            option.get("disabled") is not None
-            # "Alle categorieën…"
-            or value == "0"
-        ):
-            continue
-        l1_categories[option.text.lower()] = {
-            "id": int(value),
-            "name": option.text,
+    ul = soup.find("ul", {"class": "CategoriesBlock-list"})
+    assert isinstance(ul, Tag)
+    for li in ul.children:
+        assert isinstance(li, Tag)
+        a = next(iter(li.children))
+        assert isinstance(a, Tag)
+        href = a["href"]
+        assert isinstance(href, str)
+        _, _, id_, _ = href.split("/", 3)
+        l1_categories[a.text.lower()] = {
+            "id": int(id_),
+            "name": a.text,
         }
 
     print(f"Found {len(l1_categories)}")
