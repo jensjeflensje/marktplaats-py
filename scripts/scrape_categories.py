@@ -57,24 +57,21 @@ def main() -> None:
         url = f"https://www.marktplaats.nl/l/{stub}/"
         soup = parse(url)
         print(f"(url: {url}) ", end="", flush=True)
-        select = soup.find("select", {"id": "categoryId"})
-        assert isinstance(select, Tag)
-        for option in select.children:
-            assert isinstance(option, Tag)
-            value = option["value"]
-            assert isinstance(value, str)
+        data = soup.find("script", {"id": "__NEXT_DATA__"})
+        assert isinstance(data, Tag)
+        data = json.loads(data.text)
+        cats = data["props"]["pageProps"]["searchRequestAndResponse"][
+            "searchCategoryOptions"
+        ]
+        for cat in cats:
             if (
-                # "Kies categorie:"  # noqa: ERA001 this is not code
-                option.get("disabled") is not None
-                # "Alle categorieën…"
-                or option["value"] == "0"
                 # The L1 category itself
-                or int(value) == l1_category["id"]
+                cat["id"] == l1_category["id"]
             ):
                 continue
-            l2_categories[option.text.lower()] = {
-                "id": int(value),
-                "name": option.text,
+            l2_categories[cat["fullName"].lower()] = {
+                "id": cat["id"],
+                "name": cat["fullName"],
                 "parent": l1_category["name"],
             }
         found = len(
