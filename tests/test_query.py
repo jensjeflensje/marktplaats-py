@@ -4,7 +4,7 @@ from datetime import date, datetime
 
 import pytest
 import requests
-import requests_mock
+import responses
 
 from marktplaats import (
     BadStatusCodeError,
@@ -21,51 +21,48 @@ from tests.utils import get_mock_file
 """Basic tests to test search query functionality."""
 
 
-def test_request() -> None:
-    with requests_mock.Mocker() as m:
-        m.get(
-            "https://www.marktplaats.nl/lrp/api/search",
-            status_code=200,
-            headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
-                "Accept": "application/json",
-                "Sec-Fetch-Mode": "cors",
-                "Sec-Fetch-Site": "same-origin",
-            },
-            text=get_mock_file("query_response.json"),
-        )
+@responses.activate
+def test_request_1() -> None:
+    responses.get(
+        "https://www.marktplaats.nl/lrp/api/search",
+        status=200,
+        headers={
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
+            "Accept": "application/json",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Site": "same-origin",
+        },
+        body=get_mock_file("query_response.json"),
+        match=[
+            responses.matchers.request_kwargs_matcher({"timeout": 15}),
+            responses.matchers.query_param_matcher(
+                {
+                    "attributeRanges[]": "PriceCents:1000:20000",
+                    "attributesByKey[]": f"offeredSince:{int(datetime(2024, 12, 31, 14, 10, 0).timestamp() * 1000)}",
+                    "attributesById[]": "1",
+                    "limit": "1",
+                    "offset": "0",
+                    "query": "fiets",
+                    "searchInTitleAndDescription": "true",
+                    "viewOptions": "list-view",
+                    "distanceMeters": "1000000",
+                    "sortBy": "OPTIMIZED",
+                    "sortOrder": "INCREASING",
+                    "l1CategoryId": "322",
+                    "l2CategoryId": "1415",
+                }
+            ),
+        ],
+    )
 
-        query = SearchQuery(
-            "fiets",
-            price_from=10,
-            price_to=200,
-            offered_since=datetime(2024, 12, 31, 14, 10, 0),
-            category=category_from_name("Beschrijfbare discs"),
-            extra_attributes=[1],
-        )
-
-        assert m.called
-        req = m.request_history[0]
-        assert req.method == "GET"
-        assert req.qs == {
-            "attributeranges[]": ["pricecents:1000:20000"],
-            "attributesbykey[]": [
-                f"offeredsince:{int(datetime(2024, 12, 31, 14, 10, 0).timestamp() * 1000)}"
-            ],
-            "attributesbyid[]": ["1"],
-            "limit": ["1"],
-            "offset": ["0"],
-            "query": ["fiets"],
-            "searchintitleanddescription": ["true"],
-            "viewoptions": ["list-view"],
-            "distancemeters": ["1000000"],
-            "postcode": [""],
-            "sortby": ["optimized"],
-            "sortorder": ["increasing"],
-            "l1categoryid": ["322"],
-            "l2categoryid": ["1415"],
-        }
-        assert req.timeout == 15
+    query = SearchQuery(
+        "fiets",
+        price_from=10,
+        price_to=200,
+        offered_since=datetime(2024, 12, 31, 14, 10, 0),
+        category=category_from_name("Beschrijfbare discs"),
+        extra_attributes=[1],
+    )
 
     listings = query.get_listings()
     assert len(listings) == 1
@@ -115,25 +112,23 @@ def test_request() -> None:
     assert listing.seller.id == 7405065
     assert not listing.seller.is_verified
 
-    with requests_mock.Mocker() as m:
-        m.get(
-            "https://www.marktplaats.nl/v/api/seller-profile/7405065",
-            status_code=200,
-            headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
-                "Accept": "application/json",
-                "Sec-Fetch-Mode": "cors",
-                "Sec-Fetch-Site": "same-origin",
-            },
-            text=get_mock_file("seller_response.json"),
-        )
+    responses.get(
+        "https://www.marktplaats.nl/v/api/seller-profile/7405065",
+        status=200,
+        headers={
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
+            "Accept": "application/json",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Site": "same-origin",
+        },
+        body=get_mock_file("seller_response.json"),
+        match=[
+            responses.matchers.request_kwargs_matcher({"timeout": 15}),
+            responses.matchers.query_param_matcher({}),
+        ],
+    )
 
-        seller = listing.seller.get_seller()
-
-        req = m.request_history[0]
-        assert req.method == "GET"
-        assert req.qs == {}
-        assert req.timeout == 15
+    seller = listing.seller.get_seller()
 
     assert not seller.is_verified  # should still be false
     assert seller.id == 7405065  # should still be the same
@@ -143,38 +138,38 @@ def test_request() -> None:
     assert seller.phone_number
 
 
+@responses.activate
 def test_http_error_400() -> None:
     # This should be the same for other 4xx and 5xx errors
 
-    with requests_mock.Mocker() as m:
-        m.get(
-            "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
-            status_code=400,
-        )
-        with pytest.raises(requests.HTTPError):
-            _query = SearchQuery("fiets")
+    responses.get(
+        "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+        status=400,
+    )
+    with pytest.raises(requests.HTTPError):
+        _query = SearchQuery("fiets")
 
 
+@responses.activate
 def test_http_error_204() -> None:
     # This should be the same for all other non-200 non-4xx non-5xx errors
 
-    with requests_mock.Mocker() as m:
-        m.get(
-            "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
-            status_code=204,
-        )
-        with pytest.raises(BadStatusCodeError):
-            _query = SearchQuery("fiets")
+    responses.get(
+        "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+        status=204,
+    )
+    with pytest.raises(BadStatusCodeError):
+        _query = SearchQuery("fiets")
 
 
+@responses.activate
 def test_invalid_json() -> None:
-    with requests_mock.Mocker() as m:
-        m.get(
-            "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
-            text="this is some invalid JSON",
-        )
-        with pytest.raises(JSONDecodeError):
-            _query = SearchQuery("fiets")
+    responses.get(
+        "https://www.marktplaats.nl/lrp/api/search?limit=1&offset=0&query=fiets&searchInTitleAndDescription=true&viewOptions=list-view&distanceMeters=1000000&postcode=&sortBy=OPTIMIZED&sortOrder=INCREASING",
+        body="this is some invalid JSON",
+    )
+    with pytest.raises(JSONDecodeError):
+        _query = SearchQuery("fiets")
 
 
 def test_query_category_valueerror() -> None:
