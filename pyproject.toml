@@ -40,6 +40,8 @@ dev = [
 ]
 
 [tool.ruff]
+format.preview = true
+
 lint.select = [ "ALL" ]
 
 lint.ignore = [
@@ -130,4 +132,5 @@ enable_error_code = [
     "unused-awaitable",
     "possibly-undefined",
     "mutable-override",
+    "exhaustive-match",
 ]
