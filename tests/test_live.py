@@ -75,6 +75,9 @@ def _validate_response(search: SearchQuery, check_time: bool = False) -> None:
             assert isinstance(image.large, str)
             assert isinstance(image.extra_large, str)
 
+            images = listing.get_images()
+            assert len(images) > 1
+
 
 def test_request() -> None:
     search = SearchQuery(
