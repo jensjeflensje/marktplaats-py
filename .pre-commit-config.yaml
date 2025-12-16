@@ -38,14 +38,14 @@ repos:
       - id: enforce-https
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.10
+    rev: v0.14.9
     hooks:
       - id: ruff-check
         args: [ "--fix" ]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.17.1
+    rev: v1.19.1
     hooks:
       - id: mypy
         pass_filenames: false # Check all files to be thorough
@@ -57,12 +57,12 @@ repos:
           - requests-mock
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "v2.6.0"
+    rev: "v2.11.1"
     hooks:
       - id: pyproject-fmt
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.33.3
+    rev: 0.35.0
     hooks:
       - id: check-github-workflows
         args: ["--verbose"]
