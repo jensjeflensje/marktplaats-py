@@ -1,27 +1,88 @@
+# Parts of this workflow were derived from Django's python_matrix.yml workflow at
+# https://github.com/django/django/blob/1eac2659a102d42490f9401b08782633fa51f3e3/.github/workflows/python_matrix.yml
+# License below:
+
+#Copyright (c) Django Software Foundation and individual contributors.
+#All rights reserved.
+#
+#Redistribution and use in source and binary forms, with or without modification,
+#are permitted provided that the following conditions are met:
+#
+#    1. Redistributions of source code must retain the above copyright notice,
+#       this list of conditions and the following disclaimer.
+#
+#    2. Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#
+#    3. Neither the name of Django nor the names of its contributors may be used
+#       to endorse or promote products derived from this software without
+#       specific prior written permission.
+#
+#THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+#ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+#WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+#DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+#ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+#(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+#LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+#ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+#(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+#SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 name: Run tests
+
 on:
   pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
+  define-matrix:
+    name: Define Python version matrix
+    runs-on: ubuntu-latest
+    outputs:
+      python_versions_output: ${{ steps.set-matrix.outputs.python_versions }}
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - id: set-matrix
+        run: |
+          python_versions=$(sed -n "s/^.*Programming Language :: Python :: \([[:digit:]]\+\.[[:digit:]]\+\).*$/'\1', /p" pyproject.toml | tr -d '\n' | sed 's/, $//g')
+          echo "Supported Python versions: $python_versions"
+          echo "python_versions=[$python_versions]" >> "$GITHUB_OUTPUT"
+
   test:
     name: Run tests
     runs-on: ubuntu-latest
+    needs: define-matrix
     strategy:
       matrix:
-        python-version: ['minimum', 'default']
+        python-version: ${{ fromJson(needs.define-matrix.outputs.python_versions_output) }}
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7
+        uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
         with:
           enable-cache: true
 
-      - name: Change python version
-        if: matrix.python-version == 'minimum'
-        run: |
-          version=$(sed -n 's/^requires-python *= *[">=]*\([0-9.]*\).*/\1/p' pyproject.toml)
-          uv python pin $version
+      - name: Pin Python version to ${{ matrix.python-version }}
+        run: uv python pin "${PYTHON_VERSION}"
+        env:
+          PYTHON_VERSION: ${{ matrix.python-version }}
 
       - name: Run tests
         run: uv run pytest
