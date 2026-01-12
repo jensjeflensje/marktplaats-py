@@ -43,6 +43,7 @@ dev = [
 lint.select = [ "ALL" ]
 
 lint.ignore = [
+    "RUF067", # I disagree
     "COM812", # Conflict with formatter
     "CPY",    # No copyright statements
     "D1",     # Docstrings should not be enforced by default
