@@ -41,6 +41,10 @@ repos:
     hooks:
       - id: ruff-check
         args: [--fix]
+      - id: ruff-check
+        alias: ruff-fix
+        stages: [manual]
+        args: [--fix, --unsafe-fixes]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
