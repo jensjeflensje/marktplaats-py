@@ -164,9 +164,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "beautifulsoup4" },
     { name = "pytest" },
-    { name = "requests" },
     { name = "responses" },
 ]
 
@@ -179,9 +177,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "beautifulsoup4", specifier = ">=4.13.4" },
     { name = "pytest", specifier = ">=8.3.5" },
-    { name = "requests", specifier = ">=2.32.3" },
     { name = "responses", specifier = ">=0.25.8" },
 ]
 

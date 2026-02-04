@@ -33,9 +33,7 @@ urls.homepage = "https://github.com/jensjeflensje/marktplaats-py"
 
 [dependency-groups]
 dev = [
-    "beautifulsoup4>=4.13.4",
     "pytest>=8.3.5",
-    "requests>=2.32.3",
     "responses>=0.25.8",
 ]
 
