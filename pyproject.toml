@@ -27,7 +27,6 @@ dependencies = [
     "requests>=2.28.2",
     "typing-extensions>=4.13.2",
 ]
-
 urls.bugs = "https://github.com/jensjeflensje/marktplaats-py/issues"
 urls.homepage = "https://github.com/jensjeflensje/marktplaats-py"
 
@@ -39,7 +38,6 @@ dev = [
 
 [tool.ruff]
 lint.select = [ "ALL" ]
-
 lint.ignore = [
     "COM812", # Conflict with formatter
     "CPY",    # No copyright statements
@@ -49,7 +47,6 @@ lint.ignore = [
     "DTZ",    # (project) We use naive timezones everywhere TODO: maybe this should be looked at
     "S404",   # Uses of subprocess are rejected, no need to reject the imports as well
 ]
-
 lint.per-file-ignores."scripts/**/*.py" = [
     "INP001", # `scripts` is not a package
     "S101",   # We assume we don't run scripts with -O
@@ -67,30 +64,23 @@ lint.per-file-ignores."tests/**/*.py" = [
     "S101",    # Assert is allowed in tests
     "TID251",  # The banned APIs only apply to marktplaats itself
 ]
-
-lint.flake8-tidy-imports.ban-relative-imports = "all" # For consistency
-
+lint.flake8-tidy-imports.ban-relative-imports = "all"  # For consistency
 lint.flake8-tidy-imports.banned-api."requests" = { msg = "Use utils.get_request instead" }
-
 lint.isort.combine-as-imports = true
 lint.isort.lines-after-imports = 2
 lint.isort.required-imports = [ "from __future__ import annotations" ]
-
 lint.preview = true
 
 [tool.pyproject-fmt]
 indent = 4
 
 [tool.mypy]
-exclude = '^tests/'
+exclude = "^tests/"
 show_error_context = true
 show_error_codes = true
 pretty = true
-
 warn_unused_configs = true
-
-strict = true # All strict checks are already listed below, only here for future-proofing
-
+strict = true  # All strict checks are already listed below, only here for future-proofing
 # It already warns for the import, so we do not want to warn for each individual use.
 # If the import is silenced, there's nothing else we can do so silence the uses as well.
 # disallow_any_unimported = true
@@ -98,25 +88,21 @@ disallow_any_decorated = true
 disallow_any_explicit = true
 disallow_any_generics = true
 disallow_subclassing_any = true
-
 disallow_untyped_calls = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
 disallow_untyped_decorators = true
-
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_return_any = true
 warn_unreachable = true
-
 extra_checks = true
 implicit_reexport = false
 strict_concatenate = true
 strict_equality = true
 strict_bytes = true
-
 enable_error_code = [
     "redundant-self",
     "deprecated",
