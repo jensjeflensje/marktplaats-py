@@ -35,23 +35,21 @@ def test_request_1() -> None:
         body=get_mock_file("query_response.json"),
         match=[
             responses.matchers.request_kwargs_matcher({"timeout": 15}),
-            responses.matchers.query_param_matcher(
-                {
-                    "attributeRanges[]": "PriceCents:1000:20000",
-                    "attributesByKey[]": f"offeredSince:{int(datetime(2024, 12, 31, 14, 10, 0).timestamp() * 1000)}",
-                    "attributesById[]": "1",
-                    "limit": "1",
-                    "offset": "0",
-                    "query": "fiets",
-                    "searchInTitleAndDescription": "true",
-                    "viewOptions": "list-view",
-                    "distanceMeters": "1000000",
-                    "sortBy": "OPTIMIZED",
-                    "sortOrder": "INCREASING",
-                    "l1CategoryId": "322",
-                    "l2CategoryId": "1415",
-                }
-            ),
+            responses.matchers.query_param_matcher({
+                "attributeRanges[]": "PriceCents:1000:20000",
+                "attributesByKey[]": f"offeredSince:{int(datetime(2024, 12, 31, 14, 10, 0).timestamp() * 1000)}",
+                "attributesById[]": "1",
+                "limit": "1",
+                "offset": "0",
+                "query": "fiets",
+                "searchInTitleAndDescription": "true",
+                "viewOptions": "list-view",
+                "distanceMeters": "1000000",
+                "sortBy": "OPTIMIZED",
+                "sortOrder": "INCREASING",
+                "l1CategoryId": "322",
+                "l2CategoryId": "1415",
+            }),
         ],
     )
 
