@@ -37,7 +37,10 @@ dev = [
 ]
 
 [tool.ruff]
-lint.select = [ "ALL" ]
+lint.select = [
+    "ALL",
+    "DTZ002", # Useful outside of timezones
+]
 lint.ignore = [
     "COM812", # Conflict with formatter
     "CPY",    # No copyright statements
