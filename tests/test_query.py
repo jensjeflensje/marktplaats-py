@@ -43,6 +43,7 @@ def test_request_1() -> None:
                     "limit": "1",
                     "offset": "0",
                     "query": "fiets",
+                    "postcode": "",
                     "searchInTitleAndDescription": "true",
                     "viewOptions": "list-view",
                     "distanceMeters": "1000000",

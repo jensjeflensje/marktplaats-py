@@ -33,7 +33,7 @@ urls.homepage = "https://github.com/jensjeflensje/marktplaats-py"
 [dependency-groups]
 dev = [
     "pytest>=8.3.5",
-    "responses>=0.25.8",
+    "responses>=0.26",
 ]
 
 [tool.ruff]
