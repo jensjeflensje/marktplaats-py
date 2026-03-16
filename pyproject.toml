@@ -69,7 +69,7 @@ lint.per-file-ignores."tests/**/*.py" = [
     "TID251",  # The banned APIs only apply to marktplaats itself
 ]
 lint.flake8-tidy-imports.ban-relative-imports = "all"  # For consistency
-lint.flake8-tidy-imports.banned-api."requests" = { msg = "Use utils.get_request instead" }
+lint.flake8-tidy-imports.banned-api.requests = { msg = "Use utils.get_request instead" }
 lint.isort.combine-as-imports = true
 lint.isort.lines-after-imports = 2
 lint.isort.required-imports = [ "from __future__ import annotations" ]
