@@ -37,7 +37,7 @@ repos:
       - id: enforce-https
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.7
+    rev: v0.15.8
     hooks:
       - id: ruff-check
         args: [--fix]
@@ -64,7 +64,7 @@ repos:
       - id: pyproject-fmt
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.0
+    rev: 0.37.1
     hooks:
       - id: check-github-workflows
         args: [--verbose]
