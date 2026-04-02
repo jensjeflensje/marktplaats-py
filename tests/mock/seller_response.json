@@ -5,8 +5,14 @@
     "paymentMethod": {
         "name": "ideal"
     },
-    "numberOfReviews": 26,
-    "averageScore": 5,
     "smbVerified": false,
-    "profilePictures": {}
+    "profilePictures": {},
+    "salesRepresentatives": [],
+    "reviews": [
+        {
+            "numberOfReviews": 175,
+            "averageScore": 4.8,
+            "reviewSystem": "INTERNAL_REVIEWS"
+        }
+    ]
 }

@@ -133,7 +133,8 @@ def test_request_1() -> None:
 
     assert not seller.is_verified  # should still be false
     assert seller.id == 7405065  # should still be the same
-    assert seller.average_score == 5
+    assert seller.average_score == 4.8  # noqa: RUF069
+    assert seller.number_of_reviews == 175
     assert seller.bank_account
     assert not seller.identification
     assert seller.phone_number

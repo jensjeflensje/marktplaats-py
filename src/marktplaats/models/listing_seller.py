@@ -10,7 +10,7 @@ from marktplaats.utils import get_request
 
 
 if TYPE_CHECKING:
-    from marktplaats.api_types import SellerInformation
+    from marktplaats.api_types import Review, SellerInformation
 
 
 @dataclass
@@ -18,8 +18,8 @@ class Seller:
     id: int
     name: str
     is_verified: bool
-    average_score: float
-    number_of_reviews: int
+    average_score: float | None
+    number_of_reviews: int | None
     bank_account: bool
     identification: bool
     phone_number: bool
@@ -47,12 +47,15 @@ class ListingSeller:
         body = request.text
         body_json = json.loads(body)
 
+        review: Review | None = (
+            body_json["reviews"][0] if body_json["reviews"] else None
+        )
         return Seller(
             self.id,
             self.name,
             self.is_verified,
-            body_json["averageScore"],
-            body_json["numberOfReviews"],
+            review["averageScore"] if review else None,
+            review["numberOfReviews"] if review else None,
             body_json["bankAccount"],
             body_json["identification"],
             body_json["phoneNumber"],
