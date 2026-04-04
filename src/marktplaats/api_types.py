@@ -253,3 +253,9 @@ class MetaTags(TypedDict):
     metaTitle: str
     metaDescription: str
     pageTitleH1: str
+
+
+class Review(TypedDict):
+    numberOfReviews: int
+    averageScore: int
+    reviewSystem: str

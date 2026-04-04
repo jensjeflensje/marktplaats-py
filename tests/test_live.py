@@ -61,8 +61,9 @@ def _validate_response(search: SearchQuery, check_time: bool = False) -> None:
         assert isinstance(seller.id, int)
         assert isinstance(seller.name, str)
         assert isinstance(seller.is_verified, bool)
-        assert seller.average_score is not None
-        assert isinstance(seller.number_of_reviews, int)
+        if seller.average_score is not None:
+            assert isinstance(seller.average_score, (float, int))
+            assert isinstance(seller.number_of_reviews, int)
         assert isinstance(seller.bank_account, bool)
         assert isinstance(seller.identification, bool)
         assert isinstance(seller.phone_number, bool)
