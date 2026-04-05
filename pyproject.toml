@@ -13,10 +13,10 @@ authors = [
 ]
 requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: Dutch",
     "Operating System :: OS Independent",
+    "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
