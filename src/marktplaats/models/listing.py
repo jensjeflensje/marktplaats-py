@@ -5,7 +5,9 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
+from marktplaats.utils import get_request
 
+from bs4 import BeautifulSoup
 
 if TYPE_CHECKING:
     from datetime import date
@@ -73,3 +75,11 @@ class Listing:
             euro_sign=euro_sign,
             lang=lang,
         )
+
+    def get_full_description(self):
+        response = get_request(url=self.link)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+        self.full_description = soup.find(
+            'div', class_='Description-description').get_text(separator='\n')
+        return self.full_description
