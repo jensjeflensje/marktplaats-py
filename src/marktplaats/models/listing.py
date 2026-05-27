@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import warnings
 from dataclasses import dataclass
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 from bs4 import BeautifulSoup
-from http import HTTPStatus
 
 from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
 from marktplaats.utils import get_request
