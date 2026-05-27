@@ -80,12 +80,10 @@ class Listing:
     def get_full_description(self) -> str:
         response = get_request(url=self.link)
         if response.status_code != 200:
-            return ''
-        soup = BeautifulSoup(response.text, 'html.parser')
-        description_div = soup.find(
-            'div', class_='Description-description')
+            return ""
+        soup = BeautifulSoup(response.text, "html.parser")
+        description_div = soup.find("div", class_="Description-description")
         if description_div:
-            self.full_description = description_div.get_text(separator='\n')
+            self.full_description = description_div.get_text(separator="\n")
             return self.full_description
-        else:
-            return ''
+        return ""
