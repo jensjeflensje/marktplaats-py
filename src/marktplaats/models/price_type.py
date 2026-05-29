@@ -37,7 +37,7 @@ class PriceType(Enum):
         lang: str,
     ) -> str:
         if lang not in {"en", "nl"}:
-            msg = f"{lang:r} not in supported languages (nl, en)"
+            msg = f"{lang!r} not in supported languages (nl, en)"
             raise ValueError(msg)
 
         if self == PriceType.FREE:
