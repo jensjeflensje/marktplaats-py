@@ -1,5 +1,5 @@
 # marktplaats-py
-A small Python package to request listings from marktplaats.nl. It supports python 3.10+.
+A small Python package to request listings from marktplaats.nl or 2dehands.be. It supports python 3.10+.
 
 ## Installing
 ```shell
@@ -11,10 +11,11 @@ This is an example on how to use the library:
 ```py
 from datetime import datetime, timedelta
 
-from marktplaats import Condition, SearchQuery, SortBy, SortOrder, category_from_name
+from marktplaats import Condition, Platform, SearchQuery, SortBy, SortOrder, category_from_name
 
 search = SearchQuery(
     query="gazelle",  # Search query. Can be left out, but then category must be specified.
+    platform=Platform.MARKTPLAATS,  # Optional; MARKTPLAATS for .nl (default) or TWEEDEHANDS for .be
     zip_code="1016LV",  # Zip code to base distance from
     distance=100000,  # Max distance from the zip code for listings
     price_from=0,  # Lowest price to search for
