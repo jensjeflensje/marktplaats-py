@@ -82,11 +82,6 @@ indent = 4
 
 [tool.mypy]
 exclude = "^tests/"
-show_error_context = true
-show_error_codes = true
-pretty = true
-warn_unused_configs = true
-strict = true  # All strict checks are already listed below, only here for future-proofing
 # It already warns for the import, so we do not want to warn for each individual use.
 # If the import is silenced, there's nothing else we can do so silence the uses as well.
 # disallow_any_unimported = true
@@ -104,20 +99,25 @@ warn_unused_ignores = true
 warn_no_return = true
 warn_return_any = true
 warn_unreachable = true
+enable_error_code = [
+    "deprecated",
+    "ignore-without-code",
+    "mutable-override",
+    "possibly-undefined",
+    "possibly-undefined",
+    "redundant-expr",
+    "redundant-self",
+    "truthy-bool",
+    "truthy-iterable",
+    "unused-awaitable",
+]
 extra_checks = true
 implicit_reexport = false
 strict_concatenate = true
 strict_equality = true
 strict_bytes = true
-enable_error_code = [
-    "redundant-self",
-    "deprecated",
-    "redundant-expr",
-    "possibly-undefined",
-    "truthy-bool",
-    "truthy-iterable",
-    "ignore-without-code",
-    "unused-awaitable",
-    "possibly-undefined",
-    "mutable-override",
-]
+strict = true  # All strict checks are already listed below, only here for future-proofing
+show_error_context = true
+pretty = true
+warn_unused_configs = true
+show_error_codes = true
