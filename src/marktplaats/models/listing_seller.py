@@ -54,7 +54,7 @@ class ListingSeller:
             self.id,
             self.name,
             self.is_verified,
-            review["averageScore"] if review else None,
+            review.get("averageScore") or review["rating"] if review else None,
             review["numberOfReviews"] if review else None,
             body_json["bankAccount"],
             body_json["identification"],
