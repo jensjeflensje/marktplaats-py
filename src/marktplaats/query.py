@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from datetime import date, datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, TypedDict
@@ -145,12 +146,13 @@ class SearchQuery:
     Raises a requests.HTTPError if the request fails.
     """
 
-    def __init__(  # noqa: PLR0913 too many arguments
+    def __init__(  # noqa: PLR0913, C901 too many arguments, too complex
         self,
         query: str = "",
         *,
         zip_code: str = "",
-        distance: int = 1000000,  # in meters, basically unlimited
+        distance: int | None = None,  # In meters, deprecated
+        distance_km: int | None = None,  # In kilometers
         price_from: int | None = None,
         price_to: int | None = None,
         limit: int = 1,
@@ -170,13 +172,27 @@ class SearchQuery:
             )
             raise ValueError(msg)
 
+        if distance is not None:
+            warnings.warn(
+                "distance is deprecated. Use distance_km instead.",
+                category=DeprecationWarning,
+                stacklevel=2,
+            )
+        distance_meters = (
+            distance_km * 1000
+            if distance_km is not None
+            else distance
+            if distance is not None
+            else 1_000_000  # Basically unlimited
+        )
+
         params: Params = {
             "limit": str(limit),
             "offset": str(offset),
             "query": str(query),
             "searchInTitleAndDescription": "true",
             "viewOptions": "list-view",
-            "distanceMeters": str(distance),
+            "distanceMeters": str(distance_meters),
             "postcode": zip_code,
             "sortBy": sort_by.value,
             "sortOrder": sort_order.value,
