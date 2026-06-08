@@ -11,7 +11,7 @@ from requests.exceptions import (  # noqa: TID251 Not doing any requests
 from typing_extensions import NotRequired
 
 from marktplaats.categories import L1Category, L2Category
-from marktplaats.config import ISSUE_LINK
+from marktplaats.config import ISSUE_LINK, HttpOptions
 from marktplaats.models import (
     Listing,
     ListingFirstImage,
@@ -162,7 +162,14 @@ class SearchQuery:
         category: L1Category | L2Category | None = None,
         extra_attributes: Iterable[int]
         | None = None,  # EXPERIMENTAL: list of integers, just like Condition
+        user_agent: str = (
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36"
+        ),
+        timeout: int = 15,
     ) -> None:
+        self.http_options = HttpOptions(user_agent=user_agent, timeout=timeout)
+
         if not query and category is None:
             msg = (
                 "Invalid arguments: When the query is empty, "
@@ -213,6 +220,7 @@ class SearchQuery:
 
         self.response = get_request(
             "https://www.marktplaats.nl/lrp/api/search",
+            self.http_options,
             params=params,
         )
 
@@ -279,7 +287,7 @@ class SearchQuery:
                 listing["title"],
                 listing["description"],
                 listing_time,
-                ListingSeller.parse(listing["sellerInformation"]),
+                ListingSeller.parse(listing["sellerInformation"], self.http_options),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
                 price_type,
@@ -288,6 +296,7 @@ class SearchQuery:
                 listing["categoryId"],
                 listing.get("attributes", []),
                 listing.get("extendedAttributes", []),
+                self.http_options,
             )
             listings.append(listing_obj)
         return listings

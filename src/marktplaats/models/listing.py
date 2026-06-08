@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from types import NotImplementedType
 
     from marktplaats.api_types import Attribute
+    from marktplaats.config import HttpOptions
     from marktplaats.models.listing_location import ListingLocation
     from marktplaats.models.listing_seller import ListingSeller
     from marktplaats.models.price_type import PriceType
@@ -32,6 +33,7 @@ class Listing:
     category_id: int
     attributes: list[Attribute]
     extended_attributes: list[Attribute]
+    http_options: HttpOptions = field(repr=False)
 
     @property
     def images(self) -> list[ListingFirstImage]:
@@ -52,7 +54,7 @@ class Listing:
             return None
 
     def get_images(self) -> list[str]:
-        return fetch_listing_images(self.id)
+        return fetch_listing_images(self.id, self.http_options)
 
     def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, Listing):

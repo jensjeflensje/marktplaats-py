@@ -12,6 +12,7 @@ from marktplaats.utils import get_request
 
 if TYPE_CHECKING:
     from marktplaats.api_types import Picture
+    from marktplaats.config import HttpOptions
 
 
 @dataclass
@@ -42,7 +43,7 @@ class ListingFirstImage:
         ]
 
 
-def fetch_listing_images(listing_id: str) -> list[str]:
+def fetch_listing_images(listing_id: str, http_options: HttpOptions) -> list[str]:
     """
     Return a list of image URLs for a given listing.
 
@@ -50,7 +51,7 @@ def fetch_listing_images(listing_id: str) -> list[str]:
     :param listing_id: The listing ID to get images for.
     :return: A list of image URLs (https).
     """  # noqa: DOC201 TODO: all the docstrings are a bit inconsistent
-    r = get_request(f"https://link.marktplaats.nl/{listing_id}")
+    r = get_request(f"https://link.marktplaats.nl/{listing_id}", http_options)
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 
     soup = BeautifulSoup(r.text, "html.parser")

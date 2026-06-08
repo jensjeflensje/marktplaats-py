@@ -10,12 +10,10 @@ from requests import Response  # noqa: TID251 Not doing any requests
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
+    from marktplaats.config import HttpOptions
+
 
 REQUEST_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36"
-    ),
     "Accept": "application/json",
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-origin",
@@ -24,14 +22,18 @@ REQUEST_HEADERS = {
 
 def get_request(  # type: ignore[explicit-any] # This is Any to avoid replicating the actual type of the `params` parameter
     url: str,
+    http_options: HttpOptions,
     params: Mapping[str, Any] | None = None,
 ) -> Response:
     return requests.get(
         url,
         params=params,
         # Some headers to make the request look legit
-        headers=REQUEST_HEADERS,
-        timeout=15,
+        headers={
+            **REQUEST_HEADERS,
+            "User-Agent": http_options.user_agent,
+        },
+        timeout=http_options.timeout,
     )
 
 
