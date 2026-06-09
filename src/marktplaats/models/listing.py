@@ -78,13 +78,13 @@ class Listing:
             lang=lang,
         )
 
-    def get_full_description(self) -> str:
+    def get_full_description(self) -> str | None:
         response = get_request(url=self.link)
         if response.status_code != HTTPStatus.OK:
-            return ""
-        soup = BeautifulSoup(response.text, "html.parser")
-        description_div = soup.find("div", class_="Description-description")
-        if description_div:
-            self.full_description = description_div.get_text(separator="\n")
-            return self.full_description
-        return ""
+            return None
+        description_div = BeautifulSoup(response.text, "html.parser").find(
+            "div", class_="Description-module-description")
+        if not description_div:
+            return None
+        self.full_description = description_div.get_text(separator="\n")
+        return self.full_description
