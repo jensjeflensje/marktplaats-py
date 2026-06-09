@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, TypedDict
 
+from requests import Session  # noqa: TID251 - Constructing a session.
 from requests.exceptions import (  # noqa: TID251 Not doing any requests
     JSONDecodeError as requests_JSONDecodeError,
 )
@@ -162,7 +163,21 @@ class SearchQuery:
         category: L1Category | L2Category | None = None,
         extra_attributes: Iterable[int]
         | None = None,  # EXPERIMENTAL: list of integers, just like Condition
+        user_agent: str = (
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36"
+        ),
     ) -> None:
+        self._session = Session()
+        self._session.headers.update(
+            {
+                "User-Agent": user_agent,
+                "Accept": "application/json",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-origin",
+            }
+        )
+
         if not query and category is None:
             msg = (
                 "Invalid arguments: When the query is empty, "
@@ -213,6 +228,7 @@ class SearchQuery:
 
         self.response = get_request(
             "https://www.marktplaats.nl/lrp/api/search",
+            self._session,
             params=params,
         )
 
@@ -279,7 +295,7 @@ class SearchQuery:
                 listing["title"],
                 listing["description"],
                 listing_time,
-                ListingSeller.parse(listing["sellerInformation"]),
+                ListingSeller.parse(listing["sellerInformation"], self._session),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
                 price_type,
@@ -288,6 +304,7 @@ class SearchQuery:
                 listing["categoryId"],
                 listing.get("attributes", []),
                 listing.get("extendedAttributes", []),
+                self._session,
             )
             listings.append(listing_obj)
         return listings
