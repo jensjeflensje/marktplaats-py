@@ -12,6 +12,7 @@ from typing_extensions import NotRequired
 
 from marktplaats.categories import L1Category, L2Category
 from marktplaats.config import ISSUE_LINK
+from marktplaats.enums import Platform
 from marktplaats.models import (
     Listing,
     ListingFirstImage,
@@ -149,6 +150,7 @@ class SearchQuery:
         self,
         query: str = "",
         *,
+        platform: Platform = Platform.MARKTPLAATS,
         zip_code: str = "",
         distance: int = 1000000,  # in meters, basically unlimited
         price_from: int | None = None,
@@ -163,6 +165,8 @@ class SearchQuery:
         extra_attributes: Iterable[int]
         | None = None,  # EXPERIMENTAL: list of integers, just like Condition
     ) -> None:
+        self.platform = platform
+
         if not query and category is None:
             msg = (
                 "Invalid arguments: When the query is empty, "
@@ -212,7 +216,7 @@ class SearchQuery:
             params["l1CategoryId"] = str(category.id)
 
         self.response = get_request(
-            "https://www.marktplaats.nl/lrp/api/search",
+            f"https://www.{platform.value}/lrp/api/search",
             params=params,
         )
 
@@ -279,15 +283,16 @@ class SearchQuery:
                 listing["title"],
                 listing["description"],
                 listing_time,
-                ListingSeller.parse(listing["sellerInformation"]),
+                ListingSeller.parse(listing["sellerInformation"], self.platform),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
                 price_type,
-                "https://link.marktplaats.nl/" + listing["itemId"],
+                f"https://link.{self.platform.value}/" + listing["itemId"],
                 ListingFirstImage.parse(listing.get("pictures")),
                 listing["categoryId"],
                 listing.get("attributes", []),
                 listing.get("extendedAttributes", []),
+                self.platform,
             )
             listings.append(listing_obj)
         return listings

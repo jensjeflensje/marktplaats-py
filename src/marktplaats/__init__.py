@@ -9,6 +9,7 @@ from marktplaats.categories import (
     get_l2_categories_by_parent as get_l2_categories_by_parent,
     get_subcategories as get_subcategories,
 )
+from marktplaats.enums import Platform as Platform
 from marktplaats.models import (
     Listing as Listing,
     ListingFirstImage as ListingFirstImage,
