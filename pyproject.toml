@@ -26,15 +26,16 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "beautifulsoup4>=4.13.4",
     "requests>=2.28.2",
     "typing-extensions>=4.13.2",
 ]
+optional-dependencies.scraping = [ "beautifulsoup4>=4.13.4" ]
 urls.bugs = "https://github.com/jensjeflensje/marktplaats-py/issues"
 urls.homepage = "https://github.com/jensjeflensje/marktplaats-py"
 
 [dependency-groups]
 dev = [
+    "beautifulsoup4>=4.13.4",
     "pytest>=8.3.5",
     "responses>=0.26",
 ]
@@ -45,13 +46,14 @@ lint.select = [
     "DTZ002", # Useful outside of timezones
 ]
 lint.ignore = [
-    "COM812", # Conflict with formatter
-    "CPY",    # No copyright statements
-    "D1",     # Docstrings should not be enforced by default
-    "D203",   # Choose D203 or D211
-    "D212",   # Choose D212 or D213
-    "DTZ",    # (project) We use naive timezones everywhere TODO: maybe this should be looked at
-    "S404",   # Uses of subprocess are rejected, no need to reject the imports as well
+    "COM812",  # Conflict with formatter
+    "CPY",     # No copyright statements
+    "D1",      # Docstrings should not be enforced by default
+    "D203",    # Choose D203 or D211
+    "D212",    # Choose D212 or D213
+    "DTZ",     # (project) We use naive timezones everywhere TODO: maybe this should be looked at
+    "PLC0414", # (project) Explicit re-exports used for mypy
+    "S404",    # Uses of subprocess are rejected, no need to reject the imports as well
 ]
 lint.per-file-ignores."scripts/**/*.py" = [
     "INP001", # `scripts` is not a package
@@ -71,6 +73,7 @@ lint.per-file-ignores."tests/**/*.py" = [
     "TID251",  # The banned APIs only apply to marktplaats itself
 ]
 lint.flake8-tidy-imports.ban-relative-imports = "all"  # For consistency
+lint.flake8-tidy-imports.banned-api.bs4 = { msg = "Use marktplaats.bs4 instead" }
 lint.flake8-tidy-imports.banned-api.requests = { msg = "Use utils.get_request instead" }
 lint.isort.combine-as-imports = true
 lint.isort.lines-after-imports = 2

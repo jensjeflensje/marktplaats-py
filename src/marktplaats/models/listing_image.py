@@ -4,9 +4,9 @@ import json
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from bs4 import BeautifulSoup
 from typing_extensions import Self
 
+from marktplaats.bs4 import BeautifulSoup, assert_bs4
 from marktplaats.utils import get_request
 
 
@@ -50,6 +50,8 @@ def fetch_listing_images(listing_id: str) -> list[str]:
     :param listing_id: The listing ID to get images for.
     :return: A list of image URLs (https).
     """  # noqa: DOC201 TODO: all the docstrings are a bit inconsistent
+    assert_bs4()
+
     r = get_request(f"https://link.marktplaats.nl/{listing_id}")
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 
