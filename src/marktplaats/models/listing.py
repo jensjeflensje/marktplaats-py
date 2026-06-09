@@ -83,7 +83,8 @@ class Listing:
         if response.status_code != HTTPStatus.OK:
             return None
         description_div = BeautifulSoup(response.text, "html.parser").find(
-            "div", class_="Description-module-description")
+            "div", class_="Description-module-description"
+        )
         if not description_div:
             return None
         self.full_description = description_div.get_text(separator="\n")
