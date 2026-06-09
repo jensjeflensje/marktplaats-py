@@ -3,37 +3,22 @@ from __future__ import annotations
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
-import requests  # noqa: TID251 This is the only allowed use
-from requests import Response  # noqa: TID251 Not doing any requests
-
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from marktplaats.config import HttpOptions
-
-
-REQUEST_HEADERS = {
-    "Accept": "application/json",
-    "Sec-Fetch-Mode": "cors",
-    "Sec-Fetch-Site": "same-origin",
-}
+    from requests import Response, Session  # noqa: TID251 - Only used for type hinting.
 
 
 def get_request(  # type: ignore[explicit-any] # This is Any to avoid replicating the actual type of the `params` parameter
     url: str,
-    http_options: HttpOptions,
+    session: Session,
     params: Mapping[str, Any] | None = None,
 ) -> Response:
-    return requests.get(
+    return session.get(
         url,
         params=params,
-        # Some headers to make the request look legit
-        headers={
-            **REQUEST_HEADERS,
-            "User-Agent": http_options.user_agent,
-        },
-        timeout=http_options.timeout,
+        timeout=15,
     )
 
 

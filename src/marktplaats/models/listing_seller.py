@@ -10,8 +10,9 @@ from marktplaats.utils import get_request
 
 
 if TYPE_CHECKING:
+    from requests import Session  # noqa: TID251 - Only used for type hinting.
+
     from marktplaats.api_types import Review, SellerInformation
-    from marktplaats.config import HttpOptions
 
 
 @dataclass
@@ -31,21 +32,21 @@ class ListingSeller:
     id: int
     name: str
     is_verified: bool
-    http_options: HttpOptions = field(repr=False, compare=False)
+    _session: Session = field(repr=False, compare=False)
 
     @classmethod
-    def parse(cls, data: SellerInformation, http_options: HttpOptions) -> Self:
+    def parse(cls, data: SellerInformation, session: Session) -> Self:
         return cls(
             data["sellerId"],
             data["sellerName"],
             data["isVerified"],
-            http_options,
+            session,
         )
 
     def get_seller(self) -> Seller:
         request = get_request(
             f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}",
-            self.http_options,
+            self._session,
         )
 
         body = request.text

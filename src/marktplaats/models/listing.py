@@ -11,8 +11,9 @@ if TYPE_CHECKING:
     from datetime import date
     from types import NotImplementedType
 
+    from requests import Session  # noqa: TID251 - Only used for type hinting.
+
     from marktplaats.api_types import Attribute
-    from marktplaats.config import HttpOptions
     from marktplaats.models.listing_location import ListingLocation
     from marktplaats.models.listing_seller import ListingSeller
     from marktplaats.models.price_type import PriceType
@@ -33,7 +34,7 @@ class Listing:
     category_id: int
     attributes: list[Attribute]
     extended_attributes: list[Attribute]
-    http_options: HttpOptions = field(repr=False)
+    _session: Session = field(repr=False)
 
     @property
     def images(self) -> list[ListingFirstImage]:
@@ -54,7 +55,7 @@ class Listing:
             return None
 
     def get_images(self) -> list[str]:
-        return fetch_listing_images(self.id, self.http_options)
+        return fetch_listing_images(self.id, self._session)
 
     def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, Listing):

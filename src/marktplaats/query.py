@@ -5,13 +5,14 @@ from datetime import date, datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, TypedDict
 
+from requests import Session  # noqa: TID251 - Constructing a session.
 from requests.exceptions import (  # noqa: TID251 Not doing any requests
     JSONDecodeError as requests_JSONDecodeError,
 )
 from typing_extensions import NotRequired
 
 from marktplaats.categories import L1Category, L2Category
-from marktplaats.config import ISSUE_LINK, HttpOptions
+from marktplaats.config import ISSUE_LINK
 from marktplaats.models import (
     Listing,
     ListingFirstImage,
@@ -166,9 +167,16 @@ class SearchQuery:
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
             "(KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36"
         ),
-        timeout: int = 15,
     ) -> None:
-        self.http_options = HttpOptions(user_agent=user_agent, timeout=timeout)
+        self._session = Session()
+        self._session.headers.update(
+            {
+                "User-Agent": user_agent,
+                "Accept": "application/json",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-origin",
+            }
+        )
 
         if not query and category is None:
             msg = (
@@ -220,7 +228,7 @@ class SearchQuery:
 
         self.response = get_request(
             "https://www.marktplaats.nl/lrp/api/search",
-            self.http_options,
+            self._session,
             params=params,
         )
 
@@ -287,7 +295,7 @@ class SearchQuery:
                 listing["title"],
                 listing["description"],
                 listing_time,
-                ListingSeller.parse(listing["sellerInformation"], self.http_options),
+                ListingSeller.parse(listing["sellerInformation"], self._session),
                 ListingLocation.parse(listing["location"]),
                 listing["priceInfo"]["priceCents"] / 100,
                 price_type,
@@ -296,7 +304,7 @@ class SearchQuery:
                 listing["categoryId"],
                 listing.get("attributes", []),
                 listing.get("extendedAttributes", []),
-                self.http_options,
+                self._session,
             )
             listings.append(listing_obj)
         return listings

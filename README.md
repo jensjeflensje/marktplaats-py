@@ -27,7 +27,6 @@ search = SearchQuery(
     offered_since=datetime.now() - timedelta(days=7),  # Filter listings since a point in time
     category=category_from_name("Fietsen en Brommers"),  # Filter in specific category (L1) or subcategory (L2)
     user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ...",  # Optional; identify your app
-    timeout=15,  # Optional; timeout for HTTP requests in seconds
 )
 
 listings = search.get_listings()
