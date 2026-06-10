@@ -2,36 +2,38 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from string import ascii_lowercase
+from typing import TYPE_CHECKING, cast
 
-from bs4 import BeautifulSoup, Tag
-from requests import get
+import requests
 
 
-def parse(url: str) -> BeautifulSoup:
-    resp = get(url, timeout=15)
-    return BeautifulSoup(resp.text, "html.parser")
+if TYPE_CHECKING:
+    from marktplaats.api_types import QueryResponse
+
+
+def request_api_data(extra_params: dict[str, str]) -> QueryResponse:
+    """Make a request to the API, and return the JSON response."""  # noqa: DOC201
+    url = "https://www.marktplaats.nl/lrp/api/search"
+    params = {
+        "limit": "1",
+        **extra_params,
+    }
+    res = requests.get(url, params=params, timeout=15)
+    res.raise_for_status()
+    return cast("QueryResponse", res.json())
 
 
 def main() -> None:
+    """Save all L1 and L2 categories to JSON files."""  # noqa: DOC501
     print("Finding L1 categories... ", end="", flush=True)
     l1_categories = {}
 
-    url = "https://www.marktplaats.nl/"
-    soup = parse(url)
-    print(f"(url: {url}) ", end="", flush=True)
-    ul = soup.find("ul", {"class": "CategoriesBlock-list"})
-    assert isinstance(ul, Tag)
-    for li in ul.children:
-        assert isinstance(li, Tag)
-        a = next(iter(li.children))
-        assert isinstance(a, Tag)
-        href = a["href"]
-        assert isinstance(href, str)
-        _, _, id_, _ = href.split("/", 3)
-        l1_categories[a.text.lower()] = {
-            "id": int(id_),
-            "name": a.text,
+    l1_payload = request_api_data({"query": "fiets"})
+
+    for raw_l1_category in l1_payload["searchCategoryOptions"]:
+        l1_categories[raw_l1_category["fullName"].lower()] = {
+            "id": raw_l1_category["id"],
+            "name": raw_l1_category["fullName"],
         }
 
     print(f"Found {len(l1_categories)}")
@@ -40,40 +42,19 @@ def main() -> None:
     l2_categories = {}
 
     for l1_category in l1_categories.values():
-        assert isinstance(l1_category["name"], str)
-
         print(f"Finding for {l1_category['name']}... ", end="", flush=True)
 
-        # Replace some characters with dashes
-        stub = (
-            l1_category["name"]
-            .lower()
-            .replace(" | ", "-")
-            .replace(" ", "-")
-            .replace("'", "-")
-        )
-        # And remove any leftover characters
-        stub = "".join(filter(lambda c: c in ascii_lowercase + "-", stub))
-        url = f"https://www.marktplaats.nl/l/{stub}/"
-        soup = parse(url)
-        print(f"(url: {url}) ", end="", flush=True)
-        data = soup.find("script", {"id": "__NEXT_DATA__"})
-        assert isinstance(data, Tag)
-        data = json.loads(data.text)
-        cats = data["props"]["pageProps"]["searchRequestAndResponse"][
-            "searchCategoryOptions"
-        ]
-        for cat in cats:
-            if (
-                # The L1 category itself
-                cat["id"] == l1_category["id"]
-            ):
+        l2_payload = request_api_data({"l1CategoryId": str(l1_category["id"])})
+
+        for l2_category in l2_payload["searchCategoryOptions"]:
+            if l2_category["id"] == l1_category["id"]:  # The L1 category itself
                 continue
-            l2_categories[cat["fullName"].lower()] = {
-                "id": cat["id"],
-                "name": cat["fullName"],
+            l2_categories[l2_category["fullName"].lower()] = {
+                "id": l2_category["id"],
+                "name": l2_category["fullName"],
                 "parent": l1_category["name"],
             }
+
         found = len(
             list(
                 filter(
