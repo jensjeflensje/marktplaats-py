@@ -7,7 +7,6 @@ pip install marktplaats
 ```
 
 ## Example
-### Basics
 This is an example on how to use the library:
 ```py
 from datetime import datetime, timedelta
@@ -62,8 +61,10 @@ for listing in listings:
     print("-----------------------------")
 ```
 
-### Advanced
-More advanced usage examples:
+## Categories
+Filtering by Marktplaats category is possible. Please refer to the categories index at [CATEGORIES.md](./CATEGORIES.md)
+
+The categories can also be used programmatically. Some usage examples:
 
 ```python
 from marktplaats import L1Category, category_from_name, get_l1_categories, get_l2_categories, get_l2_categories_by_parent, get_subcategories
@@ -92,6 +93,3 @@ for l1_cat in l1_to_l2_mapping:
     for l2_cat in l1_to_l2_mapping[l1_cat]:
         print(l2_cat.name, l2_cat.id, l2_cat.parent)  # E.g. `Kerst 436 Diversen`
 ```
-
-## Categories
-Filtering by Marktplaats category is possible. Please refer to the categories index at [CATEGORIES.md](./CATEGORIES.md)
