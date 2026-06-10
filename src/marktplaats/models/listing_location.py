@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
@@ -17,7 +18,16 @@ class ListingLocation:
     country_short: str | None
     latitude: float | None
     longitude: float | None
-    distance: int | None
+    distance_km: int | None
+
+    @property
+    def distance(self) -> int | None:
+        warnings.warn(
+            "ListingLocation.distance is deprecated. Use distance_km instead.",
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.distance_km * 1000 if self.distance_km is not None else None
 
     @classmethod
     def parse(cls, data: Location) -> Self:
@@ -27,5 +37,7 @@ class ListingLocation:
             data.get("countryAbbreviation"),
             data["latitude"] if data["latitude"] != 0 else None,
             data["longitude"] if data["longitude"] != 0 else None,
-            data.get("distanceMeters") if data.get("distanceMeters") != -1000 else None,  # noqa: PLR2004 magic value
+            data.get("distanceMeters") // 1000
+            if data.get("distanceMeters") != -1000  # noqa: PLR2004 magic value
+            else None,
         )
