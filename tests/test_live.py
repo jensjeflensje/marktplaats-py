@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta
 
+import pytest
+
 from marktplaats import (
     Condition,
     ListingFirstImage,
@@ -9,6 +11,7 @@ from marktplaats import (
     ListingSeller,
     PriceType,
     SearchQuery,
+    SellerQuery,
     SortBy,
     SortOrder,
     category_from_name,
@@ -111,3 +114,38 @@ def test_request_with_condition() -> None:
     )
 
     _validate_response(search)
+
+
+@pytest.fixture
+def seller_id() -> int:
+    """
+    Get the seller ID of a random listing.
+
+    Returns:
+        The seller ID.
+
+    """
+    search_query = SearchQuery(query="fiets", limit=1)
+    return search_query.get_listings()[0].seller.id
+
+
+def test_seller_details(seller_id: int) -> None:
+    details = SellerQuery(seller_id).fetch_details()
+
+    assert isinstance(details["bankAccount"], bool)
+    assert isinstance(details["phoneNumber"], bool)
+    assert isinstance(details["identification"], bool)
+    assert isinstance(details["reviews"], list)
+
+
+def test_seller_listings(seller_id: int) -> None:
+    listings = SellerQuery(seller_id).fetch_listings()
+
+    assert listings["total"] >= 1
+    assert len(listings["items"]) >= 1
+
+    listing = listings["items"][0]
+    assert isinstance(listing["itemId"], str)
+    assert isinstance(listing["title"], str)
+    assert isinstance(listing["price"]["priceCents"], int)
+    assert isinstance(listing["url"], str)
