@@ -84,7 +84,7 @@ def test_request() -> None:
     search = SearchQuery(
         "fiets",
         zip_code="1016LV",
-        distance=100000,
+        distance_km=100,
         price_from=0,
         price_to=100,
         limit=5,
@@ -102,7 +102,7 @@ def test_request_with_condition() -> None:
     search = SearchQuery(
         "schijf",
         zip_code="1016LV",
-        distance=100000,
+        distance_km=100,
         price_from=0,
         price_to=100,
         offered_since=datetime.now() - timedelta(days=7),
