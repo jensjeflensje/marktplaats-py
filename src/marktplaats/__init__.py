@@ -24,3 +24,4 @@ from marktplaats.query import (
     SortBy as SortBy,
     SortOrder as SortOrder,
 )
+from marktplaats.seller_query import SellerQuery as SellerQuery
