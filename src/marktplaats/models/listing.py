@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import json
 import warnings
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
+from marktplaats.utils import get_request
 
 
 if TYPE_CHECKING:
@@ -15,6 +17,7 @@ if TYPE_CHECKING:
     from marktplaats.models.listing_location import ListingLocation
     from marktplaats.models.listing_seller import ListingSeller
     from marktplaats.models.price_type import PriceType
+    from marktplaats.scraped_types import ScrapedListing, ScrapedResponse
 
 
 @dataclass
@@ -53,6 +56,15 @@ class Listing:
 
     def get_images(self) -> list[str]:
         return fetch_listing_images(self.id)
+
+    def get_raw_details(self) -> ScrapedListing:
+        res = get_request(f"https://link.marktplaats.nl/{self.id}")
+        res.raise_for_status()
+        html = res.text
+        marker_pos = html.index("window.__CONFIG__ =")
+        json_start = html.index("{", marker_pos)
+        payload: ScrapedResponse = json.JSONDecoder().raw_decode(html, json_start)[0]
+        return payload["listing"]
 
     def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, Listing):
