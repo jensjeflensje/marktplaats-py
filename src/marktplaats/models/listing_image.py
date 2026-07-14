@@ -12,6 +12,7 @@ from marktplaats.utils import get_request
 
 if TYPE_CHECKING:
     from marktplaats.api_types import Picture
+    from marktplaats.enums import Platform
 
 
 @dataclass
@@ -42,15 +43,16 @@ class ListingFirstImage:
         ]
 
 
-def fetch_listing_images(listing_id: str) -> list[str]:
+def fetch_listing_images(listing_id: str, listing_platform: Platform) -> list[str]:
     """
     Return a list of image URLs for a given listing.
 
     It scrapes the listing page and parses the ld+json objects on that page.
     :param listing_id: The listing ID to get images for.
+    :param listing_platform: The platform the listing is on.
     :return: A list of image URLs (https).
     """  # noqa: DOC201 TODO: all the docstrings are a bit inconsistent
-    r = get_request(f"https://link.marktplaats.nl/{listing_id}")
+    r = get_request(f"https://link.{listing_platform.value}/{listing_id}")
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 
     soup = BeautifulSoup(r.text, "html.parser")

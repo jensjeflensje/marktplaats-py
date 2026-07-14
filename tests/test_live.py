@@ -7,6 +7,7 @@ from marktplaats import (
     ListingFirstImage,
     ListingLocation,
     ListingSeller,
+    Platform,
     PriceType,
     SearchQuery,
     SortBy,
@@ -17,7 +18,7 @@ from marktplaats.models.listing_seller import Seller
 
 
 """
-Live tests (sent to Marktplaats) to ensure they
+Live tests (sent to Marktplaats and 2dehands) to ensure they
 haven't deployed breaking changes.
 """
 
@@ -111,6 +112,41 @@ def test_request_with_condition() -> None:
         "schijf",
         zip_code="1016LV",
         distance_km=100,
+        price_from=0,
+        price_to=100,
+        offered_since=datetime.now() - timedelta(days=7),
+        condition=Condition.NOT_WORKING,
+        category=category_from_name("Computers en Software"),
+    )
+
+    _validate_response(search)
+
+
+def test_request_2dehands() -> None:
+    search = SearchQuery(
+        "fiets",
+        platform=Platform.TWEEDEHANDS,
+        zip_code="1000",
+        distance=100000,
+        price_from=0,
+        price_to=100,
+        limit=5,
+        offset=0,
+        sort_by=SortBy.LOCATION,
+        sort_order=SortOrder.ASC,
+        offered_since=datetime.now() - timedelta(days=7),
+        category=category_from_name("Fietsen en Brommers"),
+    )
+
+    _validate_response(search, check_time=True)
+
+
+def test_request_with_condition_2dehands() -> None:
+    search = SearchQuery(
+        "schijf",
+        platform=Platform.TWEEDEHANDS,
+        zip_code="1000",
+        distance=100000,
         price_from=0,
         price_to=100,
         offered_since=datetime.now() - timedelta(days=7),
