@@ -58,6 +58,16 @@ for listing in listings:
     for image in listing.get_images():
         print(image)
 
+    # Scrapes details from listing page (another request)
+    details = listing.get_raw_details()
+    # Examples of data available in the details object
+    print(details["seller"]["activeSinceDiff"])
+    print(details["seller"]["sellerType"])
+    print(details["stats"]["viewCount"])
+    print(details["shippingInformation"]["deliveryType"]["attributeValueLabel"])
+    print(details["bidsInfo"]["bids"])
+    print(details["adType"])
+
     print("-----------------------------")
 ```
 

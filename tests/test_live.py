@@ -111,3 +111,19 @@ def test_request_with_condition() -> None:
     )
 
     _validate_response(search)
+
+
+def test_get_raw_details() -> None:
+    """Test the properties documented in README.md."""
+    search = SearchQuery("fiets", limit=1)
+    listing = search.get_listings()[0]
+    details = listing.get_raw_details()
+
+    assert isinstance(details["seller"]["activeSinceDiff"], str)
+    assert isinstance(details["seller"]["sellerType"], str)
+    assert isinstance(details["stats"]["viewCount"], int)
+    assert isinstance(
+        details["shippingInformation"]["deliveryType"]["attributeValueLabel"], str
+    )
+    assert isinstance(details["bidsInfo"]["bids"], list)
+    assert isinstance(details["adType"], str)
