@@ -258,4 +258,5 @@ class MetaTags(TypedDict):
 class Review(TypedDict):
     numberOfReviews: int
     averageScore: int
+    rating: int
     reviewSystem: str
