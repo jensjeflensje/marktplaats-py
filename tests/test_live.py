@@ -79,12 +79,20 @@ def _validate_response(search: SearchQuery, check_time: bool = False) -> None:
             images = listing.get_images()
             assert len(images) >= 1
 
+    # Marktplaats currently returns distanceMeters in whole kilometers, which is
+    # why this library exposes distance_km. The following fails if Marktplaats
+    # ever increases the precision, so we can reconsider that API.
+    for listing in search.body_json["listings"]:
+        assert listing["location"]["distanceMeters"] % 1000 == 0, (
+            "Sub-kilometer precision detected"
+        )
+
 
 def test_request() -> None:
     search = SearchQuery(
         "fiets",
         zip_code="1016LV",
-        distance=100000,
+        distance_km=100,
         price_from=0,
         price_to=100,
         limit=5,
@@ -102,7 +110,7 @@ def test_request_with_condition() -> None:
     search = SearchQuery(
         "schijf",
         zip_code="1016LV",
-        distance=100000,
+        distance_km=100,
         price_from=0,
         price_to=100,
         offered_since=datetime.now() - timedelta(days=7),
