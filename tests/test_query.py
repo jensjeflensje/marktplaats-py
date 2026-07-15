@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from datetime import date, datetime
 
 import pytest
@@ -180,3 +181,22 @@ def test_query_category_valueerror() -> None:
         match=r"^Invalid arguments: When the query is empty, a category must be specified.$",
     ):
         _query = SearchQuery(price_to=10)
+
+
+@responses.activate
+def test_listing_limit_is_respected() -> None:
+    # Marktplaats pads small pages: a limit=5 request comes back
+    #  with about 20 listings. Only the requested amount should
+    #  make it out of get_listings().
+    body = json.loads(get_mock_file("query_response.json"))
+    body["listings"] *= 20
+
+    responses.get(
+        "https://www.marktplaats.nl/lrp/api/search",
+        status=200,
+        body=json.dumps(body),
+    )
+
+    query = SearchQuery("fiets", limit=5)
+
+    assert len(query.get_listings()) == 5
