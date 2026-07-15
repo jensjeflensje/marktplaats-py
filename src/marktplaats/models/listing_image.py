@@ -62,9 +62,13 @@ def fetch_listing_images(listing_id: str) -> list[str]:
         parsed = json.loads(data.text)
         # the list of image URLs is hidden within the product object
         if type(parsed) is dict and parsed["@type"] == "Product":
-            # the returned images are in a format that don't include a scheme,
-            #  so we add one manually
-            images.extend(f"https:{image}" for image in parsed["image"])
+            # actual photos are protocol-relative (//images.marktplaats.com/...),
+            #  but the placeholder image on listings without photos
+            #  already comes with a scheme
+            images.extend(
+                f"https:{image}" if image.startswith("//") else image
+                for image in parsed["image"]
+            )
             break
 
     return images
