@@ -264,7 +264,7 @@ class SearchQuery:
     def get_listings(self) -> list[Listing]:
         listings = []
         # Marktplaats pads small pages with extra listings (e.g. a limit=5
-        #  request returns 20). The first `limit` items are the actual page
+        #  request sometimes returns 20). The first `limit` items are the actual page
         #  window, so anything after that is cut off.
         for listing in self.body_json["listings"][: self.limit]:
             try:
