@@ -67,9 +67,7 @@ def fetch_listing_images(listing_id: str) -> list[str]:
             #  Listings without photos have an absolute placeholder URL here
             #  instead, which we don't want to return as an image.
             images.extend(
-                f"https:{image}"
-                for image in parsed["image"]
-                if image.startswith("//")
+                f"https:{image}" for image in parsed["image"] if image.startswith("//")
             )
             break
 
