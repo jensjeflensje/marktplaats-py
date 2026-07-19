@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import requests
 import responses
 
 from marktplaats.models.listing_image import fetch_listing_images
@@ -18,7 +17,7 @@ def test_parse_images() -> None:
         body=get_mock_file("image_response.html"),
     )
 
-    urls = fetch_listing_images("m123456789", requests.Session())
+    urls = fetch_listing_images("m123456789")
     assert len(urls) == 9
     assert urls[0].startswith("https://images.marktplaats.com")
 
