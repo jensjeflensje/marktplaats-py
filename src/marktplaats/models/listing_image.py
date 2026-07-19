@@ -49,6 +49,7 @@ def fetch_listing_images(listing_id: str, session: Session) -> list[str]:
     Return a list of image URLs for a given listing.
 
     It scrapes the listing page and parses the ld+json objects on that page.
+    Returns an empty list if the listing has no photos.
     :param listing_id: The listing ID to get images for.
     :return: A list of image URLs (https).
     """  # noqa: DOC201 TODO: all the docstrings are a bit inconsistent
@@ -64,9 +65,12 @@ def fetch_listing_images(listing_id: str, session: Session) -> list[str]:
         parsed = json.loads(data.text)
         # the list of image URLs is hidden within the product object
         if type(parsed) is dict and parsed["@type"] == "Product":
-            # the returned images are in a format that don't include a scheme,
-            #  so we add one manually
-            images.extend(f"https:{image}" for image in parsed["image"])
+            # actual photos are protocol-relative (//images.marktplaats.com/...).
+            #  Listings without photos have an absolute placeholder URL here
+            #  instead, which we don't want to return as an image.
+            images.extend(
+                f"https:{image}" for image in parsed["image"] if image.startswith("//")
+            )
             break
 
     return images
