@@ -11,8 +11,6 @@ from marktplaats.utils import get_request
 
 
 if TYPE_CHECKING:
-    from requests import Session  # noqa: TID251 - Only used for type hinting.
-
     from marktplaats.api_types import Picture
 
 
@@ -44,7 +42,7 @@ class ListingFirstImage:
         ]
 
 
-def fetch_listing_images(listing_id: str, session: Session) -> list[str]:
+def fetch_listing_images(listing_id: str) -> list[str]:
     """
     Return a list of image URLs for a given listing.
 
@@ -53,7 +51,7 @@ def fetch_listing_images(listing_id: str, session: Session) -> list[str]:
     :param listing_id: The listing ID to get images for.
     :return: A list of image URLs (https).
     """  # noqa: DOC201 TODO: all the docstrings are a bit inconsistent
-    r = get_request(f"https://link.marktplaats.nl/{listing_id}", session)
+    r = get_request(f"https://link.marktplaats.nl/{listing_id}")
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 
     soup = BeautifulSoup(r.text, "html.parser")
