@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
@@ -10,6 +10,8 @@ from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_im
 if TYPE_CHECKING:
     from datetime import date
     from types import NotImplementedType
+
+    from requests import Session  # noqa: TID251 - Only used for type hinting.
 
     from marktplaats.api_types import Attribute
     from marktplaats.models.listing_location import ListingLocation
@@ -32,6 +34,7 @@ class Listing:
     category_id: int
     attributes: list[Attribute]
     extended_attributes: list[Attribute]
+    _session: Session = field(repr=False)
 
     @property
     def images(self) -> list[ListingFirstImage]:
@@ -52,7 +55,7 @@ class Listing:
             return None
 
     def get_images(self) -> list[str]:
-        return fetch_listing_images(self.id)
+        return fetch_listing_images(self.id, self._session)
 
     def __eq__(self, other: object) -> NotImplementedType | bool:
         if not isinstance(other, Listing):

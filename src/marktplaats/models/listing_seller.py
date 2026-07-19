@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from typing_extensions import Self
@@ -10,6 +10,8 @@ from marktplaats.utils import get_request
 
 
 if TYPE_CHECKING:
+    from requests import Session  # noqa: TID251 - Only used for type hinting.
+
     from marktplaats.api_types import Review, SellerInformation
 
 
@@ -30,18 +32,21 @@ class ListingSeller:
     id: int
     name: str
     is_verified: bool
+    _session: Session = field(repr=False, compare=False)
 
     @classmethod
-    def parse(cls, data: SellerInformation) -> Self:
+    def parse(cls, data: SellerInformation, session: Session) -> Self:
         return cls(
             data["sellerId"],
             data["sellerName"],
             data["isVerified"],
+            session,
         )
 
     def get_seller(self) -> Seller:
         request = get_request(
-            f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}"
+            f"https://www.marktplaats.nl/v/api/seller-profile/{self.id}",
+            self._session,
         )
 
         body = request.text

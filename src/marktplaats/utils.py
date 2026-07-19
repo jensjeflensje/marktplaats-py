@@ -3,34 +3,21 @@ from __future__ import annotations
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
-import requests  # noqa: TID251 This is the only allowed use
-from requests import Response  # noqa: TID251 Not doing any requests
-
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-
-REQUEST_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36"
-    ),
-    "Accept": "application/json",
-    "Sec-Fetch-Mode": "cors",
-    "Sec-Fetch-Site": "same-origin",
-}
+    from requests import Response, Session  # noqa: TID251 - Only used for type hinting.
 
 
 def get_request(  # type: ignore[explicit-any] # This is Any to avoid replicating the actual type of the `params` parameter
     url: str,
+    session: Session,
     params: Mapping[str, Any] | None = None,
 ) -> Response:
-    return requests.get(
+    return session.get(
         url,
         params=params,
-        # Some headers to make the request look legit
-        headers=REQUEST_HEADERS,
         timeout=15,
     )
 
