@@ -61,6 +61,27 @@ for listing in listings:
     print("-----------------------------")
 ```
 
+## Seller
+Query a seller by their ID. This allows fetching the seller's details and
+all their listings.
+The seller ID can be obtained from the Marktplaats website: copy it from a
+seller's profile URL, e.g. `https://www.marktplaats.nl/u/johndoe/12345678/`.
+
+```python
+import pprint
+from marktplaats import SellerQuery
+
+seller = SellerQuery(seller_id=12345678)
+
+details = seller.fetch_details()
+pprint.pprint(details)
+
+listings = seller.fetch_listings()
+for listing in listings["items"]:
+    pprint.pprint(listing)
+    print("-" * 80)
+```
+
 ## Categories
 Filtering by Marktplaats category is possible. Please refer to the categories index at [CATEGORIES.md](./CATEGORIES.md)
 
