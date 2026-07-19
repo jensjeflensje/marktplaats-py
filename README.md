@@ -63,3 +63,33 @@ for listing in listings:
 
 ## Categories
 Filtering by Marktplaats category is possible. Please refer to the categories index at [CATEGORIES.md](./CATEGORIES.md)
+
+The categories can also be used programmatically. Some usage examples:
+
+```python
+from marktplaats import L1Category, category_from_name, get_l1_categories, get_l2_categories, get_l2_categories_by_parent, get_subcategories
+
+# List all level 1 categories.
+for cat in get_l1_categories():
+    print(cat.name, cat.id)  # E.g. `Antiek en Kunst 1`
+
+# List all level 2 categories.
+for cat in get_l2_categories():
+    print(cat.name, cat.id, cat.parent)  # E.g. `Antiek | Bestek 2 Antiek en Kunst`
+
+# Get a level 1 or 2 category by name.
+vacation = category_from_name("Vakantie")
+print(vacation.name, vacation.id)  # E.g. `Vakantie 856`
+
+# List level 2 categories for a specific level 1 category.
+books = L1Category(201, "Boeken")
+for cat in get_subcategories(books):
+    print(cat.name, cat.id, cat.parent)  # E.g. `Biografieën 205 Boeken`
+
+# Map level 1 categories to their level 2 subcategories.
+l1_to_l2_mapping = get_l2_categories_by_parent()
+for l1_cat in l1_to_l2_mapping:
+    print(l1_cat.name, l1_cat.id, "-" * 60)  # E.g. `Diversen 428 ------`
+    for l2_cat in l1_to_l2_mapping[l1_cat]:
+        print(l2_cat.name, l2_cat.id, l2_cat.parent)  # E.g. `Kerst 436 Diversen`
+```
