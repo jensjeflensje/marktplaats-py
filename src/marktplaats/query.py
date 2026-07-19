@@ -218,6 +218,9 @@ class SearchQuery:
                 f"offeredSince:{int(offered_since.timestamp()) * 1000}",
             ]
 
+        # Kept around because the API can return more listings than requested
+        self.limit = limit
+
         if category:
             # If it is an L2 category
             if isinstance(category, L2Category):
@@ -260,7 +263,10 @@ class SearchQuery:
 
     def get_listings(self) -> list[Listing]:
         listings = []
-        for listing in self.body_json["listings"]:
+        # Marktplaats pads small pages with extra listings (e.g. a limit=5
+        #  request sometimes returns 20). The first `limit` items are the actual page
+        #  window, so anything after that is cut off.
+        for listing in self.body_json["listings"][: self.limit]:
             try:
                 listing_time = parse_date(listing["date"])
             except ValueError:
