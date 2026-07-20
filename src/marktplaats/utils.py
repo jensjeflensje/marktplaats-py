@@ -3,8 +3,8 @@ from __future__ import annotations
 from abc import ABC
 from typing import TYPE_CHECKING, Any
 
-import requests  # noqa: TID251 This is the only allowed use
-from requests import Response  # noqa: TID251 Not doing any requests
+import requests  # ruff:ignore[banned-api] This is the only allowed use
+from requests import Response  # ruff:ignore[banned-api] Not doing any requests
 
 
 if TYPE_CHECKING:
@@ -35,7 +35,7 @@ def get_request(  # type: ignore[explicit-any] # This is Any to avoid replicatin
     )
 
 
-class MessageObjectException(Exception, ABC):  # noqa: N818 this is a base class, not an error itself
+class MessageObjectException(Exception, ABC):  # ruff:ignore[error-suffix-on-exception-name] this is a base class, not an error itself
     def __init__(self, msg: str, obj: object) -> None:
         super().__init__(msg, obj)
         self.msg = msg
