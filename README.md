@@ -4,6 +4,8 @@ A small Python package to request listings from marktplaats.nl. It supports pyth
 ## Installing
 ```shell
 pip install marktplaats
+# Or, to install dependencies for webscraping:
+pip install marktplaats[scraping]
 ```
 
 ## Example
@@ -55,6 +57,7 @@ for listing in listings:
 
     # image urls for all the listing's image
     # (this sends another HTTP request)
+    # (requires the `scraping` extra)
     for image in listing.get_images():
         print(image)
 
