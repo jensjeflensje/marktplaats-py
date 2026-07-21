@@ -6,7 +6,7 @@ from datetime import date, datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, TypedDict
 
-from requests.exceptions import (  # noqa: TID251 Not doing any requests
+from requests.exceptions import (  # ruff:ignore[banned-api] Not doing any requests
     JSONDecodeError as requests_JSONDecodeError,
 )
 from typing_extensions import NotRequired
@@ -146,7 +146,7 @@ class SearchQuery:
     Raises a requests.HTTPError if the request fails.
     """
 
-    def __init__(  # noqa: PLR0913, C901 too many arguments, too complex
+    def __init__(  # ruff:ignore[too-many-arguments, complex-structure] too many arguments, too complex
         self,
         query: str = "",
         *,
@@ -239,7 +239,7 @@ class SearchQuery:
         self.response.raise_for_status()
 
         # But if it's something else non-200, still fail fast.
-        if self.response.status_code != 200:  # noqa: PLR2004 HTTP status codes are a universal constant
+        if self.response.status_code != 200:  # ruff:ignore[magic-value-comparison] HTTP status codes are a universal constant
             msg = "Received non-200 status code:"
             raise BadStatusCodeError(msg, self.response)
 

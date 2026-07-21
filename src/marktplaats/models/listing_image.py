@@ -20,7 +20,7 @@ class ListingFirstImage:
     Data format for the listing image that marktplaats responds with when doing a search query.
 
     The get_images() method will not use this format, but instead return a list of URLs.
-    """  # noqa: E501 Line too long, we can't easily wrap it in the docstring
+    """  # ruff:ignore[line-too-long] Line too long, we can't easily wrap it in the docstring
 
     extra_small: str
     medium: str
@@ -50,7 +50,7 @@ def fetch_listing_images(listing_id: str) -> list[str]:
     Returns an empty list if the listing has no photos.
     :param listing_id: The listing ID to get images for.
     :return: A list of image URLs (https).
-    """  # noqa: DOC201 TODO: all the docstrings are a bit inconsistent
+    """  # ruff:ignore[docstring-missing-returns] TODO: all the docstrings are a bit inconsistent
     r = get_request(f"https://link.marktplaats.nl/{listing_id}")
     r.raise_for_status()  # raises so we can stop the fetching on a higher level
 

@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 def request_api_data(extra_params: dict[str, str]) -> QueryResponse:
-    """Make a request to the API, and return the JSON response."""  # noqa: DOC201
+    """Make a request to the API, and return the JSON response."""  # ruff:ignore[docstring-missing-returns]
     url = "https://www.marktplaats.nl/lrp/api/search"
     params = {
         "limit": "1",
@@ -24,7 +24,7 @@ def request_api_data(extra_params: dict[str, str]) -> QueryResponse:
 
 
 def main() -> None:
-    """Save all L1 and L2 categories to JSON files."""  # noqa: DOC501
+    """Save all L1 and L2 categories to JSON files."""  # ruff:ignore[docstring-missing-exception]
     print("Finding L1 categories... ", end="", flush=True)
     l1_categories = {}
 

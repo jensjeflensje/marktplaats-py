@@ -29,7 +29,7 @@ class PriceType(Enum):
     # Used when the price type marktplaats returns doesn't match any of our price types
     UNKNOWN = "UNKNOWN"
 
-    def _as_string(  # noqa: C901, PLR0911 Too complex and too much return statements
+    def _as_string(  # ruff:ignore[complex-structure, too-many-return-statements] Too complex and too much return statements
         self,
         price: float,
         *,

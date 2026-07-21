@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class QueryResponse(TypedDict):
     listings: list[Listing]
-    # topBlock: list[Any]  # noqa: ERA001
+    # topBlock: list[Any]  # ruff:ignore[commented-out-code]
     facets: list[Facet]
     totalResultCount: int
     maxAllowedPageNumber: int
@@ -26,14 +26,14 @@ class QueryResponse(TypedDict):
     sortOptions: list[SortOption]
     isSearchSaved: bool
     hasErrors: bool
-    # alternativeLocales: list[Any]  # noqa: ERA001
+    # alternativeLocales: list[Any]  # ruff:ignore[commented-out-code]
     searchRequest: SearchRequestOrOriginalRequest
     searchCategory: int
     searchCategoryOptions: list[SearchCategoryOption]
-    # seoFriendlyAttributes: list[Any]  # noqa: ERA001
-    # seoFriendlyTextAttributes: SeoFriendlyTextAttributes  # noqa: ERA001
+    # seoFriendlyAttributes: list[Any]  # ruff:ignore[commented-out-code]
+    # seoFriendlyTextAttributes: SeoFriendlyTextAttributes  # ruff:ignore[commented-out-code]
     attributeHierarchy: AttributeHierarchy
-    # categoriesById: CategoriesById  # noqa: ERA001
+    # categoriesById: CategoriesById  # ruff:ignore[commented-out-code]
     metaTags: MetaTags
 
 

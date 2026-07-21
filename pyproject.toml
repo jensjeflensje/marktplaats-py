@@ -45,33 +45,33 @@ dev = [
 [tool.ruff]
 lint.select = [
     "ALL",
-    "DTZ002", # Useful outside of timezones
+    "call-datetime-today", # Useful outside of timezones
 ]
 lint.ignore = [
-    "COM812", # Conflict with formatter
-    "CPY",    # No copyright statements
-    "D1",     # Docstrings should not be enforced by default
-    "D203",   # Choose D203 or D211
-    "D212",   # Choose D212 or D213
-    "DTZ",    # (project) We use naive timezones everywhere TODO: maybe this should be looked at
-    "S404",   # Uses of subprocess are rejected, no need to reject the imports as well
+    "CPY",                               # No copyright statements
+    "D1",                                # Docstrings should not be enforced by default
+    "DTZ",                               # (project) We use naive timezones everywhere TODO: maybe this should be looked at
+    "incorrect-blank-line-before-class", # Choose D203 or D211
+    "missing-trailing-comma",            # Conflict with formatter
+    "multi-line-summary-first-line",     # Choose D212 or D213
+    "suspicious-subprocess-import",      # Uses of subprocess are rejected, no need to reject the imports as well
 ]
 lint.per-file-ignores."scripts/**/*.py" = [
-    "INP001", # `scripts` is not a package
-    "S101",   # We assume we don't run scripts with -O
-    "S603",   # Use of subprocess
-    "S607",   # Partial executable path
-    "T201",   # We can print in scripts
-    "TID251", # The banned APIs only apply to marktplaats itself
-    "TRY002", # In scripts, we throw `Exception` to just crash.
+    "assert",                               # We assume we don't run scripts with -O
+    "banned-api",                           # The banned APIs only apply to marktplaats itself
+    "implicit-namespace-package",           # `scripts` is not a package
+    "print",                                # We can print in scripts
+    "raise-vanilla-class",                  # In scripts, we throw `Exception` to just crash.
+    "start-process-with-partial-path",      # Partial executable path
+    "subprocess-without-shell-equals-true", # Use of subprocess
 ]
 lint.per-file-ignores."tests/**/*.py" = [
-    "E501",    # If the formatter doesn't fix the line length, it's good enough
-    "FBT",     # We don't care about boolean parameters in tests
-    "INP001",  # Tests are supposed to be an implicit namespace
-    "PLR2004", # Magic values are allowed in tests
-    "S101",    # Assert is allowed in tests
-    "TID251",  # The banned APIs only apply to marktplaats itself
+    "assert",                     # Assert is allowed in tests
+    "banned-api",                 # The banned APIs only apply to marktplaats itself
+    "FBT",                        # We don't care about boolean parameters in tests
+    "implicit-namespace-package", # Tests are supposed to be an implicit namespace
+    "line-too-long",              # If the formatter doesn't fix the line length, it's good enough
+    "magic-value-comparison",     # Magic values are allowed in tests
 ]
 lint.flake8-tidy-imports.ban-relative-imports = "all"  # For consistency
 lint.flake8-tidy-imports.banned-api.requests = { msg = "Use utils.get_request instead" }

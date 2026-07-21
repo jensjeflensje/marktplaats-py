@@ -68,7 +68,7 @@ class Listing:
         euro_sign: bool = True,
         lang: str = "en",
     ) -> str:
-        return self.price_type._as_string(  # noqa: SLF001 private member access
+        return self.price_type._as_string(  # ruff:ignore[private-member-access] private member access
             self.price,
             euro_sign=euro_sign,
             lang=lang,

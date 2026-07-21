@@ -38,6 +38,6 @@ class ListingLocation:
             data["latitude"] if data["latitude"] != 0 else None,
             data["longitude"] if data["longitude"] != 0 else None,
             data.get("distanceMeters") // 1000
-            if data.get("distanceMeters") != -1000  # noqa: PLR2004 magic value
+            if data.get("distanceMeters") != -1000  # ruff:ignore[magic-value-comparison] magic value
             else None,
         )

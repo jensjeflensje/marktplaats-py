@@ -102,7 +102,7 @@ class LazyWrapper(Generic[KT, VT]):
     def get_data(self) -> Mapping[KT, VT]:
         if self._data is None:
             self._build_data()
-            assert self._data is not None  # noqa: S101 Assert for typechecker
+            assert self._data is not None  # ruff:ignore[assert] Assert for typechecker
         return self._data
 
     def _build_data(self) -> None:
