@@ -24,8 +24,11 @@ search = SearchQuery(
     sort_by=SortBy.OPTIMIZED,  # DATE, PRICE, LOCATION, OPTIMIZED
     sort_order=SortOrder.ASC,  # ASCending or DESCending
     condition=Condition.NEW,  # NEW, AS_GOOD_AS_NEW, USED or category-specific
-    offered_since=datetime.now() - timedelta(days=7),  # Filter listings since a point in time
-    category=category_from_name("Fietsen en Brommers"),  # Filter in specific category (L1) or subcategory (L2)
+    offered_since=datetime.now()
+    - timedelta(days=7),  # Filter listings since a point in time
+    category=category_from_name(
+        "Fietsen en Brommers"
+    ),  # Filter in specific category (L1) or subcategory (L2)
 )
 
 listings = search.get_listings()
@@ -88,7 +91,14 @@ Filtering by Marktplaats category is possible. Please refer to the categories in
 The categories can also be used programmatically. Some usage examples:
 
 ```python
-from marktplaats import L1Category, category_from_name, get_l1_categories, get_l2_categories, get_l2_categories_by_parent, get_subcategories
+from marktplaats import (
+    L1Category,
+    category_from_name,
+    get_l1_categories,
+    get_l2_categories,
+    get_l2_categories_by_parent,
+    get_subcategories,
+)
 
 # List all level 1 categories.
 for cat in get_l1_categories():
