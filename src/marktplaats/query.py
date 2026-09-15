@@ -134,7 +134,7 @@ Params = TypedDict(
         "attributeRanges[]": NotRequired[list[str]],
         "attributesByKey[]": NotRequired[list[str]],
         "l1CategoryId": NotRequired[str],
-        "l2CategoryId": NotRequired[str],
+        "l2CategoryIds": NotRequired[str],
     },
 )
 
@@ -224,7 +224,7 @@ class SearchQuery:
         if category:
             # If it is an L2 category
             if isinstance(category, L2Category):
-                params["l2CategoryId"] = str(category.id)
+                params["l2CategoryIds"] = str(category.id)
                 # Set the parent category as well
                 category = category.parent
             # Set the L1 category in both cases
