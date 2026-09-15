@@ -52,6 +52,7 @@ repos:
         stages: [manual]
         args: [--fix, --unsafe-fixes]
       - id: ruff-format
+        exclude: ^README\.md$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v2.3.1
