@@ -51,7 +51,7 @@ def test_request_1() -> None:
                     "sortBy": "OPTIMIZED",
                     "sortOrder": "INCREASING",
                     "l1CategoryId": "322",
-                    "l2CategoryId": "1415",
+                    "l2CategoryIds": "1415",
                 }
             ),
         ],
