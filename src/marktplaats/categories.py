@@ -31,8 +31,8 @@ class L1Category:
         return cls(id_, name)
 
     @classmethod
-    def from_id(cls, id_: int, name: str = "Unknown") -> None:
-        cls(id_, name)
+    def from_id(cls, id_: int, name: str = "Unknown") -> Self:
+        return cls(id_, name)
 
     def __str__(self) -> str:
         return self.name
@@ -68,8 +68,8 @@ class L2Category:
         )
 
     @classmethod
-    def from_id(cls, id_: int, parent: L1Category, name: str = "Unknown") -> None:
-        cls(id_, name, parent)
+    def from_id(cls, id_: int, parent: L1Category, name: str = "Unknown") -> Self:
+        return cls(id_, name, parent)
 
     def __str__(self) -> str:
         return self.name
