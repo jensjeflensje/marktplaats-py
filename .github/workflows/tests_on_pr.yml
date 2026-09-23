@@ -137,4 +137,24 @@ jobs:
           PYTHON_VERSION: ${{ matrix.python-version }}
 
       - name: Run tests
-        run: uv run pytest
+        # Live tests hit Marktplaats: they run daily in run_live_tests.yml,
+        #  and a few of them run in the live-smoke-test job below
+        run: uv run pytest --ignore=tests/live
+
+  live-smoke-test:
+    name: Run live smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          enable-cache: true
+
+      - name: Run live smoke tests
+        # A few live tests, on one Python version, so pull requests
+        #  don't send the whole live suite to Marktplaats
+        run: uv run pytest tests/live -m smoke
