@@ -17,4 +17,4 @@ jobs:
           enable-cache: true
 
       - name: Run live tests
-        run: uv run pytest tests/test_live.py
+        run: uv run pytest tests/live
