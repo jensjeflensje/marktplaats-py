@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import warnings
 from dataclasses import dataclass
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 
+from bs4 import BeautifulSoup
+
 from marktplaats.models.listing_image import ListingFirstImage, fetch_listing_images
+from marktplaats.utils import get_request
 
 
 if TYPE_CHECKING:
@@ -73,3 +77,15 @@ class Listing:
             euro_sign=euro_sign,
             lang=lang,
         )
+
+    def get_full_description(self) -> str | None:
+        response = get_request(url=self.link)
+        if response.status_code != HTTPStatus.OK:
+            return None
+        description_div = BeautifulSoup(response.text, "html.parser").find(
+            "div", class_="Description-module-description"
+        )
+        if not description_div:
+            return None
+        self.full_description = description_div.get_text(separator="\n")
+        return self.full_description
