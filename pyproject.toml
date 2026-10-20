@@ -11,13 +11,12 @@ license = "MIT"
 authors = [
     { name = "Jens de Ruiter", email = "me@jensderuiter.dev" },
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
     "Natural Language :: Dutch",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -32,7 +31,6 @@ classifiers = [
 dependencies = [
     "beautifulsoup4>=4.13.4",
     "requests>=2.28.2",
-    "typing-extensions>=4.13.2",
 ]
 urls.bugs = "https://github.com/jensjeflensje/marktplaats-py/issues"
 urls.homepage = "https://github.com/jensjeflensje/marktplaats-py"

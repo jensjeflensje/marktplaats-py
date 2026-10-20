@@ -3,9 +3,7 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from pathlib import Path
-from typing import TYPE_CHECKING, Generic, TypedDict, TypeVar
-
-from typing_extensions import Self
+from typing import TYPE_CHECKING, Generic, Self, TypedDict, TypeVar
 
 
 if TYPE_CHECKING:
