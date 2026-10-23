@@ -137,8 +137,9 @@ jobs:
           PYTHON_VERSION: ${{ matrix.python-version }}
 
       - name: Run tests
-        # Live tests hit Marktplaats, so they run once in the live-test job below
-        run: uv run pytest --ignore=tests/test_live.py
+        # Live tests hit Marktplaats: they run daily in run_live_tests.yml,
+        #  and a few of them run in the live-test job below
+        run: uv run pytest --ignore=tests/live
 
   live-test:
     name: Run live tests
@@ -153,7 +154,7 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Run live tests
-        # One Python version only, so pull requests don't send
-        #  the live tests to Marktplaats once per version
-        run: uv run pytest tests/test_live.py
+      - name: Run live smoke tests
+        # A few live tests, on one Python version, so pull requests
+        #  don't send the whole live suite to Marktplaats
+        run: uv run pytest tests/live -m smoke
