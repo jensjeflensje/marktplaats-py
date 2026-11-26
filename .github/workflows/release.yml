@@ -40,7 +40,7 @@ jobs:
   create_release:
     name: Create release
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: write # for creating the release
 
@@ -58,7 +58,7 @@ jobs:
   publish_pypi:
     name: Publish package
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     environment:
       name: pypi
     permissions:
